@@ -1,0 +1,44 @@
+{
+    "tum" : [
+    {"stat" : -2 , "lancer" : 116 , "nomStat" : "-2" },
+    {"stat" : -1.5 , "lancer" : 126 , "nomStat" : "-1+" },
+    {"stat" : -1 , "lancer" : 136 , "nomStat" : "-1" },
+    {"stat" : -0.5 , "lancer" : 156 , "nomStat" : "-0+" },
+    {"stat" : 0 , "lancer" : 216 , "nomStat" : "0" },
+    {"stat" : 0.5 , "lancer" : 236 , "nomStat" : "0+" },
+    {"stat" : 1 , "lancer" : 266 , "nomStat" : "1" },
+    {"stat" : 1.5 , "lancer" : 336 , "nomStat" : "1+" },
+    {"stat" : 2 , "lancer" : 366 , "nomStat" : "2" },
+    {"stat" : 2.5 , "lancer" : 436 , "nomStat" : "2+" },
+    {"stat" : 3 , "lancer" : 466 , "nomStat" : "3" },
+    {"stat" : 3.5 , "lancer" : 536 , "nomStat" : "3+" },
+    {"stat" : 4 , "lancer" : 556 , "nomStat" : "4" },
+    {"stat" : 4.5 , "lancer" : 616 , "nomStat" : "4+" },
+    {"stat" : 5 , "lancer" : 636 , "nomStat" : "5" },
+    {"stat" : 5.5 , "lancer" : 646 , "nomStat" : "5+" },
+    {"stat" : 6 , "lancer" : 656 , "nomStat" : "6" },
+    {"stat" : 6.5 , "lancer" : 666 , "nomStat" : "6+" },
+    {"stat" : 7 , "lancer" : 666 , "nomStat" : "7" },
+    {"stat" : 7.5 , "lancer" : 666 , "nomStat" : "7+" },
+    {"stat" : 8 , "lancer" : 666 , "nomStat" : "8" },
+    {"stat" : 8.5 , "lancer" : 666 , "nomStat" : "8+" },
+    {"stat" : 9 , "lancer" : 666 , "nomStat" : "9" },
+    {"stat" : 9.5 , "lancer" : 666 , "nomStat" : "9+" },
+    {"stat" : 10, "lancer" : 666 , "nomStat" : "10 ou plus" }
+    ],
+
+    "lancersSpeciaux" : {
+        "111" : {
+            "autre": " :angel:"
+        },
+
+        "444" : {
+            "autre": " <:monkaS:411272701022568458>"
+        },
+
+        "666" : {
+            "discord_id": " Allumez le feu. :fire:",
+            "autre": " :smiling_imp:"
+        }
+    }
+}
