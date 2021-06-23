@@ -17,7 +17,7 @@ function randomNumber(maximum){
 function verifierNaN(array) {
     for(let i = 0; i < array.length; i++)
     if (isNaN(array[i])) {
-      throw '';
+      throw 'nan error';
     }
   }
 
@@ -27,26 +27,66 @@ function sleep(ms) {
     });
 }     
 
+function envoyerMessage(botReply, message){ // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot.
+    console.log(botReply.substring(0, 100));
+    message.channel.send(botReply);
+}
+
 let prefix = ";"; // Set the prefix
 console.log("Ready!");
 
 client.on("message", (message) => {
-    /*console.log(message);*/
     if (message.content.startsWith("$") && message.guild.id === "846473259478024242") {
-        message.channel.send("Je ne suis pas mudae. <:monkaS:411272701022568458>");
+        envoyerMessage("Je ne suis pas mudae. <:monkaS:411272701022568458>", message);
         return;
     }
-
+    
     if (!message.content.startsWith(prefix) || message.author.bot) return;     // Exit and stop if the prefix is not there or if user is a bot
- 
+    
+    process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
 
     const commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
     const args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     const command = args.shift().toLowerCase();
+
     try {
-        if(command === "pokemon" || command === "isekai") {
-            let number = randomNumber(898); 
+        if (command === "code" || command === "source"){
+            envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message);
+        }
+
+        else if(command === "pokemon" || command === "isekai") {
+            let number = 0;
+            if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
+
+                let listeSubstitues = {"Electrik": "Electrique", "Électrik": "Electrique", "Électrique": "Electrique", "Fee": "Fée", "Insect" : "Insecte", "Derg" : "Dragon", "Dng" : "DnG", "Pasdng" : "PasDnG"}
+                for (let i = 0; i < args.length; i++){
+                    args[i] = args[i].charAt(0).toUpperCase() + args[i].slice(1); // On met la première lettre en majuscule
+                    args[i] = args[i] in listeSubstitues ? listeSubstitues[args[i]] : args[i] // On corrige les fautes courantes
+                }
+
+                let nouvelleListe = [];
+                for (let i = 0; i < pokedex.length; i++){ // On fait une boucle sur tout le pokédex
+                    let valide = true;
+                    for (let j = 0; j < args.length ; j++){ // Puis une deuxième sur la liste des tags
+                        if(!pokedex[i]["tags"].includes(args[j])){
+                            valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
+                        }
+                    }
+                    if (valide){
+                        nouvelleListe.push(pokedex[i]["numero"]);
+                    }
+                }
+
+                if (nouvelleListe.length == 0){ // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
+                    throw("Aucun pokémon avec ses tags");
+                }
+                number = nouvelleListe[randomNumber(nouvelleListe.length)-1];
+            }
+            else{
+                number = randomNumber(898); 
+            }
             if (command === "pokemon") {
+                console.log(`${message.author.toString()} a tiré le pokémon numéro ${number} qui est ${pokedex[number].nom}.`); // Console.log pour pas faire bugger le then
                 message.channel.send(`${message.author.toString()} a tiré le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
                 .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
                     setTimeout(function(){
@@ -55,6 +95,7 @@ client.on("message", (message) => {
                 }); 
             }
             else if (command === "isekai") {
+                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}.`); // Console.log pour pas faire bugger le then
                 message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
                 .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
                     setTimeout(function(){
@@ -105,7 +146,7 @@ client.on("message", (message) => {
             let botReply = `${message.author.toString()} avec une stat de ${stat},${message_reussite_un} a lancé [${dices[0]}] [${dices[1]}]. ${message_reussite_deux}`;
             
             
-            message.channel.send(botReply);
+            envoyerMessage(botReply, message);
 
             // Echelon Dé de puissance (Réussite de base de 10 ou 14 en fonction de si thème primaire ou secondaire)
             // 1 2d4
@@ -118,21 +159,35 @@ client.on("message", (message) => {
             // 16 1d10+1d12
             // 20 2d12
         }
-        else if(command === "ins") {
+        else if(command === "ins") { // A faire : Les jets d'opposition si Soraniak trouve ça utile et que j'ai eu le temps de lui demander
             if(["aide","help","commandes"].includes(args[0])){
-                message.channel.send(
+                envoyerMessage(
                     "**;ins** permet de faire un jet normal.\r\n" +
                     ";ins **stats** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins stats +3**.\r\n" +
                     ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins stats 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
                     ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve.\r\n" +
                     ";ins **cheat** ***dé1*** ***dé2*** ***dé3*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
-                    ";ins **tum** affiche la table unique multiple."
+                    ";ins **tum** affiche la table unique multiple.\r\n"+
+                    ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"+
+                    ";ins **opposition** :construction:"
+                    , message
                 )
                 return;
             }
 
             if (["table","tum","TUM"].includes(args[0])){
-                message.channel.send("https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png");
+                envoyerMessage("https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png", message);
+                return;
+            }
+
+            if (args.length > 0 && ["purge","purgé","purger"].includes(args[0].toString().toLowerCase())){
+                let botReply = `${message.author.toString()} a purgé :  \`\`\``;
+                while (botReply.length < 1989){
+                    let dices = [randomNumber(6), randomNumber(6), randomNumber(6)];
+                    botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
+                }
+                botReply = botReply.slice(0,-2) + "\`\`\`"
+                envoyerMessage(botReply, message);
                 return;
             }
 
@@ -152,7 +207,7 @@ client.on("message", (message) => {
                     INSdata.lancersSpeciaux[args[1]][message.author.id] = phrase; // On rajoute le message dans la base de données
                     let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${args[1]}, je vais afficher le message : ${phrase}`;
 
-                    message.channel.send(botReply);
+                    envoyerMessage(botReply, message);
                     client.channels.cache.get(config.canalLogs).send(botReply);
                 }
 
@@ -165,14 +220,16 @@ client.on("message", (message) => {
 
             let dices = [randomNumber(6), randomNumber(6), randomNumber(6)];
             let lancerSpecial = false;
+            let verbe = "lancé";
 
             if (args[0] === "cheat" && args.length >= 4) {
                 dices = [parseInt(args[1]), parseInt(args[2]), parseInt(args[3])];
                 verifierNaN(dices);
+                verbe = "triché avec";
             }
             let dicesSum = dices[0]*100 + dices[1]*10 + dices[2]; // Nécéssaire parce qu'on ne peut pas comparer des tableaux directement.
             
-            let botReply = `${message.author.toString()} a lancé [${dices[0]}${dices[1]}] + [${dices[2]}].`;
+            let botReply = `${message.author.toString()} a ${verbe} [${dices[0]}${dices[1]}] + [${dices[2]}].`;
 
 
             if (dicesSum in INSdata.lancersSpeciaux){
@@ -236,7 +293,7 @@ client.on("message", (message) => {
             }
 
             
-            message.channel.send(botReply);
+            envoyerMessage(botReply, message);
         }
 
         else if(command === "tarot" ){
@@ -273,11 +330,84 @@ client.on("message", (message) => {
         }
         else if(command === "ramoloss") {
             async function speak() {
-                await sleep(5*60*1000 + randomNumber(5*60*1000)); // On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
+                temps = 5*60*1000 + randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
+                console.log(temps/1000)
+                await sleep(temps); 
                 message.channel.send(`${message.author.toString()}`);
                 message.channel.send("https://i.gifer.com/7Skf.gif")
             }
             speak();
+        }
+
+        else if(command === "roll"){ // A FAIRE (Répétitions, et faire des rolls enregistrés ?)
+            if (args.length == 0){ // Si il y a juste roll, je fais quand même un lancer
+                const lancerParDefaut = 100;
+                let botReply = `${message.author.toString()} sur 1d${lancerParDefaut} a lancé **${randomNumber(lancerParDefaut)}**.`;
+                envoyerMessage(botReply, message);
+            }
+
+            else if (args.length == 1 && !args[0].includes("d")){ // Si une personne envoit juste un nombre sans écrire "d", dans ce cas on lance un d.
+                verifierNaN(args)
+                let lancer = parseInt(args[0]);
+                if (lancer > 9000000000000000) throw("Nombre trop grand");
+                let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${randomNumber(lancer)}**.`;
+                envoyerMessage(botReply, message);
+            }
+
+            else {
+                let listeCommandes = []; // [commande, bool estLancer, [lancers], somme]
+                let listeOperateurs = ["+","-","*","/","(",")",">","<"];
+
+                let args = commandBody // On refait args pour pouvoir séparer mieux
+                for (let i = 0; i < listeOperateurs.length; i+=1){
+                    args = args.split(`${listeOperateurs[i]}`).join(` ${listeOperateurs[i]} `);
+                }
+                args = args.split(/ +/);
+                args.shift();
+
+                for (let i = 0; i < args.length; i++){ // On cherche ce que sont chaque commande
+                    if(args[i].includes("d")){ // Si la commande a d...
+                        args[i] = args[i].split("d");
+                        if(args[i].length == 2 && !isNaN(args[i][0]) && !isNaN(args[i][1]) && parseInt(args[i][0]) > 0 && parseInt(args[i][1]) > 1){ // On regarde si il y a bien deux nombres qui soient valide
+                            let lancer = 0;
+                            let lancers = [];
+                            let somme = 0;
+                            
+                            for (let j = 0; j < args[i][0]; j++){ // On lance les deux
+                                lancer = randomNumber(args[i][1]);
+                                lancers.push(lancer);
+                                somme += lancer;                                
+                            }
+                            listeCommandes.push([args[i][0] +"d" + args[i][1], true, lancers, somme]); // On rajoute la commande, les lancers et le résultat du lancers dans la liste des commandes
+                        }
+                    }
+                    else if(listeOperateurs.includes(args[i]) || !isNaN(parseInt(args[i]))){ // Sinon si c'est un opréateur, on rajoute tout simplement dans la liste des commandes
+                        listeCommandes.push([args[i], false])
+                    }
+                    
+                }
+                let reponseCommandes = "";
+                let reponseLancers = "";
+                let reponseSomme = "";
+
+                for (let i = 0; i < listeCommandes.length; i++){ // On écrit la réponse
+                    reponseCommandes += listeCommandes[i][0] + " ";
+                    if (listeCommandes[i][1]){ // Si la commande est un lancer, alors la liste des lancers doit s'afficher sans la liste des lancers et dans la formule de calcul
+                        reponseLancers += `[${listeCommandes[i][2]}] `;
+                        reponseSomme += listeCommandes[i][3]
+                    }
+                    else{ // Sinon on affiche l'opérateur
+                        reponseLancers += listeCommandes[i][0] + " ";
+                        reponseSomme += listeCommandes[i][0]
+                    }
+                }
+
+                reponseSomme = Math.round(eval(reponseSomme)*100)/100; // On calcule le résultat...
+                let botReply = `${message.author.toString()} sur ${reponseCommandes} a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
+                if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
+                if (reponseSomme > 9000000000000000) throw("Nombre trop grand");
+                envoyerMessage(botReply, message);
+            }
         }
 
         else if(command === "fermer" && message.author.id === config.admin){
@@ -288,7 +418,7 @@ client.on("message", (message) => {
 
     catch(err) {
         message.react('❌');
-        console.log(err);
+        console.log(err/*.substring(0, 200)*/);
         }
 
 });
