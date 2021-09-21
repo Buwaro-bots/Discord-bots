@@ -2,6 +2,7 @@ const config = require('./config.json');
 const pokedex = require('./pokedex.json');
 const INSdata = require('./ins.json');
 const tarot = require('./tarot.json');
+let statsLancers = require('./stats.json');
 
 const Discord = require("discord.js");
 const client = new Discord.Client();
@@ -45,9 +46,9 @@ client.on("message", (message) => {
     
     process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
 
-    const commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
-    const args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
-    const command = args.shift().toLowerCase();
+    let commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
+    let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
+    let command = args.shift().toLowerCase();
 
     try {
         if (command === "code" || command === "source"){
@@ -95,11 +96,18 @@ client.on("message", (message) => {
                 }); 
             }
             else if (command === "isekai") {
-                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}.`); // Console.log pour pas faire bugger le then
+                let rollShiny = randomNumber(256);
+                let estShiny = "";
+
+                if (rollShiny === 1){
+                    estShiny = " **shiny**"
+                }
+
+                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny}.`); // Console.log pour pas faire bugger le then
                 message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
                 .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
                     setTimeout(function(){
-                        msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}.`);
+                        msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny}.`);
                     }, 5000)
                 });
             }
@@ -191,6 +199,14 @@ client.on("message", (message) => {
                 return;
             }
 
+            if (args[0] == "effacerstats" && message.author.id === config.admin ){
+                statsLancers = {}
+
+                let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./stats.json', writer);
+                console.log("Lancers effacés.")
+                return;
+            }
             if (args[0] == "message"){ // Commande permettant à quelqu'un de rajouter un message personalisé
                 if (args[2] == "deletethis"){
                     // A faire
@@ -223,7 +239,7 @@ client.on("message", (message) => {
             let verbe = "lancé";
 
             if (args[0] === "cheat" && args.length >= 4) {
-                dices = [parseInt(args[1]), parseInt(args[2]), parseInt(args[3])];
+                dices = [parseInt(args[1]), parseInt(args[2]), parseInt(args[3])]; // Penser à mettre modulo / int pour demander 666 au lieu de 6 6 6.
                 verifierNaN(dices);
                 verbe = "triché avec";
             }
@@ -294,6 +310,15 @@ client.on("message", (message) => {
 
             
             envoyerMessage(botReply, message);
+
+            if(!(message.author.username in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
+                statsLancers[message.author.username] = [];
+            }
+
+            statsLancers[message.author.username].push(`[${dices[0]}${dices[1]}]+[${dices[2]}]`)
+
+            let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./stats.json', writer);
         }
 
         else if(command === "tarot" ){
@@ -340,13 +365,23 @@ client.on("message", (message) => {
         }
 
         else if(command === "roll"){ // A FAIRE (Répétitions, et faire des rolls enregistrés ?)
-            if (args.length == 0){ // Si il y a juste roll, je fais quand même un lancer
-                const lancerParDefaut = 100;
-                let botReply = `${message.author.toString()} sur 1d${lancerParDefaut} a lancé **${randomNumber(lancerParDefaut)}**.`;
-                envoyerMessage(botReply, message);
+            if (args[0] == "setup"){
+                config.lancerParDefault = args[1];
+                let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./config.json', writer);
+                envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message);
+                return;
             }
 
-            else if (args.length == 1 && !args[0].includes("d")){ // Si une personne envoit juste un nombre sans écrire "d", dans ce cas on lance un d.
+
+            if (args.length == 0){ // Si il y a juste roll, je fais quand même un lancer
+                args = [config.lancerParDefault];
+                commandBody += " " + config.lancerParDefault;
+            }
+            
+
+            if (args.length == 1 && (!args[0].toLowerCase().includes("d") || args[0].toLowerCase().charAt(0) == "d")){ // Si une personne envoit juste un nombre sans écrire "d" ou "d100", dans ce cas on lance un dé.
+                args[0] = args[0].toLowerCase().replace("d", "");
                 verifierNaN(args)
                 let lancer = parseInt(args[0]);
                 if (lancer > 9000000000000000) throw("Nombre trop grand");
@@ -358,15 +393,18 @@ client.on("message", (message) => {
                 let listeCommandes = []; // [commande, bool estLancer, [lancers], somme]
                 let listeOperateurs = ["+","-","*","/","(",")",">","<"];
 
-                let args = commandBody // On refait args pour pouvoir séparer mieux
+                args = commandBody // On refait args pour pouvoir séparer mieux
                 for (let i = 0; i < listeOperateurs.length; i+=1){
                     args = args.split(`${listeOperateurs[i]}`).join(` ${listeOperateurs[i]} `);
                 }
-                args = args.split(/ +/);
+                args = args.toLowerCase().split(/ +/);
                 args.shift();
+
+
 
                 for (let i = 0; i < args.length; i++){ // On cherche ce que sont chaque commande
                     if(args[i].includes("d")){ // Si la commande a d...
+                        args[i] = args[i].charAt(0) === "d" ? "1" + args[i] : args[i];
                         args[i] = args[i].split("d");
                         if(args[i].length == 2 && !isNaN(args[i][0]) && !isNaN(args[i][1]) && parseInt(args[i][0]) > 0 && parseInt(args[i][1]) > 1){ // On regarde si il y a bien deux nombres qui soient valide
                             let lancer = 0;
@@ -401,7 +439,7 @@ client.on("message", (message) => {
                         reponseSomme += listeCommandes[i][0]
                     }
                 }
-
+                //console.log(reponseSomme);
                 reponseSomme = Math.round(eval(reponseSomme)*100)/100; // On calcule le résultat...
                 let botReply = `${message.author.toString()} sur ${reponseCommandes} a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
                 if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.

@@ -2,4 +2,5 @@
     "botToken" : "aaa",
     "admin" : "mon id"
     "canalLogs" : "id d'un canal de log"
+    "lancerParDefault": "100 ou 20 ou 2d20 ou 5d12 * 4 - 20"
 }
