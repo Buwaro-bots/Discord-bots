@@ -1,6 +1,7 @@
 const config = require('./config.json');
 const pokedex = require('./pokedex.json');
 const INSdata = require('./ins.json');
+const horoscope = require('./horoscope.json');
 const tarot = require('./tarot.json');
 let statsLancers = require('./stats.json');
 
@@ -114,7 +115,29 @@ client.on("message", (message) => {
         }
 
         else if(command === "horoscope"){
-            envoyerMessage("Beep beep I'm a sheep. :sheep:", message);
+
+            let continuer = true;
+            let alea = 0;
+
+            let famille = horoscope;
+            while (continuer){
+                alea = randomNumber(100);
+                process.stdout.write(`${alea} => `);
+                let nouvelleFamille;
+                famille.forEach(element => {
+                    if (alea > 0 && alea <= element["probabilité"]){
+                        nouvelleFamille = element["liste"];
+                        if (element["type"] == "liste"){
+                            continuer = false;
+                        }
+                    }
+                    alea -= element["probabilité"];
+                });
+                famille = nouvelleFamille
+            }
+
+            let animal = famille[randomNumber(famille.length)-1];
+            envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message);
             return;
         }
         else if(command === "dng"){
