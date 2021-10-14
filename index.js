@@ -103,7 +103,7 @@ client.on("message", (message) => {
                     estShiny = " **shiny**"
                 }
 
-                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny}${rollShiny}.`); // Console.log pour pas faire bugger le then
+                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny} [${rollShiny}].`); // Console.log pour pas faire bugger le then
                 message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
                 .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
                     setTimeout(function(){
@@ -113,6 +113,10 @@ client.on("message", (message) => {
             }
         }
 
+        else if(command === "horoscope"){
+            envoyerMessage("Beep beep I'm a sheep. :sheep:")
+            return;
+        }
         else if(command === "dng"){
             let est_PC = false;
             let calculer_reussite = false; // On ne dit si c'est une réussite ou pas que si le dd ou l'avantage est donné.
