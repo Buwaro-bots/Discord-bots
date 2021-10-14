@@ -103,7 +103,7 @@ client.on("message", (message) => {
                     estShiny = " **shiny**"
                 }
 
-                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny}.`); // Console.log pour pas faire bugger le then
+                console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny}${rollShiny}.`); // Console.log pour pas faire bugger le then
                 message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
                 .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
                     setTimeout(function(){
