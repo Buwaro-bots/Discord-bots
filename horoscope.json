@@ -33,7 +33,7 @@
                                 "nom": "autres",
                                 "probabilité": 20,
                                 "type": "liste",
-                                "liste" : ["Loups", "Coyotes", "Dingos"]
+                                "liste" : ["Loup", "Coyote", "Dingo"]
                             }
                         ]
                     },
@@ -41,19 +41,19 @@
                         "nom": "félins",
                         "probabilité": 10,
                         "type": "liste",
-                        "liste" : ["Chat", "Tigre", "Lion", "Guépard"]
+                        "liste" : ["Chat", "Tigre", "Lion", "Guépard", "Lynx", "Léopard", "Hyène"]
                     },
                     {
                         "nom": "autres (à faire)",
                         "probabilité": 70,
                         "type": "liste",
-                        "liste": ["Cochon", "Cheval", "Bouc", "Ane", "Ornithorynque", "Souris", "Ecureuil", "Loutre", "Elephant", "Kangourou", "Furet", "Ours", "Ouistiti"]
+                        "liste": ["Cochon", "Cheval", "Bouc", "Ane", "Ornithorynque", "Lapin", "Souris", "Ecureuil", "Loutre", "Elephant", "Rhinocéros", "Kangourou", "Furet", "Ours", "Ouistiti", "Blaireau", "Chauve-Souris", "Cerf", "Fourmilier", "Taupe", "Boeuf / Vache", "Panda Roux", "Raton Laveur", "Hippopotame", "Putois", "Oppossum", "Castor", "Lémurien"]
                     }
                 ]
             },
             {
                 "nom": "reptiles",
-                "probabilité": 15,
+                "probabilité": 16,
                 "type": "liste",
                 "liste": ["Crocodile", "Alligator", "Dragon de Komodo", "Gecko", "Iguane", "Serpent", "Vipère", "Caméléon", "Tortue", "Lézard"]
             },
@@ -61,17 +61,17 @@
                 "nom": "oiseaux",
                 "probabilité": 15,
                 "type": "liste",
-                "liste": ["Corbeau", "Pigeon", "Mouette", "Moineau", "Hibou", "Canard", "Cygne", "Pingouin"]
+                "liste": ["Corbeau", "Pigeon", "Mouette", "Moineau", "Hibou", "Canard", "Cygne", "Pingouin", "Aigle", "Perroquet", "Coq/Poule", "Vautour"]
             },
             {
                 "nom": "poissons et mammifères marin",
-                "probabilité": 10,
+                "probabilité": 12,
                 "type": "liste",
-                "liste": ["Requin", "Dauphin", "Phoque", "Baleine", "Anguille", "Poisson-chat", "Sardine", "Coelacanthe"]
+                "liste": ["Requin", "Dauphin", "Phoque", "Baleine", "Anguille", "Poisson-chat", "Sardine", "Coelacanthe", "Narval", "Orque"]
             },
             {
                 "nom": "amphibiens",
-                "probabilité": 5,
+                "probabilité": 4,
                 "type": "liste",
                 "liste": ["Salamendre", "Grenouille", "Axolotl"]
             }
@@ -81,7 +81,7 @@
         "nom": "invertébrés",
         "probabilité": 4,
         "type": "liste",
-        "liste": ["Pieuvre", "Escargot", "Scorpion", "Araignée", "Méduse", "Abeille", "Fourmis", "Mante religieuse", "Libellule", "Scarabée", "Papillon", "Coccinelle", "Criquet"]
+        "liste": ["Pieuvre", "Escargot", "Scorpion", "Araignée", "Méduse", "Abeille", "Bourdon", "Fourmis", "Mante religieuse", "Libellule", "Scarabée", "Papillon", "Coccinelle", "Criquet", "Crabe"]
     },
     {
         "nom": "mythiques",
@@ -98,7 +98,7 @@
                 "nom": "mythiques",
                 "probabilité": 34,
                 "type": "liste",
-                "liste": ["Griffon", "Dragon", "Kobold"]
+                "liste": ["Griffon", "Dragon", "Kobold", "Protogen"]
             },
             {
                 "nom": "dodo",

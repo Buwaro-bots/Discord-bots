@@ -116,30 +116,50 @@ client.on("message", (message) => {
 
         else if(command === "horoscope"){
 
-            let continuer = true;
-            let alea = 0;
-
-            let famille = horoscope;
-            while (continuer){
-                alea = randomNumber(100);
-                process.stdout.write(`${alea} => `);
-                let nouvelleFamille;
-                famille.forEach(element => {
-                    if (alea > 0 && alea <= element["probabilité"]){
-                        nouvelleFamille = element["liste"];
-                        if (element["type"] == "liste"){
-                            continuer = false;
-                        }
-                    }
-                    alea -= element["probabilité"];
-                });
-                famille = nouvelleFamille
+            let nbBoucle = 1
+            if (args.length > 0 && args[0] == "hybride"){
+                if (args.length > 1){
+                    nbBoucle = parseInt(args[1]);
+                }
+                else {
+                    nbBoucle = 2;
+                }
             }
+       
+            let animal = "";
+            let boucleEnCours = 1;
 
-            let animal = famille[randomNumber(famille.length)-1];
+            while (boucleEnCours <= nbBoucle){
+                let continuer = true;
+                let alea = 0;
+
+                let famille = horoscope;
+                while (continuer){
+                    alea = randomNumber(100);
+                    process.stdout.write(`${alea} => `);
+                    let nouvelleFamille;
+                    famille.forEach(element => {
+                        if (alea > 0 && alea <= element["probabilité"]){
+                            nouvelleFamille = element["liste"];
+                            if (element["type"] == "liste"){
+                                continuer = false;
+                            }
+                        }
+                        alea -= element["probabilité"];
+                    });
+                    famille = nouvelleFamille
+                }
+
+                animal += famille[randomNumber(famille.length)-1];
+                if (boucleEnCours < nbBoucle){
+                    animal += "-";
+                }
+                boucleEnCours += 1;
+            }
             envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message);
             return;
         }
+
         else if(command === "dng"){
             let est_PC = false;
             let calculer_reussite = false; // On ne dit si c'est une réussite ou pas que si le dd ou l'avantage est donné.
