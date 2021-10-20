@@ -47,7 +47,7 @@
                         "nom": "autres (à faire)",
                         "probabilité": 70,
                         "type": "liste",
-                        "liste": ["Cochon", "Cheval", "Bouc", "Ane", "Ornithorynque", "Lapin", "Souris", "Ecureuil", "Loutre", "Elephant", "Rhinocéros", "Kangourou", "Furet", "Ours", "Ouistiti", "Blaireau", "Chauve-Souris", "Cerf", "Fourmilier", "Taupe", "Boeuf / Vache", "Panda Roux", "Raton Laveur", "Hippopotame", "Putois", "Oppossum", "Castor", "Lémurien"]
+                        "liste": ["Cochon", "Cheval", "Bouc", "Ane", "Ornithorynque", "Lapin", "Souris", "Ecureuil", "Loutre", "Elephant", "Rhinocéros", "Kangourou", "Furet", "Ours", "Ouistiti", "Blaireau", "Chauve-souris", "Cerf", "Fourmilier", "Taupe", "Boeuf / Vache", "Panda Roux", "Raton laveur", "Hippopotame", "Putois", "Oppossum", "Castor", "Lémurien", "Pangolin"]
                     }
                 ]
             },
