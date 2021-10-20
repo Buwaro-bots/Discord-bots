@@ -2,6 +2,7 @@ const config = require('./config.json');
 const pokedex = require('./pokedex.json');
 const INSdata = require('./ins.json');
 const horoscope = require('./horoscope.json');
+const aliases = require('./aliases.json');
 const tarot = require('./tarot.json');
 let statsLancers = require('./stats.json');
 
@@ -29,9 +30,15 @@ function sleep(ms) {
     });
 }     
 
-function envoyerMessage(botReply, message){ // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot.
+// Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot. Si la réponse doit être par mp, envoyerPM doit être égal à true
+function envoyerMessage(botReply, message, envoyerPM = false){ 
     console.log(botReply.substring(0, 100));
-    message.channel.send(botReply);
+    if (envoyerPM){
+        message.author.send(botReply);
+    }
+    else {
+        message.channel.send(botReply);
+    }
 }
 
 let prefix = ";"; // Set the prefix
@@ -39,21 +46,37 @@ console.log("Ready!");
 
 client.on("message", (message) => {
     if (message.content.startsWith("$") && message.guild.id === "846473259478024242") {
-        envoyerMessage("Je ne suis pas mudae. <:monkaS:411272701022568458>", message);
+        envoyerMessage("Je ne suis pas mudae. <:monkaS:411272701022568458>", message, envoyerPM);
         return;
     }
     
     if (!message.content.startsWith(prefix) || message.author.bot) return;     // Exit and stop if the prefix is not there or if user is a bot
     
     process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
+    let envoyerPM = false; // Cette variable indique si la réponse doit être envoyée par mp.
 
+    /* Note pour moi même :
+    commandBody : string qui représente le message tel qu'il est entré moins le préfix.
+    args        : tableau qui contient tout les paramètres après la commande
+    command     : string qui est la commande après le préfix
+    */
     let commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     let command = args.shift().toLowerCase();
 
     try {
+
+        // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
+        aliases.forEach(alias => {
+            if (command == alias["nom"]){
+                command = alias["alias"];
+                eval(alias["commande"]);
+                return;
+            }
+        })
+
         if (command === "code" || command === "source"){
-            envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message);
+            envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message, envoyerPM);
         }
 
         else if(command === "pokemon" || command === "isekai") {
@@ -156,7 +179,7 @@ client.on("message", (message) => {
                 }
                 boucleEnCours += 1;
             }
-            envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message);
+            envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM);
             return;
         }
 
@@ -201,7 +224,7 @@ client.on("message", (message) => {
             let botReply = `${message.author.toString()} avec une stat de ${stat},${message_reussite_un} a lancé [${dices[0]}] [${dices[1]}]. ${message_reussite_deux}`;
             
             
-            envoyerMessage(botReply, message);
+            envoyerMessage(botReply, message, envoyerPM);
 
             // Echelon Dé de puissance (Réussite de base de 10 ou 14 en fonction de si thème primaire ou secondaire)
             // 1 2d4
@@ -225,7 +248,7 @@ client.on("message", (message) => {
                     ";ins **tum** affiche la table unique multiple.\r\n"+
                     ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"+
                     ";ins **opposition** :construction:"
-                    , message
+                    , message, envoyerPM
                 )
                 return;
             }
@@ -242,7 +265,7 @@ client.on("message", (message) => {
                     botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
                 }
                 botReply = botReply.slice(0,-2) + "\`\`\`"
-                envoyerMessage(botReply, message);
+                envoyerMessage(botReply, message, envoyerPM);
                 return;
             }
 
@@ -270,7 +293,7 @@ client.on("message", (message) => {
                     INSdata.lancersSpeciaux[args[1]][message.author.id] = phrase; // On rajoute le message dans la base de données
                     let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${args[1]}, je vais afficher le message : ${phrase}`;
 
-                    envoyerMessage(botReply, message);
+                    envoyerMessage(botReply, message, envoyerPM);
                     client.channels.cache.get(config.canalLogs).send(botReply);
                 }
 
@@ -356,7 +379,7 @@ client.on("message", (message) => {
             }
 
             
-            envoyerMessage(botReply, message);
+            envoyerMessage(botReply, message, envoyerPM);
 
             if(!(message.author.username in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
                 statsLancers[message.author.username] = [];
@@ -416,12 +439,12 @@ client.on("message", (message) => {
                 config.lancerParDefault = args[1];
                 let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
                 fs.writeFileSync('./config.json', writer);
-                envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message);
+                envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message, envoyerPM);
                 return;
             }
 
 
-            if (args.length == 0){ // Si il y a juste roll, je fais quand même un lancer
+            if (args.length == 0){ // Si il y a juste roll, je fais le lancer par défaut
                 args = [config.lancerParDefault];
                 commandBody += " " + config.lancerParDefault;
             }
@@ -433,7 +456,7 @@ client.on("message", (message) => {
                 let lancer = parseInt(args[0]);
                 if (lancer > 9000000000000000) throw("Nombre trop grand");
                 let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${randomNumber(lancer)}**.`;
-                envoyerMessage(botReply, message);
+                envoyerMessage(botReply, message, envoyerPM);
             }
 
             else {
@@ -491,7 +514,7 @@ client.on("message", (message) => {
                 let botReply = `${message.author.toString()} sur ${reponseCommandes} a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
                 if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
                 if (reponseSomme > 9000000000000000) throw("Nombre trop grand");
-                envoyerMessage(botReply, message);
+                envoyerMessage(botReply, message, envoyerPM);
             }
         }
 
