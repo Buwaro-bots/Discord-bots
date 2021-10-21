@@ -8,6 +8,8 @@ Enlever les fonctions qui ne servent à rien. (faire un fichier / dossier poubel
 Faire la fonction jet en opposition pour ins.
 Faire un mode auto vérification de jet pour ins.
 Faire un meilleur logs de jets pour ins et rolls.
+Permettre la répétition de rolls.
+Faire des rolls pré-enregistrés.
 
 
     Peu important
