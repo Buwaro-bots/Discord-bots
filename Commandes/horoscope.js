@@ -42,5 +42,5 @@ exports.horoscope = function(message, args){
         }
         boucleEnCours += 1;
     }
-    outils.envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message);
+    outils.envoyerMessage(client, `${message.author.toString()} Votre signe du jour est : ${animal}.`, message);
 }

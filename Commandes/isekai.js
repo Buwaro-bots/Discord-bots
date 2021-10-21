@@ -1,7 +1,7 @@
 const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
 
-exports.isekai = function(command, message, args, envoyerPM, idMJ){
+exports.isekai = function(client, message, args, command){
     let number = 0;
     if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
 

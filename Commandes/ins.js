@@ -4,11 +4,11 @@ let statsLancers = require('../Données/stats.json');
 const config = require('../config.json');
 const fs = require('fs');
 
-exports.ins = function(message, args, envoyerPM, idMJ, client){
+exports.ins = function(client, message, args, envoyerPM, idMJ){
     [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
     if(["aide","help","commandes"].includes(args[0])){
-        outils.envoyerMessage(
+        outils.envoyerMessage(client, 
             "**;ins** permet de faire un jet normal.\r\n" +
             ";ins **stats** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins stats +3**.\r\n" +
             ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins stats 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
@@ -23,7 +23,7 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
     }
 
     if (["table","tum","TUM"].includes(args[0])){
-        outils.envoyerMessage("https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png", message);
+        outils.envoyerMessage(client, "https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png", message);
         return;
     }
 
@@ -34,7 +34,7 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
             botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
         }
         botReply = botReply.slice(0,-2) + "\`\`\`"
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         return;
     }
 
@@ -62,7 +62,7 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
             INSdata.lancersSpeciaux[args[1]][message.author.id] = phrase; // On rajoute le message dans la base de données
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${args[1]}, je vais afficher le message : ${phrase}`;
 
-            outils.envoyerMessage(botReply, message);
+            outils.envoyerMessage(client, botReply, message);
             client.channels.cache.get(config.canalLogs).send(botReply);
         }
 
@@ -148,7 +148,7 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
     }
 
 
-    outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+    outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 
     if(!(message.author.username in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
         statsLancers[message.author.username] = [];

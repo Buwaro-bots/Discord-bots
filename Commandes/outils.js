@@ -18,7 +18,7 @@ module.exports = {
     },  
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot. Si la réponse doit être par mp, envoyerPM doit être égal à true
-    envoyerMessage: function(botReply, message, envoyerPM = false, idMJ = null){
+    envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null){
         console.log(botReply.substring(0, 100));
         if (envoyerPM){
             message.author.send(botReply);

@@ -2,14 +2,14 @@ const outils = require("./outils.js");
 const config = require('../config.json');
 const fs = require('fs');
 
-exports.roll = function(message, args, envoyerPM, idMJ, commandBody){
+exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody){
     [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
     if (args[0] == "setup"){
         config.lancerParDefault = args[1];
         let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./config.json', writer);
-        outils.envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message);
+        outils.envoyerMessage(client, `Le lancer par défaut est maintenant ${args[1]}.`, message);
         return;
     }
 
@@ -26,7 +26,7 @@ exports.roll = function(message, args, envoyerPM, idMJ, commandBody){
         let lancer = parseInt(args[0]);
         if (lancer > 9000000000000000) throw("Nombre trop grand");
         let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${outils.randomNumber(lancer)}**.`;
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     }
 
     else {
@@ -84,6 +84,6 @@ exports.roll = function(message, args, envoyerPM, idMJ, commandBody){
         let botReply = `${message.author.toString()} sur ${reponseCommandes} a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
         if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
         if (reponseSomme > 9000000000000000) throw("Nombre trop grand");
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     }
 }

@@ -15,7 +15,7 @@ console.log("Ready!");
 
 client.on("message", (message) => {
     if (message.content.startsWith("$") && message.guild.id === "846473259478024242") {
-        outils.envoyerMessage("Je ne suis pas mudae. <:monkaS:411272701022568458>", message, envoyerPM);
+        outils.envoyerMessage(client, "Je ne suis pas mudae. <:monkaS:411272701022568458>", message, envoyerPM);
         return;
     }
     
@@ -46,11 +46,11 @@ client.on("message", (message) => {
 
         if (command === "code" || command === "source"){
             console.log(`\n\n\n${mesCommandes.outils}\n\n\n`);
-            mesCommandes.outils.envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message);
+            mesCommandes.outils.envoyerMessage(client, "https://github.com/Buwaro-bots/Discord-bots", message);
         }
 
         else if(command === "pokemon" || command === "isekai") {
-            mesCommandes.isekai.isekai(command, message, args, envoyerPM, idMJ);
+            mesCommandes.isekai.isekai(client, message, args, command);
         }
 
         else if(command === "horoscope"){
@@ -58,10 +58,10 @@ client.on("message", (message) => {
         }
 
         else if(command === "dng"){
-            mesCommandes.dng.dng(message, args, envoyerPM, idMJ);
+            mesCommandes.dng.dng(client, message, args, envoyerPM, idMJ);
         }
         else if(command === "ins") { // A faire : Les jets d'opposition si Soraniak trouve ça utile et que j'ai eu le temps de lui demander
-            mesCommandes.ins.ins(message, args, envoyerPM, idMJ, client);
+            mesCommandes.ins.ins(client, message, args, envoyerPM, idMJ);
         }
 
         else if(command === "ramoloss") {
@@ -76,7 +76,7 @@ client.on("message", (message) => {
         }
 
         else if(command === "roll"){ // A FAIRE (Répétitions, et faire des rolls enregistrés ?)
-            mesCommandes.roll.roll(message, args, envoyerPM, idMJ, commandBody);
+            mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
         }
 
         else if(command === "fermer" && message.author.id === config.admin){
