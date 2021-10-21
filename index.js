@@ -1,4 +1,5 @@
 const config = require('./config.json');
+const outils = require("./Commandes/outils.js");
 const aliases = require('./Données/aliases.json');
 let statsLancers = require('./Données/stats.json');
 
@@ -65,11 +66,11 @@ client.on("message", (message) => {
 
         else if(command === "ramoloss") {
             async function speak() {
-                temps = 5*60*1000 + randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
+                temps = 5*60*1000 + outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
                 console.log(temps/1000)
-                await sleep(temps); 
+                await outils.sleep(temps); 
                 message.channel.send(`${message.author.toString()}`);
-                message.channel.send("https://i.gifer.com/7Skf.gif")
+                message.channel.send("https://tenor.com/view/confusedslow-gif-22074333")
             }
             speak();
         }
