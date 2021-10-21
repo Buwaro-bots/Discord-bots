@@ -31,14 +31,28 @@ function sleep(ms) {
 }     
 
 // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot. Si la réponse doit être par mp, envoyerPM doit être égal à true
-function envoyerMessage(botReply, message, envoyerPM = false){ 
+function envoyerMessage(botReply, message, envoyerPM = false, idMJ = null){ 
     console.log(botReply.substring(0, 100));
     if (envoyerPM){
         message.author.send(botReply);
+        if (idMJ != null){
+            client.users.cache.get(idMJ).send(botReply);
+        }
+        message.react('📬');
     }
     else {
         message.channel.send(botReply);
     }
+}
+
+function verifierSiMJ(args){
+    longueur = args.length;
+    if (longueur > 0 && args[longueur -1].startsWith('<@!')){
+        idMJ = args.pop();
+        idMJ = idMJ.substring(3, idMJ.length-1);
+        return [args, true, idMJ];
+    }
+    return [args, false];
 }
 
 let prefix = ";"; // Set the prefix
@@ -63,7 +77,6 @@ client.on("message", (message) => {
     let commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     let command = args.shift().toLowerCase();
-
     try {
 
         // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
@@ -184,6 +197,15 @@ client.on("message", (message) => {
         }
 
         else if(command === "dng"){
+            let array = verifierSiMJ(args);
+            args = array[0];
+            let idMJ = null;
+            if (array[1]){
+                envoyerPM = true;
+                idMJ = array[2];
+            }
+
+
             let est_PC = false;
             let calculer_reussite = false; // On ne dit si c'est une réussite ou pas que si le dd ou l'avantage est donné.
             let stat = 3; // Si aucune information est donnée, on assume que la stat est de 3 et le dd de 3. Si ça pose problème de toute façon le bot le mentionne.
@@ -224,7 +246,7 @@ client.on("message", (message) => {
             let botReply = `${message.author.toString()} avec une stat de ${stat},${message_reussite_un} a lancé [${dices[0]}] [${dices[1]}]. ${message_reussite_deux}`;
             
             
-            envoyerMessage(botReply, message, envoyerPM);
+            envoyerMessage(botReply, message, envoyerPM, idMJ);
 
             // Echelon Dé de puissance (Réussite de base de 10 ou 14 en fonction de si thème primaire ou secondaire)
             // 1 2d4
@@ -238,6 +260,14 @@ client.on("message", (message) => {
             // 20 2d12
         }
         else if(command === "ins") { // A faire : Les jets d'opposition si Soraniak trouve ça utile et que j'ai eu le temps de lui demander
+            let array = verifierSiMJ(args);
+            args = array[0];
+            let idMJ = null;
+            if (array[1]){
+                envoyerPM = true;
+                idMJ = array[2];
+            }
+
             if(["aide","help","commandes"].includes(args[0])){
                 envoyerMessage(
                     "**;ins** permet de faire un jet normal.\r\n" +
@@ -265,7 +295,7 @@ client.on("message", (message) => {
                     botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
                 }
                 botReply = botReply.slice(0,-2) + "\`\`\`"
-                envoyerMessage(botReply, message, envoyerPM);
+                envoyerMessage(botReply, message, envoyerPM, idMJ);
                 return;
             }
 
@@ -293,7 +323,7 @@ client.on("message", (message) => {
                     INSdata.lancersSpeciaux[args[1]][message.author.id] = phrase; // On rajoute le message dans la base de données
                     let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${args[1]}, je vais afficher le message : ${phrase}`;
 
-                    envoyerMessage(botReply, message, envoyerPM);
+                    envoyerMessage(botReply, message);
                     client.channels.cache.get(config.canalLogs).send(botReply);
                 }
 
@@ -379,7 +409,7 @@ client.on("message", (message) => {
             }
 
             
-            envoyerMessage(botReply, message, envoyerPM);
+            envoyerMessage(botReply, message, envoyerPM, idMJ);
 
             if(!(message.author.username in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
                 statsLancers[message.author.username] = [];
@@ -435,11 +465,21 @@ client.on("message", (message) => {
         }
 
         else if(command === "roll"){ // A FAIRE (Répétitions, et faire des rolls enregistrés ?)
+            let array = verifierSiMJ(args);
+            args = array[0];
+            let idMJ = null;
+            if (array[1]){
+                envoyerPM = true;
+                idMJ = array[2];
+            }
+       
+
+
             if (args[0] == "setup"){
                 config.lancerParDefault = args[1];
                 let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
                 fs.writeFileSync('./config.json', writer);
-                envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message, envoyerPM);
+                envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message);
                 return;
             }
 
@@ -456,7 +496,7 @@ client.on("message", (message) => {
                 let lancer = parseInt(args[0]);
                 if (lancer > 9000000000000000) throw("Nombre trop grand");
                 let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${randomNumber(lancer)}**.`;
-                envoyerMessage(botReply, message, envoyerPM);
+                envoyerMessage(botReply, message, envoyerPM, idMJ);
             }
 
             else {
@@ -514,7 +554,7 @@ client.on("message", (message) => {
                 let botReply = `${message.author.toString()} sur ${reponseCommandes} a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
                 if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
                 if (reponseSomme > 9000000000000000) throw("Nombre trop grand");
-                envoyerMessage(botReply, message, envoyerPM);
+                envoyerMessage(botReply, message, envoyerPM, idMJ);
             }
         }
 

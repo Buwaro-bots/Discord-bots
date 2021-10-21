@@ -2,8 +2,6 @@
 Mettre toutes les fonctionalités dans des fonctions et des fichiers à part ?
 Remettre toutes les variables en français pour être plus consistant. (c'est un projet purement perso, comme les réponses du bot sont en français autant rester cohérent)
 Mettre plus de commentaires pour que je puisse mieux me repérer après.
-Faire des jets secrets. (avec une commande ;;, mettre un bool mp en true, ce qui envoit en privé, peut en vrai fonctionner avec toutes les commandes)
-
 
     Assez important
 Enlever les fonctions qui ne servent à rien. (faire un fichier / dossier poubelle ?)
@@ -15,3 +13,7 @@ Faire un meilleur logs de jets pour ins et rolls.
     Peu important
 Essayer d'importer les fonctions du bot musical en important le fichier ?
 Regarder comment la gestion des emotes fonctionne. Peut-être faire une gestion de rôle?
+
+
+    Déjà fait
+Faire des jets secrets. (avec une commande ;;, mettre un bool mp en true, ce qui envoit en privé, peut en vrai fonctionner avec toutes les commandes) -> ping au mj pour qu'il le reçoive
