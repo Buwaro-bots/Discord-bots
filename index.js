@@ -31,7 +31,7 @@ function sleep(ms) {
 }     
 
 // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot. Si la réponse doit être par mp, envoyerPM doit être égal à true
-function envoyerMessage(botReply, message, envoyerPM = false, idMJ = null){ 
+function envoyerMessage(botReply, message, envoyerPM = false, idMJ = null){
     console.log(botReply.substring(0, 100));
     if (envoyerPM){
         message.author.send(botReply);
@@ -45,14 +45,14 @@ function envoyerMessage(botReply, message, envoyerPM = false, idMJ = null){
     }
 }
 
-function verifierSiMJ(args){
+function verifierSiMJ(args, envoyerPM){
     longueur = args.length;
     if (longueur > 0 && args[longueur -1].startsWith('<@!')){
         idMJ = args.pop();
         idMJ = idMJ.substring(3, idMJ.length-1);
         return [args, true, idMJ];
     }
-    return [args, false];
+    return [args, envoyerPM, null];
 }
 
 let prefix = ";"; // Set the prefix
@@ -68,6 +68,7 @@ client.on("message", (message) => {
     
     process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
     let envoyerPM = false; // Cette variable indique si la réponse doit être envoyée par mp.
+    let idMJ = null;
 
     /* Note pour moi même :
     commandBody : string qui représente le message tel qu'il est entré moins le préfix.
@@ -89,7 +90,7 @@ client.on("message", (message) => {
         })
 
         if (command === "code" || command === "source"){
-            envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message, envoyerPM);
+            envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message);
         }
 
         else if(command === "pokemon" || command === "isekai") {
@@ -197,14 +198,7 @@ client.on("message", (message) => {
         }
 
         else if(command === "dng"){
-            let array = verifierSiMJ(args);
-            args = array[0];
-            let idMJ = null;
-            if (array[1]){
-                envoyerPM = true;
-                idMJ = array[2];
-            }
-
+            [args, envoyerPM, idMJ] = verifierSiMJ(args, envoyerPM);
 
             let est_PC = false;
             let calculer_reussite = false; // On ne dit si c'est une réussite ou pas que si le dd ou l'avantage est donné.
@@ -260,13 +254,7 @@ client.on("message", (message) => {
             // 20 2d12
         }
         else if(command === "ins") { // A faire : Les jets d'opposition si Soraniak trouve ça utile et que j'ai eu le temps de lui demander
-            let array = verifierSiMJ(args);
-            args = array[0];
-            let idMJ = null;
-            if (array[1]){
-                envoyerPM = true;
-                idMJ = array[2];
-            }
+            [args, envoyerPM, idMJ] = verifierSiMJ(args, envoyerPM);
 
             if(["aide","help","commandes"].includes(args[0])){
                 envoyerMessage(
@@ -465,15 +453,7 @@ client.on("message", (message) => {
         }
 
         else if(command === "roll"){ // A FAIRE (Répétitions, et faire des rolls enregistrés ?)
-            let array = verifierSiMJ(args);
-            args = array[0];
-            let idMJ = null;
-            if (array[1]){
-                envoyerPM = true;
-                idMJ = array[2];
-            }
-       
-
+            [args, envoyerPM, idMJ] = verifierSiMJ(args, envoyerPM);
 
             if (args[0] == "setup"){
                 config.lancerParDefault = args[1];
@@ -509,7 +489,7 @@ client.on("message", (message) => {
                 }
                 args = args.toLowerCase().split(/ +/);
                 args.shift();
-
+                if (idMJ != null) { args = args.splice(0, args.length-4) }
 
 
                 for (let i = 0; i < args.length; i++){ // On cherche ce que sont chaque commande
