@@ -1,5 +1,5 @@
 const outils = require("./outils.js");
-const horoscope = require('../horoscope.json');
+const horoscope = require('../Données/horoscope.json');
 
 exports.horoscope = function(message, args){
     let nbBoucle = 1

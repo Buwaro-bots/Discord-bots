@@ -1,6 +1,6 @@
 const config = require('./config.json');
-const aliases = require('./aliases.json');
-let statsLancers = require('./stats.json');
+const aliases = require('./Données/aliases.json');
+let statsLancers = require('./Données/stats.json');
 
 const requireDir = require('require-dir');
 const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes commandes du dossier commande.

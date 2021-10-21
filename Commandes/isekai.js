@@ -1,5 +1,5 @@
 const outils = require("./outils.js");
-const pokedex = require('../pokedex.json');
+const pokedex = require('../Données/pokedex.json');
 
 exports.isekai = function(command, message, args, envoyerPM, idMJ){
     let number = 0;

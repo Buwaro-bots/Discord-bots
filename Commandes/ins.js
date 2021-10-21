@@ -1,6 +1,6 @@
 const outils = require("./outils.js");
-const INSdata = require('../ins.json');
-let statsLancers = require('../stats.json');
+const INSdata = require('../Données/ins.json');
+let statsLancers = require('../Données/stats.json');
 const config = require('../config.json');
 const fs = require('fs');
 
@@ -42,7 +42,7 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
         statsLancers = {}
 
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./stats.json', writer);
+        fs.writeFileSync('./Données/stats.json', writer);
         console.log("Lancers effacés.")
         return;
     }
@@ -67,7 +67,7 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
         }
 
         let writer = JSON.stringify(INSdata, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./ins.json', writer);
+        fs.writeFileSync('./Données/ins.json', writer);
         
 
         return;
@@ -157,5 +157,5 @@ exports.ins = function(message, args, envoyerPM, idMJ, client){
     statsLancers[message.author.username].push(`[${dices[0]}${dices[1]}]+[${dices[2]}]`)
 
     let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-    fs.writeFileSync('./stats.json', writer);
+    fs.writeFileSync('./Données/stats.json', writer);
 }
