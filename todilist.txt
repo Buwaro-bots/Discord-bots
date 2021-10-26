@@ -6,7 +6,6 @@ Mettre plus de commentaires pour que je puisse mieux me repérer après.
 Faire la fonction jet en opposition pour ins.
 Faire un meilleur log de jets pour ins et rolls.
 Permettre la répétition de rolls.
-Faire des rolls pré-enregistrés.
 Formes alternatives dans ;isekai.
 
 
@@ -21,3 +20,4 @@ Faire des jets secrets. (avec une commande ;;, mettre un bool mp en true, ce qui
 Mettre toutes les fonctionalités dans des fonctions et des fichiers à part
 Enlever les fonctions qui ne servent à rien. (faire un fichier / dossier poubelle ?)
 Faire un mode auto vérification de jet pour ins.
+Faire des rolls pré-enregistrés.

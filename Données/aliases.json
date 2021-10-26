@@ -27,5 +27,11 @@
     {   "nom" : "hiddendng",
         "alias" : "dng",
         "commande" : "envoyerPM = true;"
+    },
+
+    {
+        "nom": "repeat",
+        "alias": "repeat",
+        "commande" : "nbBouclesMax = parseInt(args.shift()) ; command = args.shift().toLowerCase();"
     }
 ]

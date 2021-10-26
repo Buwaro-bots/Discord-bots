@@ -11,7 +11,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         outils.envoyerMessage(client, 
             "**;ins** permet de faire un jet normal.\r\n" +
             ";ins **check** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins check +3**.\r\n" +
-            ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande)**.\r\n" +            
+            ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +            
             ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins verif 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
             ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve.\r\n" +
             ";ins **cheat** ***dé1*** ***dé2*** ***dé3*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
