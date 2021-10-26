@@ -4,14 +4,15 @@ Mettre plus de commentaires pour que je puisse mieux me repérer après.
 
     Assez important
 Faire la fonction jet en opposition pour ins.
-Faire un mode auto vérification de jet pour ins.
-Faire un meilleur logs de jets pour ins et rolls.
+Faire un meilleur log de jets pour ins et rolls.
 Permettre la répétition de rolls.
 Faire des rolls pré-enregistrés.
+Formes alternatives dans ;isekai.
 
 
     Peu important
-Essayer d'importer les fonctions du bot musical en important le fichier ?
+Revoir la programmation de la commande ins parce que j'ai du mal à m'y repérer.
+Essayer d'importer les fonctions du bot musical en important le fichier ? (Note : Je sais pas si c'est possible vu comment fonctionne la gestion des paquets)
 Regarder comment la gestion des emotes fonctionne. Peut-être faire une gestion de rôle?
 
 
@@ -19,3 +20,4 @@ Regarder comment la gestion des emotes fonctionne. Peut-être faire une gestion 
 Faire des jets secrets. (avec une commande ;;, mettre un bool mp en true, ce qui envoit en privé, peut en vrai fonctionner avec toutes les commandes) -> ping au mj pour qu'il le reçoive
 Mettre toutes les fonctionalités dans des fonctions et des fichiers à part
 Enlever les fonctions qui ne servent à rien. (faire un fichier / dossier poubelle ?)
+Faire un mode auto vérification de jet pour ins.

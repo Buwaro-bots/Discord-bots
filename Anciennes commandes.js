@@ -1,5 +1,11 @@
 const tarot = require('./tarot.json');
-/*else*/ if(command === "tarot" ){
+
+if (message.content.startsWith("$") && message.guild.id === "846473259478024242") {
+    outils.envoyerMessage(client, "Je ne suis pas mudae. <:monkaS:411272701022568458>", message, envoyerPM);
+    return;
+}
+
+else if(command === "tarot" ){
     if (args[0] === "mélanger") { // Pour mélanger le tarot on dit que chaque carte n'a pas été piochée.
         for (let i = 0; i < tarot.length; i++){
             tarot[i]["piochee"] = false;

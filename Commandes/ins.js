@@ -10,8 +10,9 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
     if(["aide","help","commandes"].includes(args[0])){
         outils.envoyerMessage(client, 
             "**;ins** permet de faire un jet normal.\r\n" +
-            ";ins **stats** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins stats +3**.\r\n" +
-            ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins stats 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
+            ";ins **check** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins check +3**.\r\n" +
+            ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande)**.\r\n" +            
+            ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins verif 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
             ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve.\r\n" +
             ";ins **cheat** ***dé1*** ***dé2*** ***dé3*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
             ";ins **tum** affiche la table unique multiple.\r\n"+
@@ -73,6 +74,25 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
+    if (args[0] == "autocheck"){
+        let botReply = "";
+        if (INSdata.listeAutoVerifications.includes(message.author.id)){
+            const index = INSdata.listeAutoVerifications.indexOf(message.author.id);
+            INSdata.listeAutoVerifications.splice(index, 1);
+            botReply = `${message.author.toString()} : Vous avez désactivé la vérification automatique.`;
+        }
+        else {
+            INSdata.listeAutoVerifications.push(message.author.id)
+            botReply = `${message.author.toString()} : Vous avez activé la vérification automatique.`;
+        }
+
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        let writer = JSON.stringify(INSdata, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/ins.json', writer);
+        
+        return;
+    }
+
     let dices = [outils.randomNumber(6), outils.randomNumber(6), outils.randomNumber(6)];
     let lancerSpecial = false;
     let verbe = "lancé";
@@ -97,7 +117,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         }
     }
 
-    if (args[0] === "stats" || args[0] === "verif" && lancerSpecial == false) { // Stats dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
+    if (args[0] === "check" || args[0] === "verif" || INSdata.listeAutoVerifications.includes(message.author.id) && lancerSpecial == false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
         let minimumStat = -2 ;
         let nomMinimumStat = "" ;
         let maximumRoll = 110;
@@ -108,9 +128,9 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         }
         i -= 1; // Je fais ça en attendant d'avoir une solution
 
-        if ((args[0] === "stats" && args.length >= 2) || (args[0] === "verif" && args.length >= 3)) { // On regarde si on demande une modifications du nombre de jets de colonnes.
+        if ((args[0] === "check" && args.length >= 2) || (args[0] === "verif" && args.length >= 3)) { // On regarde si on demande une modifications du nombre de jets de colonnes.
             let rowBonus = 0;
-            if (args[0] === "stats") {
+            if (args[0] === "check") {
                 rowBonus = -parseInt(args[1]);
             }
             else {
@@ -122,7 +142,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         minimumStat = INSdata.tum[i]["stat"];
         nomMinimumStat = INSdata.tum[i]["nomStat"];
 
-        if(args[0] === "stats") { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
+        if(args[0] === "check" || INSdata.listeAutoVerifications.includes(message.author.id)) { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
             if (minimumStat <= 0 ) {
                 botReply += ` Réussite quelque soit la stat.`;    
             }

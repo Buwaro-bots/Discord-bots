@@ -1,6 +1,5 @@
-const config = require('./config.json');
-const outils = require("./Commandes/outils.js");
-const aliases = require('./Données/aliases.json');
+const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
+const aliases = require('./Données/aliases.json'); // Ce fichier contient les noms alternatifs des commandes
 let statsLancers = require('./Données/stats.json');
 
 const requireDir = require('require-dir');
@@ -14,11 +13,6 @@ let prefix = ";"; // Set the prefix
 console.log("Ready!");
 
 client.on("message", (message) => {
-    if (message.content.startsWith("$") && message.guild.id === "846473259478024242") {
-        outils.envoyerMessage(client, "Je ne suis pas mudae. <:monkaS:411272701022568458>", message, envoyerPM);
-        return;
-    }
-    
     if (!message.content.startsWith(prefix) || message.author.bot) return;     // Exit and stop if the prefix is not there or if user is a bot
     
     process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
@@ -34,7 +28,15 @@ client.on("message", (message) => {
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     let command = args.shift().toLowerCase();
     try {
-
+        /* Partie à faire, renommer aussi le nom du tableau parce que je l'aime pas.
+        let parametresLogiciel = { 
+        "envoyerPM" : false, // Cette variable indique si la réponse doit être envoyée par mp.
+        "idMJ" : null,
+        "commandBody" : commandbody,
+        "args" : args,
+        "command" : command
+        };
+        */
         // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
         aliases.forEach(alias => {
             if (command == alias["nom"]){
@@ -45,7 +47,6 @@ client.on("message", (message) => {
         })
 
         if (command === "code" || command === "source"){
-            console.log(`\n\n\n${mesCommandes.outils}\n\n\n`);
             mesCommandes.outils.envoyerMessage(client, "https://github.com/Buwaro-bots/Discord-bots", message);
         }
 
@@ -60,15 +61,16 @@ client.on("message", (message) => {
         else if(command === "dng"){
             mesCommandes.dng.dng(client, message, args, envoyerPM, idMJ);
         }
+
         else if(command === "ins") { // A faire : Les jets d'opposition si Soraniak trouve ça utile et que j'ai eu le temps de lui demander
             mesCommandes.ins.ins(client, message, args, envoyerPM, idMJ);
         }
 
         else if(command === "ramoloss") {
             async function speak() {
-                temps = 5*60*1000 + outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
+                temps = 5*60*1000 + mesCommandes.outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
                 console.log(temps/1000)
-                await outils.sleep(temps); 
+                await mesCommandes.outils.sleep(temps); 
                 message.channel.send(`${message.author.toString()}`);
                 message.channel.send("https://tenor.com/view/confusedslow-gif-22074333")
             }
@@ -89,7 +91,6 @@ client.on("message", (message) => {
         message.react('❌');
         console.log(err/*.substring(0, 200)*/);
         }
-
 });
  
 client.login(config.botToken);
