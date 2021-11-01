@@ -58,7 +58,7 @@ client.on("message", (message) => {
             }
 
             else if(command === "horoscope"){
-                mesCommandes.horoscope.horoscope(message, args)
+                mesCommandes.horoscope.horoscope(client, message, args)
             }
 
             else if(command === "dng"){

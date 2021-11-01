@@ -1,7 +1,7 @@
 const outils = require("./outils.js");
 const horoscope = require('../Données/horoscope.json');
 
-exports.horoscope = function(message, args){
+exports.horoscope = function(client, message, args){
     let nbBoucle = 1
     if (args.length > 0 && args[0] == "hybride"){
         if (args.length > 1){

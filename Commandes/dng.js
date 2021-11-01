@@ -42,6 +42,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
     }
     let botReply = `${message.author.toString()} avec une stat de ${stat},${message_reussite_un} a lancé [${dices[0]}] [${dices[1]}]. ${message_reussite_deux}`;
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+    outils.logLancer(message.author.username, `[${dices[0]}] [${dices[1]}]`, `DNG ${stat}`);
     return
     // Echelon Dé de puissance (Réussite de base de 10 ou 14 en fonction de si thème primaire ou secondaire)
     // 1 2d4

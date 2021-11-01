@@ -1,6 +1,5 @@
 const outils = require("./outils.js");
 const INSdata = require('../Données/ins.json');
-let statsLancers = require('../Données/stats.json');
 const config = require('../config.json');
 const fs = require('fs');
 
@@ -39,14 +38,6 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
-    if (args[0] == "effacerstats" && message.author.id === config.admin ){
-        statsLancers = {}
-
-        let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/stats.json', writer);
-        console.log("Lancers effacés.")
-        return;
-    }
     if (args[0] == "message"){ // Commande permettant à quelqu'un de rajouter un message personalisé
         if (args[2] == "deletethis"){
             // A faire
@@ -170,12 +161,5 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 
-    if(!(message.author.username in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
-        statsLancers[message.author.username] = [];
-    }
-
-    statsLancers[message.author.username].push(`[${dices[0]}${dices[1]}]+[${dices[2]}]`)
-
-    let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-    fs.writeFileSync('./Données/stats.json', writer);
+    outils.logLancer(message.author.username, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, "INS");
 }

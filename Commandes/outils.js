@@ -1,3 +1,6 @@
+let statsLancers = require('../Données/stats.json');
+const fs = require('fs');
+
 module.exports = {
     randomNumber: function(maximum){
         // Cette fonction sert à tirer un nombre au pif de 1 à x, j'en ai beaucoup besoin.
@@ -40,5 +43,27 @@ module.exports = {
             return [args, true, idMJ];
         }
         return [args, envoyerPM, null];
+    },
+
+    logLancer: function(auteur, lancer, typeLancer){
+        if(!(auteur in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
+            statsLancers[auteur] = [];
+        }
+    
+        statsLancers[auteur].push([lancer, typeLancer])
+    
+        let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/stats.json', writer);
+    },
+
+    logLancerEffacer: function(auteur){
+        // Soit à revoir, soit à mettre dans le main.
+        if (auteur === config.admin ){
+            statsLancers = {}
+    
+            let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./Données/stats.json', writer);
+            console.log("Lancers effacés.")
+        }
     }
 }
