@@ -37,9 +37,12 @@ module.exports = {
 
     verifierSiMJ: function(args, envoyerPM){
         longueur = args.length;
-        if (longueur > 0 && args[longueur -1].startsWith('<@!')){
+        if (longueur > 0 && args[longueur -1].startsWith('<@')){
             idMJ = args.pop();
-            idMJ = idMJ.substring(3, idMJ.length-1);
+            idMJ = idMJ.substring(2, idMJ.length-1);
+            if (idMJ.startsWith("!")){ // Les pings sur téléphone visiblement ne mettent pas de ! donc il faut les enlever à part ?
+                idMJ = idMJ.slice(1);
+            }
             return [args, true, idMJ];
         }
         return [args, envoyerPM, null];
