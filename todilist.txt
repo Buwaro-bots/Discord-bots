@@ -2,7 +2,6 @@
 Lignes avec un astérisque : Peu de pas valoir le temps vu le temps de programmation vs nombre d'utilisations prévues : https://xkcd.com/1205/
 
     Très Important
-Formes alternatives dans ;isekai.
 Remettre toutes les variables en français pour être plus consistant. (c'est un projet purement perso, comme les réponses du bot sont en français autant rester cohérent)
 Mettre plus de commentaires pour que je puisse mieux me repérer après.
 
@@ -24,3 +23,4 @@ Enlever les fonctions qui ne servent à rien. (faire un fichier / dossier poubel
 Faire un mode auto vérification de jet pour ins.
 Permettre la répétition de rolls.
 Impossible => Essayer d'importer les fonctions du bot musical en important le fichier ?
+Formes alternatives dans ;isekai.

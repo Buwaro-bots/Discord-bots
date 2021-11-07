@@ -2,7 +2,8 @@ const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
 
 exports.isekai = function(client, message, args, command){
-    let number = 0;
+    let pokemonChoisi = null;
+    let listePokemon = pokedex;
     if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
 
         let listeSubstitues = {"Electrik": "Electrique", "Électrik": "Electrique", "Électrique": "Electrique", "Fee": "Fée", "Insect" : "Insecte", "Derg" : "Dragon", "Dng" : "DnG", "Pasdng" : "PasDnG"}
@@ -20,41 +21,55 @@ exports.isekai = function(client, message, args, command){
                 }
             }
             if (valide){
-                nouvelleListe.push(pokedex[i]["numero"]);
+                nouvelleListe.push(pokedex[i]);
             }
         }
 
         if (nouvelleListe.length == 0){ // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
             throw("Aucun pokémon avec ses tags");
         }
-        number = nouvelleListe[outils.randomNumber(nouvelleListe.length)-1];
+        
+        listePokemon = nouvelleListe;
     }
-    else{
-        number = outils.randomNumber(898); 
+
+    let nouveauPokemon;
+    const tailleListe = listePokemon.length;
+    while (pokemonChoisi === null){
+        nouveauPokemon = listePokemon[outils.randomNumber(tailleListe)-1];
+        if (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()){
+            pokemonChoisi = nouveauPokemon;
+        }    
     }
+
     if (command === "pokemon") {
-        console.log(`${message.author.toString()} a tiré le pokémon numéro ${number} qui est ${pokedex[number].nom}.`); // Console.log pour pas faire bugger le then
-        message.channel.send(`${message.author.toString()} a tiré le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
+        console.log(`${message.author.toString()} a tiré le pokémon numéro ${pokemonChoisi.numero} qui est ${pokemonChoisi.nom}.`); // Console.log pour pas faire bugger le then
+        message.channel.send(`${message.author.toString()} a tiré le pokémon numéro  ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.`)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function(){
-                msg.edit(`${message.author.toString()} a tiré le pokémon numéro ${number} qui est ${pokedex[number].nom}.`);
+                msg.edit(`${message.author.toString()} a tiré le pokémon numéro ${pokemonChoisi.numero} qui est ${pokemonChoisi.nom}.`);
             }, 5000)
         }); 
     }
     else if (command === "isekai") {
-        let rollShiny = outils.randomNumber(256);
+        let rollShiny = outils.randomNumber(128);
         let estShiny = "";
 
         if (rollShiny === 1){
             estShiny = " **shiny**"
         }
 
-        console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny} [${rollShiny}].`); // Console.log pour pas faire bugger le then
-        message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ||${pokedex[number].nom}||.`)
+        let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
+        let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
+        if (pokemonChoisi.tags.includes("Forme")){
+            pokemonNumeroForme = pokemonChoisi.numeroForme;
+            pokemonNomForme = pokemonChoisi.nomForme;
+        }
+        console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollShiny}].`); // Console.log pour pas faire bugger le then
+        message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}||.`)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function(){
-                msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${number} qui est ${pokedex[number].nom}${estShiny}.`);
-            }, 5000)
+                msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+            }, 4000)
         });
     }
 
