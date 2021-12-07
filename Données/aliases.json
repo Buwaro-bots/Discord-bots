@@ -33,5 +33,56 @@
         "nom": "repeat",
         "alias": "repeat",
         "commande" : "nbBouclesMax = parseInt(args.shift()) ; command = args.shift().toLowerCase();"
+    },
+
+    {
+        "nom" : "d2",
+        "alias" : "roll",
+        "commande" : "args = ['2'];"
+    },
+
+    
+    {
+        "nom" : "d4",
+        "alias" : "roll",
+        "commande" : "args = ['4'];"
+    },
+
+    {
+        "nom" : "d6",
+        "alias" : "roll",
+        "commande" : "args = ['6'];"
+    },
+
+    
+    {
+        "nom" : "d8",
+        "alias" : "roll",
+        "commande" : "args = ['8'];"
+    },
+
+    {
+        "nom" : "d10",
+        "alias" : "roll",
+        "commande" : "args = ['10'];"
+    },
+
+    {
+        "nom" : "d12",
+        "alias" : "roll",
+        "commande" : "args = ['12'];"
+    },
+    
+    {
+        "nom" : "d20",
+        "alias" : "roll",
+        "commande" : "args = ['20'];"
+    },
+
+    
+    {
+        "nom" : "d100",
+        "alias" : "roll",
+        "commande" : "args = ['100'];"
     }
 ]

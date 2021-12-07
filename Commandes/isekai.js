@@ -1,7 +1,42 @@
 const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
+const disable = require('../Données/disable-isekai.json');
+const fs = require('fs');
 
 exports.isekai = function(client, message, args, command){
+    if (args[0] == "disable") {
+        if(!disable.hasOwnProperty(message.author.id)){
+            disable[message.author.id] = {"pokemons" : [], "tags" : []}; 
+        }
+        if (args[1] == "tags") {
+            for(let i = 2; i < args.length; i++){
+                disable[message.author.id].tags.push(args[i]);
+            }
+        }
+        else {
+            for(let i = 1; i < args.length; i++){
+                disable[message.author.id].pokemons.push(args[i]);
+            }
+        }
+
+        let botReply = `${message.author.toString()} Liste des pokémons disabled : `
+        for (let i = 0; i < disable[message.author.id].pokemons.length; i++) {
+            botReply += `${disable[message.author.id].pokemons[i]}, `;
+        }
+
+        botReply += "\nListe des tags disabled : ";
+       for (let i = 0; i < disable[message.author.id].tags.length; i++) {
+            botReply += `${disable[message.author.id].tags[i]}, `;
+        }
+
+        let writer = JSON.stringify(disable, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/disable-isekai.json', writer);
+
+        outils.envoyerMessage(client, botReply, message);
+        return;
+    }
+    
+    
     let pokemonChoisi = null;
     let listePokemon = pokedex;
     if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
@@ -12,16 +47,33 @@ exports.isekai = function(client, message, args, command){
             args[i] = args[i] in listeSubstitues ? listeSubstitues[args[i]] : args[i] // On corrige les fautes courantes
         }
 
+        // Etablissement de la disable list
+        let disablePokemons = [];
+        let disableTags = [];
+
+        if (disable.hasOwnProperty(message.author.id) && command === "isekai") { // La disable list ne marche que sur la commande isekai
+            disablePokemons = disable[message.author.id].pokemons;
+            disableTags = disable[message.author.id].tags;
+        }
+
         let nouvelleListe = [];
         for (let i = 0; i < pokedex.length; i++){ // On fait une boucle sur tout le pokédex
-            let valide = true;
-            for (let j = 0; j < args.length ; j++){ // Puis une deuxième sur la liste des tags
-                if(!pokedex[i]["tags"].includes(args[j])){
-                    valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
+            if(!disablePokemons.includes(pokedex[i]["nom"])) { // Si le pokémon n'est pas disabled
+                let valide = true;
+                for (let j = 0; j < args.length ; j++){ // On fait une deuxième boucle sur la liste des tags
+                    if(!pokedex[i]["tags"].includes(args[j])){
+                        valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
+                    }
                 }
-            }
-            if (valide){
-                nouvelleListe.push(pokedex[i]);
+                for (let j = 0; j < disableTags.length ; j++){ // On fait une troisième boucle sur la liste des tags disabled
+                    if(pokedex[i]["tags"].includes(disableTags[j])){
+                        valide = false; // Si le pokémon a l'un des tags, on ne l'incluera pas dans la liste
+                    }
+                }
+
+                if (valide){
+                    nouvelleListe.push(pokedex[i]);
+                }
             }
         }
 
@@ -36,9 +88,12 @@ exports.isekai = function(client, message, args, command){
     const tailleListe = listePokemon.length;
     while (pokemonChoisi === null){
         nouveauPokemon = listePokemon[outils.randomNumber(tailleListe)-1];
-        if (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()){
+        if (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()) {
             pokemonChoisi = nouveauPokemon;
         }    
+        else {
+            process.stdout.write(`[${nouveauPokemon.hasOwnProperty("nomForme") ? nouveauPokemon.nomForme : nouveauPokemon.nom }]`);
+        }
     }
 
     if (command === "pokemon") {
@@ -60,7 +115,7 @@ exports.isekai = function(client, message, args, command){
 
         let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
         let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
-        if (pokemonChoisi.tags.includes("Forme")){
+        if (pokemonChoisi.hasOwnProperty("nomForme")){
             pokemonNumeroForme = pokemonChoisi.numeroForme;
             pokemonNomForme = pokemonChoisi.nomForme;
         }
