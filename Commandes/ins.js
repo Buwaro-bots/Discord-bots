@@ -6,7 +6,7 @@ const fs = require('fs');
 exports.ins = function(client, message, args, envoyerPM, idMJ){
     [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
-    if(["aide","help","commandes"].includes(args[0])){
+    if(["aide", "help", "commandes", "commande"].includes(args[0])){
         outils.envoyerMessage(client, 
             "**;ins** permet de faire un jet normal.\r\n" +
             ";ins **check** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins check +3**.\r\n" +
