@@ -37,7 +37,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
             message_reussite_un += avantage > 0 ? ` et ${avantage} avantages` : ` et ${-avantage} désavantages`
         }
 
-        message_reussite_deux = (dices[0] > dd && dices[1] >= avantage * -5 )|| dices[1] <= avantage * 5 ? `C'est une réussite !` : `C'est un échec !`
+        message_reussite_deux = (dices[0] > dd && dices[1] >= avantage * -4 )|| dices[1] <= avantage * 4 ? `C'est une réussite !` : `C'est un échec !`
 
     }
     let botReply = `${message.author.toString()} avec une stat de ${stat},${message_reussite_un} a lancé [${dices[0]}] [${dices[1]}]. ${message_reussite_deux}`;

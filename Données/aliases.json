@@ -36,6 +36,12 @@
     },
 
     {
+        "nom" : "r",
+        "alias" : "roll",
+        "commande" : ""
+    },
+
+    {
         "nom" : "d2",
         "alias" : "roll",
         "commande" : "args = ['2'];"

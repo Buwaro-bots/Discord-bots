@@ -84,6 +84,22 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
+
+    if (args[0] == "gacha"){
+
+        let lancer = outils.randomNumber(6) * 10 +  outils.randomNumber(6);
+        let resultat = INSdata.gacha[lancer];
+
+        console.log(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
+        message.channel.send(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ||${resultat}||`)
+        .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
+            setTimeout(function(){
+                msg.edit(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
+            }, 4000)
+        });
+        return;
+    }
+
     let dices = [outils.randomNumber(6), outils.randomNumber(6), outils.randomNumber(6)];
     let lancerSpecial = false;
     let verbe = "lancé";

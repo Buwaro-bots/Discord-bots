@@ -7,12 +7,12 @@ Mettre plus de commentaires pour que je puisse mieux me repérer après.
 
     Assez important
 * Faire la fonction jet en opposition pour ins.
-Faire un meilleur log de jets pour ins et rolls. (en cours)
+Faire un meilleur log de jets pour ins et rolls.
 
 
     Peu important
 Revoir la programmation de la commande ins parce que j'ai du mal à m'y repérer.
-Faire des rolls pré-enregistrés.
+Faire des rolls pré-enregistrés. => Demander si c'est utile
 * Regarder comment la gestion des emotes fonctionne. Peut-être faire une gestion de rôle?
 
 
