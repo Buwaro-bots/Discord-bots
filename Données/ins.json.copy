@@ -56,13 +56,13 @@
         "52": "**Point de pouvoir**. *Côut de 1PA*.",
         "53": "**Point de pouvoir**. *Côut de 1PA*.",
         "54": "**Point de pouvoir**. *Côut de 1PA*.",
-        "55": "**Servant**.",
-        "56": "**Servant**.",
-        "61": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût 1PA.*",
-        "62": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût 1PA.*",
-        "63": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût 1PA.*",
-        "64": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût 1PA.*",
-        "65": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût 1PA.*",
+        "55": "**Servant** (1 familier ou 10 zombies). *Coût de 6 PA.*",
+        "56": "**Servant** (1 familier ou 10 zombies). *Coût de 6 PA.*",
+        "61": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût d'1PA.*",
+        "62": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût d'1PA.*",
+        "63": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût d'1PA.*",
+        "64": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût d'1PA.*",
+        "65": "**Talent** (rang dans un talent principal et secondaire au choix du mj). *Coût d'1PA.*",
         "66": "**Grande générosité**. (au choix)"
     },
 
@@ -79,5 +79,9 @@
             "discord_id": " Allumez le feu. :fire:",
             "autre": " :smiling_imp:"
         }
-    }
+    },
+
+    "listeAutoVerifications": [
+        "id utilisateur qui veut l'auto verif"
+    ]
 }
