@@ -84,9 +84,12 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody){
         }
         //console.log(reponseSomme);
         reponseSomme = Math.round(eval(reponseSomme)*100)/100; // On calcule le résultat...
+        reponseCommandes = reponseCommandes.replaceAll('*', '\\*');
+        reponseLancers = reponseLancers.replaceAll('*', '\\*');
         let botReply = `${message.author.toString()} sur ${reponseCommandes} a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
         if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
-        if (reponseSomme > 9000000000000000) throw("Nombre trop grand");
+        if (Math.abs(reponseSomme) > 9000000000000000) throw("Nombre trop grand");
+        outils.verifierNaN([reponseSomme]);
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         outils.logLancer(message.author.username, `${reponseLancers}= ${reponseSomme}` , reponseCommandes);
     }

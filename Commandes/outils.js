@@ -10,6 +10,7 @@ module.exports = {
         return Math.floor(Math.random() * maximum) + 1;
     },
 
+    // Cette fonction vérifie un tableau de nombre pour être sûr que ça ne renvoie pas NaN. Un tableau.
     verifierNaN: function(array) {
         for(let i = 0; i < array.length; i++)
         if (isNaN(array[i])) {
