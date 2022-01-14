@@ -20,7 +20,8 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody){
     }
     
 
-    if (args.length == 1 && (!args[0].toLowerCase().includes("d") || args[0].toLowerCase().charAt(0) == "d")){ // Si une personne envoit juste un nombre sans écrire "d" ou "d100", dans ce cas on lance un dé.
+    if (args.length == 1 && (!args[0].toLowerCase().includes("d") || args[0].toLowerCase().includes("1d") || args[0].toLowerCase().charAt(0) == "d")){ // Si une personne envoit juste un nombre sans écrire "d" ou "d100", dans ce cas on lance un dé.
+        args[0] = args[0].toLowerCase().replace("1d", "");
         args[0] = args[0].toLowerCase().replace("d", "");
         outils.verifierNaN(args)
         let lancer = parseInt(args[0]);
@@ -71,7 +72,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody){
         let reponseSomme = "";
 
         for (let i = 0; i < listeCommandes.length; i++){ // On écrit la réponse
-            reponseCommandes += listeCommandes[i][0] + " ";
+            reponseCommandes += listeCommandes[i][0];
             if (listeCommandes[i][1]){ // Si la commande est un lancer, alors la liste des lancers doit s'afficher sans la liste des lancers et dans la formule de calcul
                 reponseLancers += `[${listeCommandes[i][2]}] `;
                 reponseSomme += listeCommandes[i][3]
