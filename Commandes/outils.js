@@ -3,6 +3,9 @@ const fs = require('fs');
 
 module.exports = {
     randomNumber: function(maximum){
+        if (maximum < 2) {
+            throw 'dé inférieur à 2';
+        }
         // Cette fonction sert à tirer un nombre au pif de 1 à x, j'en ai beaucoup besoin.
         return Math.floor(Math.random() * maximum) + 1;
     },
