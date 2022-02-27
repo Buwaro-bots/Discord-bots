@@ -41,54 +41,96 @@
         "commande" : ""
     },
 
+
     {
         "nom" : "d2",
         "alias" : "roll",
-        "commande" : "args = ['2'];"
+        "commande" : "args.unshift('2');"
     },
 
     
     {
         "nom" : "d4",
         "alias" : "roll",
-        "commande" : "args = ['4'];"
+        "commande" : "args.unshift('4');"
     },
 
     {
         "nom" : "d6",
         "alias" : "roll",
-        "commande" : "args = ['6'];"
+        "commande" : "args.unshift('6');"
     },
 
     
     {
         "nom" : "d8",
         "alias" : "roll",
-        "commande" : "args = ['8'];"
+        "commande" : "args.unshift('8');"
     },
 
     {
         "nom" : "d10",
         "alias" : "roll",
-        "commande" : "args = ['10'];"
+        "commande" : "args.unshift('10');"
     },
 
     {
         "nom" : "d12",
         "alias" : "roll",
-        "commande" : "args = ['12'];"
+        "commande" : "args.unshift('12');"
     },
     
     {
         "nom" : "d20",
         "alias" : "roll",
-        "commande" : "args = ['20'];"
+        "commande" : "args.unshift('20');"
     },
-
-    
+ 
     {
         "nom" : "d100",
         "alias" : "roll",
-        "commande" : "args = ['100'];"
+        "commande" : "args.unshift('100');"
+    },
+ 
+
+    {   "nom" : ";num",
+        "alias" : "num",
+        "commande" : "envoyerPM = true;"
+    },
+
+    {
+        "nom" : "num1",
+        "alias" : "num",
+        "commande" : "args.unshift('1');"
+    },
+ 
+    {
+        "nom" : "num2",
+        "alias" : "num",
+        "commande" : "args.unshift('2');"
+    },
+ 
+    {
+        "nom" : "num3",
+        "alias" : "num",
+        "commande" : "args.unshift('3');"
+    },
+ 
+    {
+        "nom" : "num4",
+        "alias" : "num",
+        "commande" : "args.unshift('4');"
+    },
+ 
+    {
+        "nom" : "num5",
+        "alias" : "num",
+        "commande" : "args.unshift('5');"
+    },
+
+    {
+        "nom" : "num6",
+        "alias" : "num",
+        "commande" : "args.unshift('6');"
     }
 ]
