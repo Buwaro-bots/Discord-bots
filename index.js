@@ -89,6 +89,10 @@ client.on("message", (message) => {
                 mesCommandes.ins.ins(client, message, args, envoyerPM, idMJ);
             }
 
+            else if(command === "num") { 
+                mesCommandes.num.num(client, message, args, envoyerPM, idMJ);
+            }
+
             else if(command === "ramoloss") {
                 async function speak() {
                     temps = 5*60*1000 + mesCommandes.outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
