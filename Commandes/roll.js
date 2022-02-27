@@ -19,6 +19,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody){
         commandBody += " " + config.lancerParDefault;
     }
     
+    if (args.length == 1 && args[0].includes("^")) args[0] = String(parseInt(args[0]) ** 2);
 
     if (args.length == 1 && (!args[0].toLowerCase().includes("d") || args[0].toLowerCase().includes("1d") || args[0].toLowerCase().charAt(0) == "d")){ // Si une personne envoit juste un nombre sans écrire "d" ou "d100", dans ce cas on lance un dé.
         args[0] = args[0].toLowerCase().replace("1d", "");
