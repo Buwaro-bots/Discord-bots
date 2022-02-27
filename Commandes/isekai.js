@@ -39,6 +39,15 @@ exports.isekai = function(client, message, args, command){
     
     let pokemonChoisi = null;
     let listePokemon = pokedex;
+
+    /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
+    (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
+    let tauxDeNouveau = 3; 
+    let rollNouveau = outils.randomNumber(100);
+
+    if (args.length == 0 && rollNouveau <= tauxDeNouveau) {
+        args = ["Nouveau"];
+    }
     if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
 
         let listeSubstitues = {"Electrik": "Electrique", "Électrik": "Electrique", "Électrique": "Electrique", "Fee": "Fée", "Insect" : "Insecte", "Derg" : "Dragon", "Dng" : "DnG", "Pasdng" : "PasDnG"}
@@ -119,7 +128,7 @@ exports.isekai = function(client, message, args, command){
             pokemonNumeroForme = pokemonChoisi.numeroForme;
             pokemonNomForme = pokemonChoisi.nomForme;
         }
-        console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollShiny}].`); // Console.log pour pas faire bugger le then
+        console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}].`); // Console.log pour pas faire bugger le then
         message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}||.`)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function(){
