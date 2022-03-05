@@ -117,9 +117,11 @@ exports.isekai = function(client, message, args, command){
     else if (command === "isekai") {
         let rollShiny = outils.randomNumber(128);
         let estShiny = "";
+        let suffixe = "";
 
         if (rollShiny === 1){
-            estShiny = " **shiny**"
+            estShiny = " **shiny**";
+            suffixe += "✨";
         }
 
         let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
@@ -127,13 +129,17 @@ exports.isekai = function(client, message, args, command){
         if (pokemonChoisi.hasOwnProperty("nomForme")){
             pokemonNumeroForme = pokemonChoisi.numeroForme;
             pokemonNomForme = pokemonChoisi.nomForme;
+            suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
+            suffixe += pokemonChoisi.tags.includes("Galar") ? "🍵" : "";
+            suffixe += pokemonChoisi.tags.includes("Hisui") ? "🍙" : "";
+            suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
         }
         console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}].`); // Console.log pour pas faire bugger le then
-        message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}||.`)
+        message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function(){
                 msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-            }, 4000)
+            }, 4500)
         });
     }
 
