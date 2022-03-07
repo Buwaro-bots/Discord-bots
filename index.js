@@ -5,8 +5,9 @@ let statsLancers = require('./Données/stats.json');
 const requireDir = require('require-dir');
 const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes commandes du dossier commande.
 
-const Discord = require("discord.js");
-const client = new Discord.Client();
+//const Discord = require("discord.js");
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 const fs = require('fs');
 
 let prefix = ";"; // Set the prefix

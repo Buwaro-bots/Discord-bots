@@ -1,26 +1,26 @@
 {
-  "name": "vanilla",
-  "version": "1.0.0",
-  "description": "JavaScript example starter project",
-  "main": "index.html",
-  "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html"
-  },
   "dependencies": {
-    "discord.js": "^12.5.3",
     "require-dir": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "7.2.0"
+    "@babel/core": "7.2.0",
+    "discord.js": "^13.6.0"
   },
-  "resolutions": {
-    "@babel/preset-env": "7.13.8"
+  "name": "bot-discord",
+  "description": "Un bot perso que j'ai fait pour des projets persos, notamment un bot de lancer pour INS/MV.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "javascript",
-    "starter"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Buwaro-bots/Discord-bots.git"
+  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Buwaro-bots/Discord-bots/issues"
+  },
+  "homepage": "https://github.com/Buwaro-bots/Discord-bots#readme"
 }
