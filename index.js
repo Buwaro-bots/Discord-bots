@@ -13,7 +13,7 @@ const fs = require('fs');
 let prefix = ";"; // Set the prefix
 console.log("Ready!");
 
-client.on("message", (message) => {
+client.on("messageCreate", (message) => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;     // Exit and stop if the prefix is not there or if user is a bot
     
     process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
@@ -107,6 +107,23 @@ client.on("message", (message) => {
 
             else if(command === "roll") { 
                 mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
+            }
+
+            else if(command === "test") { 
+                mesCommandes.roll.roll(client, message, ["100"], envoyerPM, idMJ, commandBody);
+
+                const filter = (reaction, user) => {
+                    return true;//reaction.emoji.name === '👍' && user.id === message.author.id;
+                };
+                const collector = message.createReactionCollector({ filter, time: 15000 });
+                
+                collector.on('collect', (reaction, user) => {
+                    console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+                });
+                
+                collector.on('end', collected => {
+                    console.log(`Collected ${collected.size} items`);
+                });
             }
 
             else if(command === "fermer" && message.author.id === config.admin) {
