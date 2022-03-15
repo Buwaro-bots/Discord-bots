@@ -42,7 +42,7 @@ exports.isekai = function(client, message, args, command){
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 3; 
+    let tauxDeNouveau = 4; 
     let rollNouveau = outils.randomNumber(100);
 
     if (args.length == 0 && rollNouveau <= tauxDeNouveau) {
@@ -96,7 +96,7 @@ exports.isekai = function(client, message, args, command){
     let nouveauPokemon;
     const tailleListe = listePokemon.length;
     while (pokemonChoisi === null){
-        nouveauPokemon = listePokemon[outils.randomNumber(tailleListe)-1];
+        nouveauPokemon = tailleListe == 1? listePokemon[0] : listePokemon[outils.randomNumber(tailleListe)-1];
         if (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()) {
             pokemonChoisi = nouveauPokemon;
         }    
@@ -138,7 +138,12 @@ exports.isekai = function(client, message, args, command){
         message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function(){
-                msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                if(pokemonChoisi["tags"].includes("Digimon")) {
+                    console.log("a");
+                }
+                else {
+                    msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                }
             }, 4500)
         });
     }
