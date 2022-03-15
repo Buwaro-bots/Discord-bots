@@ -1,5 +1,6 @@
 const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
 const aliases = require('./Données/aliases.json'); // Ce fichier contient les noms alternatifs des commandes
+const outils = require("./Commandes/outils.js");
 let statsLancers = require('./Données/stats.json');
 
 const requireDir = require('require-dir');
@@ -49,6 +50,7 @@ client.on("messageCreate", (message) => {
             }
         })
 
+        outils.verifierNaN([nbBouclesMax]);
         if(nbBouclesMax > 10 && message.author.id !== config.admin ) {
             nbBouclesMax = 5;
         }

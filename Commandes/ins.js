@@ -16,6 +16,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
             ";ins **cheat** ***dé1*** ***dé2*** ***dé3*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
             ";ins **tum** affiche la table unique multiple.\r\n"+
             ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"+
+            ";ins **gacha** pour faire un jet de gacha. (wow)\r\n" +
             ";ins **opposition** :construction:"
             , message, envoyerPM
         )

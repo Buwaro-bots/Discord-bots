@@ -954,7 +954,7 @@
     {"numero" : "900" , "nom" : "Hachécateur", "tags" : ["Insecte", "Roche", "Gen8", "DnG", "Final"] },
     {"numero" : "901" , "nom" : "Ursaking", "tags" : ["Sol", "Normal", "Gen8", "DnG", "Final"] },
     {"numero" : "902" , "nom" : "Paragruel", "tags" : ["Eau", "Spectre", "Gen8", "PasDnG"] },
-    {"numero" : "903" , "nom" : "Farfuret", "tags" : ["Combat", "Poison", "Gen8", "DnG", "Final"]},
+    {"numero" : "903" , "nom" : "Farfurex", "tags" : ["Combat", "Poison", "Gen8", "DnG", "Final"]},
     {"numero" : "904" , "nom" : "Qwilpik", "tags" : ["Ténèbres", "Poison", "Gen8", "PasDnG", "Nouveau"]},
     {"numero" : "905" , "nom" : "Amovénus", "tags" : ["Fée", "Vol", "Gen8", "PasDnG", "Nouveau"]},
  
