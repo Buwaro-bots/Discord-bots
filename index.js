@@ -8,8 +8,14 @@ const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes
 
 //const Discord = require("discord.js");
 const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES], partials: ["CHANNEL"]});
 const fs = require('fs');
+
+process.on('uncaughtException', function (err) {
+    console.error(err);
+    console.log("Penser à gérer correctment les erreurs 400 un jour.");
+    });
+
 
 let prefix = ";"; // Set the prefix
 console.log("Ready!");
@@ -65,7 +71,7 @@ client.on("messageCreate", (message) => {
             if(command === "help" || command === "aide" || command === "commande" || command === "commandes") {
                 mesCommandes.outils.envoyerMessage(client, 
                     "**;roll** pour faire des jets. Il est possible de juste mettre le nombre de faces comme **;roll 20**, des commandes plus compliquées comme **;roll 1d10 + 1d8 + 3**, " +
-                    "ou juste **;roll** pour avoir la commande par défaut qui en général est 100. **;roll setup 1d10 + 1d8** permets de changer le roll par défaut.\r\n" +
+                    "ou juste **;roll** pour avoir la commande par défaut qui en général est 100. **;roll setup 1d10 + 1d8** permets de changer le roll par défaut. Il est aussi possible d'abréger en **;r**.\r\n" +
                     "**;d2**, ;d4, ;d6, ;d8, ;d10, ;d12, ;d20 et ;d100 sont des raccourcis pour les jets correspondant.\r\n" +
                     "**;ins** pour faire un jet pour In Nomine Satanis / Magna Veritas. **;ins commandes** a la liste des commandes spécifiques.\r\n"+            
                     "**;dng** pour faire un jet pour Donjons et Groudon, par exemple **;dng 4** pour faire un jet avec une stat de 4.\r\n" +
