@@ -132,5 +132,23 @@
         "nom" : "num6",
         "alias" : "num",
         "commande" : "args.unshift('6');"
+    },
+
+    {
+        "nom": "épée",
+        "alias": "ins",
+        "commande" : "nbBouclesMax = 3;"
+    },
+
+    {
+        "nom": "epee",
+        "alias": "ins",
+        "commande" : "nbBouclesMax = 3;"
+    },
+
+    {
+        "nom" : "gacha",
+        "alias" : "ins",
+        "commande" : "args.unshift('gacha');"
     }
 ]
