@@ -55,6 +55,8 @@ client.on("messageCreate", (message) => {
             nbBouclesMax = 5;
         }
 
+        [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
+
         while (nbBoucles < nbBouclesMax){
             if(command === "code" || command === "source") {
                 mesCommandes.outils.envoyerMessage(client, "https://github.com/Buwaro-bots/Discord-bots", message);

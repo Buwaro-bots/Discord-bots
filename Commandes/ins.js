@@ -4,7 +4,6 @@ const config = require('../config.json');
 const fs = require('fs');
 
 exports.ins = function(client, message, args, envoyerPM, idMJ){
-    [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
     if(["aide", "help", "commandes", "commande"].includes(args[0])){
         outils.envoyerMessage(client, 

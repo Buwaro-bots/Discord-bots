@@ -2,7 +2,6 @@ const outils = require("./outils.js");
 const fs = require('fs');
 
 exports.num = function(client, message, args, envoyerPM, idMJ, commandBody){
-    [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
     args = args.length == 0 ? [3] : args;
     let test = args[0];

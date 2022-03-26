@@ -1,7 +1,7 @@
 const outils = require("./outils.js");
 
 exports.dng = function(client, message, args, envoyerPM, idMJ){
-    [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
+
 
     let est_PC = false;
     outils.verifierNaN(args);

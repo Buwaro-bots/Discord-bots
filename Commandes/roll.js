@@ -3,7 +3,6 @@ const config = require('../config.json');
 const fs = require('fs');
 
 exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody){
-    [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
     if (args[0] == "setup"){
         config.lancerParDefault = args[1];
