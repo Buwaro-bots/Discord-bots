@@ -4,18 +4,32 @@ const config = require('../config.json');
 const fs = require('fs');
 
 exports.ins = function(client, message, args, envoyerPM, idMJ){
+    function verifierRegexLancer(lancer){
+        let regex = new RegExp('[1-6]{3}');
+        if(regex.test(lancer)){
+            return lancer.substring(0,3);
+        }
+        else {
+            throw(`Le lancer n'est pas valide.`);
+        }
+    }
 
     if(["aide", "help", "commandes", "commande"].includes(args[0])){
         outils.envoyerMessage(client, 
             "**;ins** permet de faire un jet normal.\r\n" +
+            ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +
             ";ins **check** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins check +3**.\r\n" +
-            ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +            
-            ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins verif 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
-            ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve.\r\n" +
-            ";ins **cheat** ***dé1*** ***dé2*** ***dé3*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
+            ";ins **gacha** pour faire un jet de gacha. (wow)\r\n" +
+            "\r\n" +
+            ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve, si de la mise en forme est utilisé il n'est pas nécéssaire d'échapper les \* avec des \\.\r\n" +
+            ";ins **message** ***lancer*** ***deletethis*** permet de supprimer le message. Note : ne pas mettre de message permet aussi de ne pas afficher le message par défaut.\r\n" +
+            ";ins **message** ***liste*** permet de voir la liste des messages, y compris les messages par défaut.\r\n" +
+            "\r\n" +
             ";ins **tum** affiche la table unique multiple.\r\n"+
             ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"+
-            ";ins **gacha** pour faire un jet de gacha. (wow)\r\n" +
+            "\r\n"+
+            ";ins **cheat** ***lancer*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
+            ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins verif 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
             ";ins **opposition** :construction:"
             , message, envoyerPM
         )
@@ -39,20 +53,40 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
     }
 
     if (args[0] == "message"){ // Commande permettant à quelqu'un de rajouter un message personalisé
+        if (args[1] == "liste"){
+            let botReply = "";
+            for (const lancer in INSdata.lancersSpeciaux) {
+                if (INSdata.lancersSpeciaux[lancer].hasOwnProperty(message.author.id)){
+                    botReply += `${lancer} : ${INSdata.lancersSpeciaux[lancer][message.author.id]}\r\n`;
+                }
+                else if (INSdata.lancersSpeciaux[lancer].hasOwnProperty("autre")){
+                    botReply += `*${lancer}* : ${INSdata.lancersSpeciaux[lancer]["autre"]}\r\n`;
+                }
+            }
+            outils.envoyerMessage(client, botReply, message, true, idMJ);
+            return;
+        }
+
+        // Il faut que le premier paramètre après message soit le lancer, après l'utilisateur écrit le message, si c'est delete this, on supprime le message existant à la place.
+
+        let lancer = verifierRegexLancer(args[1]);
+
         if (args[2] == "deletethis"){
-            // A faire
+            delete INSdata.lancersSpeciaux[lancer][message.author.id];
+            let botReply = `${message.author.toString()} : Votre message pour le lancer ${lancer} a été supprimé.`;	
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         }
         else{
-            if(!(args[1] in INSdata.lancersSpeciaux)){ // Si le lancer n'existait pas dans la base, on le rajoute
-                INSdata.lancersSpeciaux[args[1]] = {};
+            if(!(lancer in INSdata.lancersSpeciaux)){ // Si le lancer n'existait pas dans la base, on le rajoute
+                INSdata.lancersSpeciaux[lancer] = {};
             }
 
             phrase = " "; // Très mauvaise manière de récupérer la phrase qui a été découpée avant, à revoir
             for (let i= 2; i < args.length; i++){
                 phrase += args[i] + " ";
             }
-            INSdata.lancersSpeciaux[args[1]][message.author.id] = phrase; // On rajoute le message dans la base de données
-            let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${args[1]}, je vais afficher le message : ${phrase}`;
+            INSdata.lancersSpeciaux[lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
+            let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
             outils.envoyerMessage(client, botReply, message);
             client.channels.cache.get(config.canalLogs).send(botReply);
@@ -104,9 +138,9 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
     let lancerSpecial = false;
     let verbe = "lancé";
 
-    if (args[0] === "cheat" && args.length >= 4) {
-        dices = [parseInt(args[1]), parseInt(args[2]), parseInt(args[3])]; // Penser à mettre modulo / int pour demander 666 au lieu de 6 6 6.
-        outils.verifierNaN(dices);
+    if (args[0] === "cheat" && args.length >= 1) {
+        dices = verifierRegexLancer(args[1]).split('');
+        dices[0] = parseInt(dices[0]); dices[1] = parseInt(dices[1]); dices[2] = parseInt(dices[2]);
         verbe = "triché avec";
     }
     let dicesSum = dices[0]*100 + dices[1]*10 + dices[2]; // Nécéssaire parce qu'on ne peut pas comparer des tableaux directement.
