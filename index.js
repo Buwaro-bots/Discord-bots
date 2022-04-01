@@ -10,6 +10,8 @@ const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES], partials: ["CHANNEL"]});
 const fs = require('fs');
+const { stringify } = require('querystring');
+const { verifierNaN } = require('./Commandes/outils.js');
 
 process.on('uncaughtException', function (err) {
     console.error(err);
@@ -70,21 +72,44 @@ client.on("messageCreate", (message) => {
 
             if(command === "help" || command === "aide" || command === "commande" || command === "commandes") {
                 mesCommandes.outils.envoyerMessage(client, 
-                    "**;roll** pour faire des jets. Il est possible de juste mettre le nombre de faces comme **;roll 20**, des commandes plus compliquées comme **;roll 1d10 + 1d8 + 3**, " +
-                    "ou juste **;roll** pour avoir la commande par défaut qui en général est 100. **;roll setup 1d10 + 1d8** permets de changer le roll par défaut. Il est aussi possible d'abréger en **;r**.\r\n" +
+                    "**;roll** pour faire des jets. Il est possible de juste mettre le nombre de faces comme **;roll *20***, des commandes plus compliquées comme **;roll *1d10 + 1d8 + 3***, " +
+                    "ou juste **;roll** pour avoir la commande par défaut qui en général est 100. **;roll setup *1d10 + 1d8*** permets de changer le roll par défaut. Il est aussi possible d'abréger en **;r**.\r\n" +
                     "**;d2**, ;d4, ;d6, ;d8, ;d10, ;d12, ;d20 et ;d100 sont des raccourcis pour les jets correspondant.\r\n" +
+                    "\r\n" +
                     "**;ins** pour faire un jet pour In Nomine Satanis / Magna Veritas. **;ins commandes** a la liste des commandes spécifiques.\r\n"+            
-                    "**;dng** pour faire un jet pour Donjons et Groudon, par exemple **;dng 4** pour faire un jet avec une stat de 4.\r\n" +
-                    "=> Pour ces trois commandes, rajouter un ping à la fin du message permet d'envoyer le roll en privé à vous et à la personne pingée. Sinon mettre deux **;** envoit le résultat en privé.\r\n\r\n" +
+                    "**;dng stat** pour faire un jet pour Donjons et Groudon, **;ins commandes** a la liste des commandes spécifiques et une aide rapide pour les lancers.\r\n" +
+                    "**;num *test*** pour faire un lancer de numénera. \r\n" +
+                    "\r\n" +
+                    "=> Pour les lancers de jdr, rajouter un ping à la fin du message permet d'envoyer le roll en privé à vous et à la personne pingée. Sinon mettre deux **;** envoit le résultat en privé.\r\n" +
+                    "**;repeat** permet de faire plusieurs fois la même commandes comme **;repeat 3 dng 4** pour faire 3 rolls de dng avec une stat de 4.\r\n" +
+                    "\r\n" +
                     "**;isekai** pour vous faire réincarner en pokémon. Il est possible de roll dans une catégorie telle que les types, Femelle/Mâle, gen1, DnG. " +
-                    "**;isekai disable** permet d'enlever des pokémons de vos rolls, soit en les listant ou en listant les tags.\r\n\r\n"+
-                    "**;repeat** permet de faire plusieurs fois la même commandes comme **;repeat 3 dng** pour faire 3 rolls de dng."
+                    "**;isekai disable** permet d'enlever des pokémons de vos rolls, soit en les listant ou en listant les tags.\r\n"
                     , message, envoyerPM
                 )
                 return;
             }
 
-            else if(command === "pokemon" || command === "isekai") {
+            else if(command === "pokemon") {
+                let dexDng = require('./Données/dex-dng.json');
+                let pokemonDemande = args.join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                if (!dexDng.hasOwnProperty(pokemonDemande)) {
+                    throw("Le pokémon demandé n'existe pas.");
+                }
+                
+                let pokemon = dexDng[pokemonDemande];
+                let botReply = pokemon.types.length > 1 ? `Types : ${pokemon.types[0]} / ${pokemon.types[1]}\r\n` : `Type : ${pokemon.types[0]}\r\n`;
+                botReply += `Style : ${pokemon.style}\r\n`;
+                botReply += `Grade : ${pokemon.grade}\r\n`;
+                botReply += `Arbres : ${pokemon.arbres}\r\n`;
+                botReply += `Traits : ${pokemon.traits}\r\n`;
+
+                mesCommandes.outils.envoyerMessage(client, botReply, message, envoyerPM);
+                return;
+            }
+
+            else if(command === "isekai") {
                 mesCommandes.isekai.isekai(client, message, args, command);
             }
 
@@ -115,8 +140,52 @@ client.on("messageCreate", (message) => {
                 speak();
             }
 
+            
             else if(command === "roll") { 
                 mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
+            }
+            
+            else if (command === "troll") {
+                args = [];
+                let typeLancer = outils.randomNumber(100);
+                let nombreLancer = outils.randomNumber(100);
+                process.stdout.write(`(${typeLancer}) (${nombreLancer})`);
+
+                if (typeLancer <= 40) {
+                    nombreLancer = nombreLancer > 12 ? ["check"] : ["cheat", (((nombreLancer % 6) + 1) * 111).toString()];
+                    mesCommandes.ins.ins(client, message, nombreLancer, envoyerPM, idMJ);
+                }
+                else if (typeLancer <= 65) {
+                    nombreLancer = nombreLancer > 80 ? "4" : (nombreLancer > 20 ? "3" : "2");
+                    mesCommandes.dng.dng(client, message, [], envoyerPM, idMJ);
+                }
+                else if (typeLancer <= 84) {
+                    nombreLancer = nombreLancer > 30 ? "100" : (nombreLancer > 10 ? "2d20" : "4d6 - 3");
+                    mesCommandes.roll.roll(client, message, [nombreLancer], envoyerPM, idMJ, `roll ${nombreLancer}`);
+                }
+                else if (typeLancer <= 92) {
+                    args = nombreLancer <= 25 ? ["5"] : [];
+                    command === "tarot"
+                }
+                else {
+                    mesCommandes.isekai.isekai(client, message, ["DnG"], "isekai");
+                }
+            }
+
+            if (command === "tarot") {
+                tarot = ["I le magicien", "II la grande prêtresse", "III l'impératrice", "IV l'empereur", "V l'hiérophante", "VI les amoureux", "VII le chariot", "VIII la justice", "IX l'ermite", "X la roue de fortune", "XI la force",
+                "XII le pendu", "XIII la mort", "XIV la tempérance", "XV le diable", "XVI la maison dieu", "XVII l'étoile", "XVIII la lune", "XIX le soleil", "XX le jugement", "XXI le monde", "le fou"]
+                
+                verifierNaN(args);
+                nombreCartes = args.length > 0 ? args[0] : 1;
+                phraseCartes = nombreCartes > 1 ? "les cartes" : "la carte";
+
+                cartesTirées = tarot.sort(() => Math.random() - 0.5);
+                cartesTirées = cartesTirées.slice(0, nombreCartes);
+                cartesTirées = cartesTirées.join(",  ");
+
+                outils.envoyerMessage(client, `${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
+                outils.logLancer(message.author.username, cartesTirées, "tarot");
             }
 
             else if(command === "test") { 

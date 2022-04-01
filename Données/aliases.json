@@ -144,5 +144,17 @@
         "nom" : "gacha",
         "alias" : "ins",
         "commande" : "args.unshift('gacha');"
+    },
+
+    {
+        "nom" : "pc",
+        "alias" : "dng",
+        "commande" : "args.unshift('pc');"
+    },
+
+    {
+        "nom" : "dex",
+        "alias" : "pokemon",
+        "commande" : ""
     }
 ]
