@@ -42,7 +42,7 @@ exports.isekai = function(client, message, args, command){
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 4; 
+    let tauxDeNouveau = 3;
     let rollNouveau = outils.randomNumber(100);
 
     if (args.length == 0 && rollNouveau <= tauxDeNouveau) {
@@ -105,48 +105,40 @@ exports.isekai = function(client, message, args, command){
         }
     }
 
-    if (command === "pokemon") {
-        console.log(`${message.author.toString()} a tiré le pokémon numéro ${pokemonChoisi.numero} qui est ${pokemonChoisi.nom}.`); // Console.log pour pas faire bugger le then
-        message.channel.send(`${message.author.toString()} a tiré le pokémon numéro  ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.`)
-        .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
-            setTimeout(function(){
-                msg.edit(`${message.author.toString()} a tiré le pokémon numéro ${pokemonChoisi.numero} qui est ${pokemonChoisi.nom}.`);
-            }, 5000)
-        }); 
-    }
-    else if (command === "isekai") {
-        let rollShiny = outils.randomNumber(128);
-        let estShiny = "";
-        let suffixe = "";
+    let rollShiny = outils.randomNumber(128);
+    let estShiny = "";
+    let suffixe = "";
 
-        if (rollShiny === 1){
-            estShiny = " **shiny**";
-            suffixe += "✨";
-        }
-
-        let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
-        let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
-        if (pokemonChoisi.hasOwnProperty("nomForme")){
-            pokemonNumeroForme = pokemonChoisi.numeroForme;
-            pokemonNomForme = pokemonChoisi.nomForme;
-            suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
-            suffixe += pokemonChoisi.tags.includes("Galar") ? "🍵" : "";
-            suffixe += pokemonChoisi.tags.includes("Hisui") ? "🍙" : "";
-            suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
-        }
-        console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}].`); // Console.log pour pas faire bugger le then
-        message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
-        .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
-            setTimeout(function(){
-                if(pokemonChoisi["tags"].includes("Digimon")) {
-                    console.log("a");
-                }
-                else {
-                    msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-                }
-            }, 4500)
-        });
+    if (rollShiny === 1){
+        estShiny = " **shiny**";
+        suffixe += "✨";
     }
+
+    let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
+    let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
+    if (pokemonChoisi.hasOwnProperty("nomForme")){
+        pokemonNumeroForme = pokemonChoisi.numeroForme;
+        pokemonNomForme = pokemonChoisi.nomForme;
+        suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
+        suffixe += pokemonChoisi.tags.includes("Galar") ? "🍵" : "";
+        suffixe += pokemonChoisi.tags.includes("Hisui") ? "🍙" : "";
+        suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
+        suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
+    }
+    console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}].`); // Console.log pour pas faire bugger le then
+    outils.logLancer(message.author.username, `${pokemonNomForme}${estShiny}`, `isekai ${args.join(" ")}`);
+
+    message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
+    .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
+        setTimeout(function(){
+            if(pokemonChoisi["tags"].includes("Digimon")) {
+                msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+            }
+            else {
+                msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+            }
+        }, 4500)
+    });
 
     return;
 }
