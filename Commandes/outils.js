@@ -56,8 +56,16 @@ module.exports = {
         if(!(auteur in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
             statsLancers[auteur] = [];
         }
-    
-        statsLancers[auteur].push([lancer, typeLancer])
+        
+        // variable with one leading zero if only one digit
+        function pad(n) {
+            return n < 10 ? '0' + n : n;
+        }
+
+        dateHeure = new Date();
+        dateHeure = pad(dateHeure.getDate()) + '/' + pad(dateHeure.getMonth() + 1) + ' ' + pad(dateHeure.getHours()) + ':' + pad(dateHeure.getMinutes()) + ':' + pad(dateHeure.getSeconds());
+
+        statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure});
     
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/stats.json', writer);
