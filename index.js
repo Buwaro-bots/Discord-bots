@@ -36,7 +36,7 @@ client.on("messageCreate", (message) => {
     */
     let commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
-    let command = args.shift().toLowerCase();
+    let command = args.shift().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     try {
         /* Partie à faire, renommer aussi le nom du tableau parce que je l'aime pas.
         let parametresLogiciel = { 

@@ -135,12 +135,6 @@
     },
 
     {
-        "nom": "épée",
-        "alias": "ins",
-        "commande" : "nbBouclesMax = 3;"
-    },
-
-    {
         "nom": "epee",
         "alias": "ins",
         "commande" : "nbBouclesMax = 3;"
