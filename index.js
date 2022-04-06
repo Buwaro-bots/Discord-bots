@@ -31,6 +31,12 @@ client.on("messageCreate", (message) => {
     let nbBouclesMax = 1;
     let nbBoucles = 0;
 
+    // Si l'utilisateur utilise deux fois le préfix, on considère qu'il veut recevoir la réponse par mp
+    if (message.content.startsWith(prefix + prefix)){
+        envoyerPM = true;
+        message.content = message.content.slice(prefix.length);
+    }
+
     /* Note pour moi même :
     commandBody : string qui représente le message tel qu'il est entré moins le préfix.
     args        : tableau qui contient tout les paramètres après la commande

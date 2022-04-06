@@ -1,26 +1,11 @@
 [
-    {   "nom" : ";roll",
-        "alias" : "roll",
-        "commande" : "envoyerPM = true;"
-    },
-
     {   "nom" : "hiddenroll",
         "alias" : "roll",
         "commande" : "envoyerPM = true;"
     },
 
-    {   "nom" : ";ins",
-        "alias" : "ins",
-        "commande" : "envoyerPM = true;"
-    },
-
     {   "nom" : "hiddenins",
         "alias" : "ins",
-        "commande" : "envoyerPM = true;"
-    },
-
-    {   "nom" : ";dng",
-        "alias" : "dng",
         "commande" : "envoyerPM = true;"
     },
 
@@ -90,12 +75,6 @@
         "nom" : "d100",
         "alias" : "roll",
         "commande" : "args.unshift('100');"
-    },
- 
-
-    {   "nom" : ";num",
-        "alias" : "num",
-        "commande" : "envoyerPM = true;"
     },
 
     {
