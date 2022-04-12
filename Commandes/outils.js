@@ -63,7 +63,7 @@ module.exports = {
         }
 
         dateHeure = new Date();
-        dateHeure = pad(dateHeure.getDate()) + '/' + pad(dateHeure.getMonth() + 1) + ' ' + pad(dateHeure.getHours()) + ':' + pad(dateHeure.getMinutes()) + ':' + pad(dateHeure.getSeconds());
+        dateHeure = pad(dateHeure.getDate()) + '/' + pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + pad(dateHeure.getHours()) + ':' + pad(dateHeure.getMinutes()) + ':' + pad(dateHeure.getSeconds());
 
         statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure});
     
@@ -71,14 +71,10 @@ module.exports = {
         fs.writeFileSync('./Données/stats.json', writer);
     },
 
-    logLancerEffacer: function(auteur){
-        // Soit à revoir, soit à mettre dans le main.
-        if (auteur === config.admin ){
-            statsLancers = {}
-    
-            let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-            fs.writeFileSync('./Données/stats.json', writer);
-            console.log("Lancers effacés.")
-        }
+    logLancerEffacer: function(){
+        statsLancers = {}
+        let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/stats.json', writer);
+        console.log("Lancers effacés.")
     }
 }
