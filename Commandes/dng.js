@@ -17,6 +17,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         "**;dng trait** pour avoir la description complète d'un trait. Je conseille de faire **;pokemon *espèce*** pour avoir le nom exact.\r\n" +
         " \r\n" +
         "**;dng *stat*** pour un jet normal, la stat doit normalement être entre 1 et 5.\r\n" +
+        "**;dng ini *instinct* + *agilité*** pour un jet d'initiative.\r\n" +
         "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée," +
         " la stat correspond à l'échelon entre 1 et 20. La jauge a 4 points de plus que le niveau de l'échelon. \r\n" +
         " \r\n" +
@@ -45,6 +46,24 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         }
 
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        return;
+    }
+
+    if (["ini", "init", "initiative"].includes(args[0])){
+        let de1; let de2;
+        let stats = {"1": "4", "2": "6", "3": "8", "4": "10", "5": "12"};
+
+        if (args.length == 2){
+            de1 = stats[parseInt(args[1][0])];
+            de2 = stats[parseInt(args[1][args[1].length -1])];
+        }
+        else {
+            de1 = stats[parseInt(args[1])];
+            de2 = stats[parseInt(args[args.length -1])];
+        }
+        verifierNaN([de1, de2]);
+        let lancer = de1 === de2 ? `2d${de1}` : `1d${de1}+1d${de2}`;
+        roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`);
         return;
     }
     if (args[0] == "pc" && args.length > 1){
