@@ -46,15 +46,6 @@ client.on("messageCreate", (message) => {
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     let command = args.shift().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     try {
-        /* Partie à faire, renommer aussi le nom du tableau parce que je l'aime pas.
-        let parametresLogiciel = { 
-        "envoyerPM" : false, // Cette variable indique si la réponse doit être envoyée par mp.
-        "idMJ" : null,
-        "commandBody" : commandbody,
-        "args" : args,
-        "command" : command
-        };
-        */
         // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
         aliases.forEach(alias => {
             if (command == alias["nom"]){
@@ -145,6 +136,14 @@ client.on("messageCreate", (message) => {
                 mesCommandes.num.num(client, message, args, envoyerPM, idMJ);
             }
 
+            else if(command === "roll") {
+                mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
+            }
+
+            else if(command === "log") {
+                mesCommandes.log.log(client, message, args, envoyerPM, idMJ);
+            }
+
             else if(command === "ramoloss") {
                 async function speak() {
                     temps = 5*60*1000 + mesCommandes.outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
@@ -156,11 +155,6 @@ client.on("messageCreate", (message) => {
                 speak();
             }
 
-            
-            else if(command === "roll") { 
-                mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
-            }
-            
             else if (command === "troll") {
                 args = [];
                 let typeLancer = outils.randomNumber(100);
