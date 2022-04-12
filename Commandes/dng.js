@@ -1,3 +1,4 @@
+let dexDng = require('../Données/dex-dng.json');
 const { verifierNaN } = require("./outils.js");
 const outils = require("./outils.js");
 const roll = require('./roll.js');
@@ -13,6 +14,8 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         " \r\n" +
         espaces + "**Commandes**\r\n" +
         "**;dng table** pour la table des types.\r\n" +
+        "**;dng trait** pour avoir la description complète d'un trait. Je conseille de faire **;pokemon *espèce*** pour avoir le nom exact.\r\n" +
+        " \r\n" +
         "**;dng *stat*** pour un jet normal, la stat doit normalement être entre 1 et 5.\r\n" +
         "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée," +
         " la stat correspond à l'échelon entre 1 et 20. La jauge a 4 points de plus que le niveau de l'échelon. \r\n" +
@@ -28,6 +31,20 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
     }
     if (args[0] === "table" || args[0] === "types"){
         outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ);
+        return;
+    }
+    if (args[0] === "trait" & args.length > 0) {
+        args.shift();
+        let trait = args.join(" ");
+        let botReply = `${message.author.toString()} `;
+        if (dexDng.Traits.hasOwnProperty(trait)) {
+            botReply += `${trait} : ${dexDng.Traits[trait].DescriptionLongue}`;
+        }
+        else {
+            botReply += "Désolé ce trait n'a pas été trouvé, vérifiez l'orthographe, cette commande est encore en beta et est sensible aux accents et aux majuscules.";
+        }
+
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         return;
     }
     if (args[0] == "pc" && args.length > 1){

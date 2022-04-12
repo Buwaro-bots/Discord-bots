@@ -98,18 +98,28 @@ client.on("messageCreate", (message) => {
 
             else if(command === "pokemon") {
                 let dexDng = require('./Données/dex-dng.json');
-                let pokemonDemande = args.join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                let pokemonDemande = args.join(" ").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-                if (!dexDng.hasOwnProperty(pokemonDemande)) {
-                    throw("Le pokémon demandé n'existe pas.");
+                if (!dexDng.Pokemons.hasOwnProperty(pokemonDemande)) {
+                    mesCommandes.outils.envoyerMessage(client, `${message.author.toString()} Désolé ce pokémon n'a pas été trouvé, vérifiez l'orthographe, cette commande est encore en beta et est sensible aux majuscules.`, message, envoyerPM);
+                    return;
                 }
                 
-                let pokemon = dexDng[pokemonDemande];
-                let botReply = pokemon.types.length > 1 ? `Types : ${pokemon.types[0]} / ${pokemon.types[1]}\r\n` : `Type : ${pokemon.types[0]}\r\n`;
-                botReply += `Style : ${pokemon.style}\r\n`;
-                botReply += `Grade : ${pokemon.grade}\r\n`;
-                botReply += `Arbres : ${pokemon.arbres}\r\n`;
-                botReply += `Traits : ${pokemon.traits}\r\n`;
+                let pokemon = dexDng.Pokemons[pokemonDemande];
+                let botReply = pokemon.types.length > 1 ? `Types : **${pokemon.types[0]} / ${pokemon.types[1]}**\r\n` : `Type : **${pokemon.types[0]}**\r\n`;
+                botReply += `Style : **${pokemon.style}**\r\n`;
+                botReply += `Grade : **${pokemon.grade}**\r\n`;
+                botReply += `Arbres : **${pokemon.arbres}**\r\n\r\n`;
+                botReply += `Traits :\r\n`;
+                // On parcourt les traits du pokémon
+                for (let numero in pokemon.traits) {
+                    let trait = pokemon.traits[numero];
+                    let description = "";
+                    if (dexDng.Traits.hasOwnProperty(trait)) {
+                        description = ` : ${dexDng.Traits[trait].DescriptionCourte}`;
+                    }
+                    botReply += `**${trait}**${description}\r\n`;
+                }
 
                 mesCommandes.outils.envoyerMessage(client, botReply, message, envoyerPM);
                 return;
