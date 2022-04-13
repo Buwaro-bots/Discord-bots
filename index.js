@@ -167,7 +167,7 @@ client.on("messageCreate", (message) => {
                 }
                 else if (typeLancer <= 65) {
                     nombreLancer = nombreLancer > 80 ? "4" : (nombreLancer > 20 ? "3" : "2");
-                    mesCommandes.dng.dng(client, message, [], envoyerPM, idMJ);
+                    mesCommandes.dng.dng(client, message, [nombreLancer], envoyerPM, idMJ);
                 }
                 else if (typeLancer <= 84) {
                     nombreLancer = nombreLancer > 30 ? "100" : (nombreLancer > 10 ? "2d20" : "4d6 - 3");
@@ -226,6 +226,12 @@ client.on("messageCreate", (message) => {
 
     catch(err) {
         message.react('❌');
+        if (err === "dng nan error") {
+            mesCommandes.dng.dng(client, message, [3], envoyerPM, idMJ);
+        }
+        else {
+            mesCommandes.roll.roll(client, message, ["100"], envoyerPM, idMJ, `roll 100`);
+        }
         console.log(err/*.substring(0, 200)*/);
         }
 });

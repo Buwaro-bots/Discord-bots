@@ -11,10 +11,10 @@ module.exports = {
     },
 
     // Cette fonction vérifie un tableau de nombre pour être sûr que ça ne renvoie pas NaN. Un tableau.
-    verifierNaN: function(array) {
+    verifierNaN: function(array, type = "") {
         for(let i = 0; i < array.length; i++)
-        if (isNaN(array[i])) {
-        throw 'nan error';
+            if (isNaN(array[i])) {
+                throw type + 'nan error';
         }
     },
 

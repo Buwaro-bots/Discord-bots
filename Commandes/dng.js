@@ -111,7 +111,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
-    outils.verifierNaN(args);
+    outils.verifierNaN(args, "dng ");
 
     let stat = args.length > 0 ? parseInt(args[0]) : 3; // Si aucune information est donnée, on assume que la stat est de 3 et le dd de 3. Si ça pose problème de toute façon le bot le mentionne.
     let nombreLancers = args.length > 1 ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1;
