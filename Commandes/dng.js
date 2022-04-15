@@ -34,7 +34,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ);
         return;
     }
-    if (args[0] === "trait" & args.length > 0) {
+    if (args[0] === "trait") {
         args.shift();
         let trait = args.join(" ");
         let botReply = `${message.author.toString()} `;
@@ -42,7 +42,10 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
             botReply += `${trait} : ${dexDng.Traits[trait].DescriptionLongue}`;
         }
         else {
-            botReply += "Désolé ce trait n'a pas été trouvé, vérifiez l'orthographe, cette commande est encore en beta et est sensible aux accents et aux majuscules.";
+            botReply += "Désolé ce trait n'a pas été trouvé, vérifiez l'orthographe, cette commande est encore en beta et est sensible aux accents et aux majuscules. La liste des traits est : ";
+            for (let trait in dexDng.Traits) {
+                botReply += trait + ", ";
+            }
         }
 
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
@@ -50,6 +53,11 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
     }
 
     if (["ini", "init", "initiative"].includes(args[0])){
+        if (args.length === 1){
+            outils.envoyerMessage(client, "Pour faire un jet d'initiative, les stats sont l'instinct et l'agilité, la commande est **;dng ini *instinct* + *agilité***.", message, false, null);
+            return;
+        }
+
         let de1; let de2;
         let stats = {"1": "4", "2": "6", "3": "8", "4": "10", "5": "12"};
 
