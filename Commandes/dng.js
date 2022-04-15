@@ -35,18 +35,21 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         return;
     }
     if (args[0] === "trait") {
+        if (args.length == 1) {
+            let listeTraits = "La liste des traits est : ";
+            for (let trait in dexDng.Traits) {
+                listeTraits += trait + ", ";
+            }
+            outils.envoyerMessage(client, listeTraits, message, envoyerPM, idMJ);
+            return;
+        }
         args.shift();
         let trait = args.join(" ");
         let botReply = `${message.author.toString()} `;
-        if (dexDng.Traits.hasOwnProperty(trait)) {
-            botReply += `${trait} : ${dexDng.Traits[trait].DescriptionLongue}`;
+        if (!dexDng.Traits.hasOwnProperty(trait)) {
+            trait = outils.rattrapageFauteOrthographe(dexDng.Traits, trait);
         }
-        else {
-            botReply += "Désolé ce trait n'a pas été trouvé, vérifiez l'orthographe, cette commande est encore en beta et est sensible aux accents et aux majuscules. La liste des traits est : ";
-            for (let trait in dexDng.Traits) {
-                botReply += trait + ", ";
-            }
-        }
+        botReply += `${trait} : ${dexDng.Traits[trait].DescriptionLongue}`;
 
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         return;

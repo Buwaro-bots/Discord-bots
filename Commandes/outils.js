@@ -1,5 +1,6 @@
 let statsLancers = require('../Données/stats.json');
 const fs = require('fs');
+const levenshtein = require('js-levenshtein');
 
 module.exports = {
     randomNumber: function(maximum){
@@ -76,6 +77,29 @@ module.exports = {
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/stats.json', writer);
         console.log("Lancers effacés.")
+    },
+
+    rattrapageFauteOrthographe: function(liste, entree){
+        if (typeof liste === 'object'){
+            liste = Object.keys(liste);
+        }
+        let min = 1000;
+        let minIndex = 0;
+        entree = this.normalisationString(entree);
+        for (let i = 0; i < liste.length; i++){
+            let elementTableau = this.normalisationString(liste[i]);
+            let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
+
+            if (distance < 3.05) {
+                console.log(entree + " " + liste[i] + " " + distance);
+            }
+
+            if (distance < min){
+                min = distance;
+                minIndex = i;
+            }
+        }
+        return liste[minIndex];
     },
 
     // Cette fonction permet d'enlever les accents et majuscules d'une chaîne de caractères.
