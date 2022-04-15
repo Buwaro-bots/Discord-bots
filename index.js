@@ -44,7 +44,7 @@ client.on("messageCreate", (message) => {
     */
     let commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
-    let command = args.shift().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let command = outils.normalisationString(args.shift());
     try {
         // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
         aliases.forEach(alias => {

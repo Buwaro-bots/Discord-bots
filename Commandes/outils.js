@@ -76,5 +76,10 @@ module.exports = {
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/stats.json', writer);
         console.log("Lancers effacés.")
+    },
+
+    // Cette fonction permet d'enlever les accents et majuscules d'une chaîne de caractères.
+    normalisationString : function(string){
+        return string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 }
