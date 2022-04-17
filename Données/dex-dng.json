@@ -685,6 +685,28 @@
         "Vision nocturne" : { "DescriptionCourte": "Vision nocturne" ,"DescriptionLongue": "Le Pokémon est capable de voir comme en plein jour, même avec une faible lumière ; et comme avec une faible lumière dans l’obscurité totale."},
         "Vol" : { "DescriptionCourte": "Vol grands espaces" ,"DescriptionLongue": "Le Pokémon est capable de voler et de se déplacer librement dans les airs. Il peut s’élever haut dans le ciel mais, contrairement aux Pokémons lévitant, un endroit exigu peut l’empêcher d’utiliser cette capacité."},
         "Xérophile" : { "DescriptionCourte": "Avantage en Désertique; Désavantage en Marécage" ,"DescriptionLongue": "Le Pokémon est adapté à vivre dans un milieu sec. Tant que le personnage se trouve dans un environnement Désertique, il obtient un Avantage (cumulable avec un éventuel bonus de terrain de prédilection) pour tous ses tests non-sociaux. En revanche, s’il se trouve dans un environnement Marécageux, il subit un Désavantage. De plus, il ne peut pas choisir Marécageux comme terrain de prédilection."}
+    },
+    "LancersPC" : {
+        "1" : "2d4",
+        "2" : "1d4 + 1d6",
+        "3" : "2d6",
+        "4" : "2d6",
+        "5" : "1d6 + 1d8",
+        "6" : "1d6 + 1d8",
+        "7" : "2d8",
+        "8" : "2d8",
+        "9" : "2d8",
+        "10" : "1d8 + 1d10",
+        "11" : "1d8 + 1d10",
+        "12" : "1d8 + 1d10",
+        "13" : "2d10",
+        "14" : "2d10",
+        "15" : "2d10",
+        "16" : "1d10 + 1d12",
+        "17" : "1d10 + 1d12",
+        "18" : "1d10 + 1d12",
+        "19" : "1d10 + 1d12",
+        "20" : "2d12"
     }
 }
     

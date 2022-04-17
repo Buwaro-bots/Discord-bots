@@ -74,6 +74,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         }
         verifierNaN([de1, de2]);
         let lancer = de1 === de2 ? `2d${de1}` : `1d${de1}+1d${de2}`;
+        lancer += ' + 1d9 / 10';
         roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`);
         return;
     }
@@ -87,37 +88,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
             throw("Stat incorrecte");
         }
 
-        let lancer = ""
-
-        switch(stat){
-            case 1:
-                lancer = `2d4 ${modificateur}`;
-                break;
-            case 2:
-                lancer = `1d4+1d6 ${modificateur}`;
-                break;
-            case 3: case 4:
-                lancer = `2d6 ${modificateur}`;
-                break;
-            case 5: case 6:
-                lancer = `1d6+1d8 ${modificateur}`;
-                break;
-            case 7: case 8: case 9:
-                lancer = `2d8 ${modificateur}`;
-                break;
-            case 10: case 11: case 12:
-                lancer = `1d8+1d10 ${modificateur}`;
-                break;
-            case 13: case 14: case 15:
-                lancer = `2d10 ${modificateur}`;
-                break;
-            case 16: case 17: case 18: case 19:
-                lancer = `1d10+1d12 ${modificateur}`;
-                break;
-            case 20:
-                lancer = `2d12 ${modificateur}`;
-                break;
-        }
+        let lancer = `${dexDng.LancersPC[stat]} ${modificateur}`;
         roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`);
         return;
     }
