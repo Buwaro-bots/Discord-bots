@@ -2,9 +2,9 @@ const outils = require("./outils.js");
 const config = require('../config.json');
 const fs = require('fs');
 
-exports.log = function(client, message, args, envoyerPM, idMJ){
+exports.log = function(client, message, args, envoyerPM, idMJ) {
     // Si l'argument est effacer et que l'utilisateur est l'admin, on effectue une copie de sauvegarde en mettant la date du jour, puis on efface les logs
-    if (args[0] == "effacer" && message.author.id == config.admin){
+    if (args[0] === "effacer" && message.author.id === config.admin) {
         function pad(n) {
             return n < 10 ? '0' + n : n;
         }

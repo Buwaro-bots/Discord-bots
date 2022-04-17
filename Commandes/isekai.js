@@ -3,18 +3,18 @@ const pokedex = require('../Données/pokedex.json');
 const disable = require('../Données/disable-isekai.json');
 const fs = require('fs');
 
-exports.isekai = function(client, message, args, command){
+exports.isekai = function(client, message, args, command) {
     // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
     let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
     "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
     "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Non-pokemon", "Digimon"]
 
-    if (args[0] == "disable") {
-        if(!disable.hasOwnProperty(message.author.id)){
+    if (args[0] === "disable") {
+        if (!disable.hasOwnProperty(message.author.id)) {
             disable[message.author.id] = {"pokemons" : [], "tags" : []}; 
         }
-        if (args[1] == "tags") {
-            for(let i = 2; i < args.length; i++){
+        if (args[1] === "tags") {
+            for(let i = 2; i < args.length; i++) {
                 tagADisable = outils.rattrapageFauteOrthographe(listeTags, args[i]);
                 disable[message.author.id].tags.push(tagADisable);
             }
@@ -24,7 +24,7 @@ exports.isekai = function(client, message, args, command){
             for (let i = 0; i < pokedex.length; i++) {
                 listePokemon.push(pokedex[i].nom);
             }
-            for(let i = 1; i < args.length; i++){
+            for(let i = 1; i < args.length; i++) {
                 pokemonADisable = outils.rattrapageFauteOrthographe(listePokemon, args[i]);
                 if (disable[message.author.id].pokemons.length < 150) {
                     disable[message.author.id].pokemons.push(pokemonADisable);
@@ -62,12 +62,12 @@ exports.isekai = function(client, message, args, command){
     let tauxDeNouveau = 3;
     let rollNouveau = outils.randomNumber(100);
 
-    if (args.length == 0 && rollNouveau <= tauxDeNouveau) {
+    if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
         args = ["Nouveau"];
     }
-    if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
+    if (args.length > 0) { // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
         let tagsEnvoye = [];
-        for (let i = 0; i < args.length; i++){
+        for (let i = 0; i < args.length; i++) {
             tagsEnvoye.push(outils.rattrapageFauteOrthographe(listeTags, args[i]));
         } 
 
@@ -81,27 +81,27 @@ exports.isekai = function(client, message, args, command){
         }
 
         let nouvelleListe = [];
-        for (let i = 0; i < pokedex.length; i++){ // On fait une boucle sur tout le pokédex
-            if(!disablePokemons.includes(pokedex[i]["nom"])) { // Si le pokémon n'est pas disabled
+        for (let i = 0; i < pokedex.length; i++) { // On fait une boucle sur tout le pokédex
+            if (!disablePokemons.includes(pokedex[i]["nom"])) { // Si le pokémon n'est pas disabled
                 let valide = true;
-                for (let j = 0; j < tagsEnvoye.length ; j++){ // On fait une deuxième boucle sur la liste des tags
-                    if(!pokedex[i]["tags"].includes(tagsEnvoye[j])){
+                for (let j = 0; j < tagsEnvoye.length ; j++) { // On fait une deuxième boucle sur la liste des tags
+                    if (!pokedex[i]["tags"].includes(tagsEnvoye[j])) {
                         valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
                     }
                 }
-                for (let j = 0; j < disableTags.length ; j++){ // On fait une troisième boucle sur la liste des tags disabled
-                    if(pokedex[i]["tags"].includes(disableTags[j])){
+                for (let j = 0; j < disableTags.length ; j++) { // On fait une troisième boucle sur la liste des tags disabled
+                    if (pokedex[i]["tags"].includes(disableTags[j])) {
                         valide = false; // Si le pokémon a l'un des tags, on ne l'incluera pas dans la liste
                     }
                 }
 
-                if (valide){
+                if (valide) {
                     nouvelleListe.push(pokedex[i]);
                 }
             }
         }
 
-        if (nouvelleListe.length == 0){ // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
+        if (nouvelleListe.length === 0) { // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
             throw("Aucun pokémon avec ses tags");
         }
         
@@ -110,8 +110,8 @@ exports.isekai = function(client, message, args, command){
 
     let nouveauPokemon;
     const tailleListe = listePokemon.length;
-    while (pokemonChoisi === null){
-        nouveauPokemon = tailleListe == 1? listePokemon[0] : listePokemon[outils.randomNumber(tailleListe)-1];
+    while (pokemonChoisi === null) {
+        nouveauPokemon = tailleListe === 1? listePokemon[0] : listePokemon[outils.randomNumber(tailleListe)-1];
         if (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()) {
             pokemonChoisi = nouveauPokemon;
         }    
@@ -124,14 +124,14 @@ exports.isekai = function(client, message, args, command){
     let estShiny = "";
     let suffixe = "";
 
-    if (rollShiny === 1){
+    if (rollShiny === 1) {
         estShiny = " **shiny**";
         suffixe += "✨";
     }
 
     let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
     let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
-    if (pokemonChoisi.hasOwnProperty("nomForme")){
+    if (pokemonChoisi.hasOwnProperty("nomForme")) {
         pokemonNumeroForme = pokemonChoisi.numeroForme;
         pokemonNomForme = pokemonChoisi.nomForme;
         suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
@@ -145,8 +145,8 @@ exports.isekai = function(client, message, args, command){
 
     message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
     .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
-        setTimeout(function(){
-            if(pokemonChoisi["tags"].includes("Digimon")) {
+        setTimeout(function() {
+            if (pokemonChoisi["tags"].includes("Digimon")) {
                 msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
             }
             else {

@@ -3,7 +3,7 @@ const fs = require('fs');
 const levenshtein = require('js-levenshtein');
 
 module.exports = {
-    randomNumber: function(maximum){
+    randomNumber: function(maximum) {
         if (maximum < 2) {
             throw 'dé inférieur à 2';
         }
@@ -26,11 +26,11 @@ module.exports = {
     },  
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot. Si la réponse doit être par mp, envoyerPM doit être égal à true
-    envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null){
+    envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
         console.log(botReply.substring(0, 100));
-        if (envoyerPM){
+        if (envoyerPM) {
             message.author.send(botReply);
-            if (idMJ != null){
+            if (idMJ != null) {
                 client.users.cache.get(idMJ).send(botReply);
             }
             message.react('📬');
@@ -40,12 +40,12 @@ module.exports = {
         }
     },
 
-    verifierSiMJ: function(args, envoyerPM){
+    verifierSiMJ: function(args, envoyerPM) {
         longueur = args.length;
-        if (longueur > 0 && args[longueur -1].startsWith('<@')){
+        if (longueur > 0 && args[longueur -1].startsWith('<@')) {
             idMJ = args.pop();
             idMJ = idMJ.substring(2, idMJ.length-1);
-            if (idMJ.startsWith("!")){ // Les pings sur téléphone visiblement ne mettent pas de ! donc il faut les enlever à part ?
+            if (idMJ.startsWith("!")) { // Les pings sur téléphone visiblement ne mettent pas de ! donc il faut les enlever à part ?
                 idMJ = idMJ.slice(1);
             }
             return [args, true, idMJ];
@@ -53,8 +53,8 @@ module.exports = {
         return [args, envoyerPM, null];
     },
 
-    logLancer: function(auteur, lancer, typeLancer){
-        if(!(auteur in statsLancers)){ // Si le lancer n'existait pas dans la base, on le rajoute
+    logLancer: function(auteur, lancer, typeLancer) {
+        if (!(auteur in statsLancers)) { // Si le lancer n'existait pas dans la base, on le rajoute
             statsLancers[auteur] = [];
         }
         
@@ -72,21 +72,21 @@ module.exports = {
         fs.writeFileSync('./Données/stats.json', writer);
     },
 
-    logLancerEffacer: function(){
+    logLancerEffacer: function() {
         statsLancers = {}
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/stats.json', writer);
         console.log("Lancers effacés.")
     },
 
-    rattrapageFauteOrthographe: function(liste, entree){
-        if (!Array.isArray(liste)){
+    rattrapageFauteOrthographe: function(liste, entree) {
+        if (!Array.isArray(liste)) {
             liste = Object.keys(liste);
         }
         let min = 1000;
         let minIndex = 0;
         entree = this.normalisationString(entree);
-        for (let i = 0; i < liste.length; i++){
+        for (let i = 0; i < liste.length; i++) {
             let elementTableau = this.normalisationString(liste[i]);
             let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
 
@@ -94,12 +94,12 @@ module.exports = {
                 console.log(liste[i] + " " + distance);
             }
 
-            if (distance < min){
+            if (distance < min) {
                 min = distance;
                 minIndex = i;
             }
         }
-        if (min < 4){
+        if (min < 4) {
             return liste[minIndex];
         }
         else {
@@ -108,7 +108,7 @@ module.exports = {
     },
 
     // Cette fonction permet d'enlever les accents et majuscules d'une chaîne de caractères.
-    normalisationString : function(string){
+    normalisationString : function(string) {
         return string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 }

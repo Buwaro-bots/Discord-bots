@@ -4,9 +4,9 @@ const outils = require("./outils.js");
 const roll = require('./roll.js');
 let strings = require('../Données/textes-privés.json');
 
-exports.dng = function(client, message, args, envoyerPM, idMJ){
+exports.dng = function(client, message, args, envoyerPM, idMJ) {
 
-    if (["aide", "help", "commandes", "commande"].includes(args[0])){
+    if (["aide", "help", "commandes", "commande"].includes(args[0])) {
         let espaces = "                ";
         let botReply = "." + 
         espaces + "**Liens utiles**\r\n" +
@@ -30,12 +30,12 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         return;
     }
-    if (args[0] === "table" || args[0] === "types"){
+    if (args[0] === "table" || args[0] === "types") {
         outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ);
         return;
     }
     if (args[0] === "trait") {
-        if (args.length == 1) {
+        if (args.length === 1) {
             let listeTraits = "La liste des traits est : ";
             for (let trait in dexDng.Traits) {
                 listeTraits += trait + ", ";
@@ -55,8 +55,8 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
-    if (["ini", "init", "initiative"].includes(args[0])){
-        if (args.length === 1){
+    if (["ini", "init", "initiative"].includes(args[0])) {
+        if (args.length === 1) {
             outils.envoyerMessage(client, "Pour faire un jet d'initiative, les stats sont l'instinct et l'agilité, la commande est **;dng ini *instinct* + *agilité***.", message, false, null);
             return;
         }
@@ -64,7 +64,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         let de1; let de2;
         let stats = {"1": "4", "2": "6", "3": "8", "4": "10", "5": "12"};
 
-        if (args.length == 2){
+        if (args.length === 2) {
             de1 = stats[parseInt(args[1][0])];
             de2 = stats[parseInt(args[1][args[1].length -1])];
         }
@@ -78,7 +78,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`);
         return;
     }
-    if (args[0] == "pc" && args.length > 1){
+    if (args[0] === "pc" && args.length > 1) {
 
         verifierNaN([args[1], args[args.length -1]]);
         let stat = parseInt(args[1]);
@@ -102,7 +102,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
     let lancerCritique = outils.randomNumber(20);
     let lancerCaracteristique = "";
 
-    if (nombreLancers == 1) {
+    if (nombreLancers === 1) {
         lancerCaracteristique = outils.randomNumber((1+stat)*2);
     }
     else {
@@ -113,8 +113,6 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
         
         let meilleurLancer = Math.max.apply(Math, listeLancers);
         lancerCaracteristique = listeLancers.join(", ");
-        console.log(lancerCaracteristique);
-        console.log(meilleurLancer);
         lancerCaracteristique = lancerCaracteristique.replace(meilleurLancer, `**${meilleurLancer}**`);
     }
 
@@ -131,13 +129,13 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
     let avantage = 0;
     let avantage_mis = false;
 
-    for (let i = 0; i < args.length; i++){ // On regarde la liste des paramètres données, on peut les mettre dans n'importe quel ordre car les trois ont leur propre nomenclature.
-        if (args[i][0] == "+" || args[i][0] == "-"){ // Si ça commence par + ou -, c'est des avantages / désavantages
+    for (let i = 0; i < args.length; i++) { // On regarde la liste des paramètres données, on peut les mettre dans n'importe quel ordre car les trois ont leur propre nomenclature.
+        if (args[i][0] === "+" || args[i][0] === "-") { // Si ça commence par + ou -, c'est des avantages / désavantages
             avantage_mis = true;
             calculer_reussite = true;
             avantage = parseInt(args[i]);
         }
-        else if (args[i].includes("dd")){ // Si ça commence par dd, c'est le dd.
+        else if (args[i].includes("dd")) { // Si ça commence par dd, c'est le dd.
             calculer_reussite = true;
             dd = parseInt(args[i][2])
         }
@@ -152,9 +150,9 @@ exports.dng = function(client, message, args, envoyerPM, idMJ){
     /*
     let message_reussite_un = "";
     let message_reussite_deux = "";
-    if (calculer_reussite){
+    if (calculer_reussite) {
         message_reussite_un = ` un dd de ${dd}`;
-        if (avantage_mis){
+        if (avantage_mis) {
             message_reussite_un += avantage > 0 ? ` et ${avantage} avantages` : ` et ${-avantage} désavantages`
         }
 

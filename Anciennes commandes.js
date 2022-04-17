@@ -5,19 +5,19 @@ if (message.content.startsWith("$") && message.guild.id === "846473259478024242"
     return;
 }
 
-else if(command === "tarot" ){
+else if (command === "tarot" ) {
     if (args[0] === "mélanger") { // Pour mélanger le tarot on dit que chaque carte n'a pas été piochée.
-        for (let i = 0; i < tarot.length; i++){
+        for (let i = 0; i < tarot.length; i++) {
             tarot[i]["piochee"] = false;
         }
         message.channel.send("Le tarot a été remélangée.");
     }
     else {
         let carte = "";
-        while (carte === ""){ // On initialise carte, tant que la carte est vide...
+        while (carte === "") { // On initialise carte, tant que la carte est vide...
             numeroCarte = randomNumber(tarot.length).toString();    // On tire un numéro au hasard...
-            for (let i = 0; i < tarot.length; i++){ // On recherche la carte correspondante...
-                if (tarot[i]["piochee"] === false && tarot[i]["numero"] === numeroCarte){ // Et si la carte n'a pas été tirée on attribue la carte à la variable carte et on sort de la boucle.
+            for (let i = 0; i < tarot.length; i++) { // On recherche la carte correspondante...
+                if (tarot[i]["piochee"] === false && tarot[i]["numero"] === numeroCarte) { // Et si la carte n'a pas été tirée on attribue la carte à la variable carte et on sort de la boucle.
                     carte = tarot[i];
                     tarot[i]["piochee"] = true;
                     break;
@@ -26,8 +26,8 @@ else if(command === "tarot" ){
         }
         
         nombreCartesRestantes = 0; // On calcule le nombre de cartes restantes
-        for (let i = 0; i < tarot.length; i++){
-            if (tarot[i]["piochee"] === false){
+        for (let i = 0; i < tarot.length; i++) {
+            if (tarot[i]["piochee"] === false) {
                 nombreCartesRestantes += 1;
             }
         }

@@ -3,10 +3,10 @@ const INSdata = require('../Données/ins.json');
 const config = require('../config.json');
 const fs = require('fs');
 
-exports.ins = function(client, message, args, envoyerPM, idMJ){
-    function verifierRegexLancer(lancer){
+exports.ins = function(client, message, args, envoyerPM, idMJ) {
+    function verifierRegexLancer(lancer) {
         let regex = new RegExp('[1-6]{3}');
-        if(regex.test(lancer)){
+        if (regex.test(lancer)) {
             return lancer.substring(0,3);
         }
         else {
@@ -14,7 +14,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         }
     }
 
-    if(["aide", "help", "commandes", "commande"].includes(args[0])){
+    if (["aide", "help", "commandes", "commande"].includes(args[0])) {
         outils.envoyerMessage(client, 
             "**;ins** permet de faire un jet normal.\r\n" +
             ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +
@@ -30,20 +30,20 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
             "\r\n"+
             ";ins **cheat** ***lancer*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
             ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins verif 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
-            ";ins **opposition** :construction:"
+            ";ins **opposition** :construction: ~~Ca serait vraiment utilisé en vrai ?~~"
             , message, envoyerPM
         )
         return;
     }
 
-    if (["table","tum","TUM"].includes(args[0])){
+    if (["table","tum","TUM"].includes(args[0])) {
         outils.envoyerMessage(client, "https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png", message);
         return;
     }
 
-    if (args.length > 0 && ["purge","purgé","purger"].includes(args[0].toString().toLowerCase())){
+    if (args.length > 0 && ["purge","purgé","purger"].includes(args[0].toString().toLowerCase())) {
         let botReply = `${message.author.toString()} a purgé :  \`\`\``;
-        while (botReply.length < 1989){
+        while (botReply.length < 1989) {
             let dices = [outils.randomNumber(6), outils.randomNumber(6), outils.randomNumber(6)];
             botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
         }
@@ -52,14 +52,14 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
-    if (args[0] == "message"){ // Commande permettant à quelqu'un de rajouter un message personalisé
-        if (args[1] == "liste"){
+    if (args[0] === "message") { // Commande permettant à quelqu'un de rajouter un message personalisé
+        if (args[1] === "liste") {
             let botReply = "";
             for (const lancer in INSdata.lancersSpeciaux) {
-                if (INSdata.lancersSpeciaux[lancer].hasOwnProperty(message.author.id)){
+                if (INSdata.lancersSpeciaux[lancer].hasOwnProperty(message.author.id)) {
                     botReply += `${lancer} : ${INSdata.lancersSpeciaux[lancer][message.author.id]}\r\n`;
                 }
-                else if (INSdata.lancersSpeciaux[lancer].hasOwnProperty("autre")){
+                else if (INSdata.lancersSpeciaux[lancer].hasOwnProperty("autre")) {
                     botReply += `*${lancer}* : ${INSdata.lancersSpeciaux[lancer]["autre"]}\r\n`;
                 }
             }
@@ -71,18 +71,18 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
 
         let lancer = verifierRegexLancer(args[1]);
 
-        if (args[2] == "deletethis"){
+        if (args[2] === "deletethis") {
             delete INSdata.lancersSpeciaux[lancer][message.author.id];
             let botReply = `${message.author.toString()} : Votre message pour le lancer ${lancer} a été supprimé.`;	
             outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         }
-        else{
-            if(!(lancer in INSdata.lancersSpeciaux)){ // Si le lancer n'existait pas dans la base, on le rajoute
+        else {
+            if (!(lancer in INSdata.lancersSpeciaux)) { // Si le lancer n'existait pas dans la base, on le rajoute
                 INSdata.lancersSpeciaux[lancer] = {};
             }
 
             phrase = " "; // Très mauvaise manière de récupérer la phrase qui a été découpée avant, à revoir
-            for (let i= 2; i < args.length; i++){
+            for (let i= 2; i < args.length; i++) {
                 phrase += args[i] + " ";
             }
             INSdata.lancersSpeciaux[lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
@@ -99,9 +99,9 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         return;
     }
 
-    if (args[0] == "autocheck"){
+    if (args[0] === "autocheck") {
         let botReply = "";
-        if (INSdata.listeAutoVerifications.includes(message.author.id)){
+        if (INSdata.listeAutoVerifications.includes(message.author.id)) {
             const index = INSdata.listeAutoVerifications.indexOf(message.author.id);
             INSdata.listeAutoVerifications.splice(index, 1);
             botReply = `${message.author.toString()} : Vous avez désactivé la vérification automatique.`;
@@ -119,15 +119,15 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
     }
 
 
-    if (args[0] == "gacha"){
+    if (args[0] === "gacha") {
 
         let lancer = outils.randomNumber(6) * 10 +  outils.randomNumber(6);
         let resultat = INSdata.gacha[lancer];
 
         console.log(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
         message.channel.send(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ||${resultat}||`)
-        .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
-            setTimeout(function(){
+        .then((msg)=> {
+            setTimeout(function() {
                 msg.edit(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
             }, 4000)
         });
@@ -140,7 +140,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
 
     if (args[0] === "cheat" && args.length >= 1) {
         dices = verifierRegexLancer(args[1]).split('');
-        dices[0] = parseInt(dices[0]); dices[1] = parseInt(dices[1]); dices[2] = parseInt(dices[2]);
+        dices = [parseInt(dices[0]), parseInt(dices[1]), parseInt(dices[2])];
         verbe = "triché avec";
     }
     let dicesSum = dices[0]*100 + dices[1]*10 + dices[2]; // Nécéssaire parce qu'on ne peut pas comparer des tableaux directement.
@@ -148,17 +148,17 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
     let botReply = `${message.author.toString()} a ${verbe} [${dices[0]}${dices[1]}] + [${dices[2]}].`;
 
 
-    if (dicesSum in INSdata.lancersSpeciaux){
-        if (message.author.id in INSdata.lancersSpeciaux[dicesSum]){
+    if (dicesSum in INSdata.lancersSpeciaux) {
+        if (message.author.id in INSdata.lancersSpeciaux[dicesSum]) {
             botReply += INSdata.lancersSpeciaux[dicesSum][message.author.id];
             lancerSpecial = true; // Si le lancer est "spécial", c'est à dire qu'il a un message perso, on n'a pas besoin de préciser si c'est une réussite ou pas.
         }
-        else if("autre" in INSdata.lancersSpeciaux[dicesSum]){
+        else if ("autre" in INSdata.lancersSpeciaux[dicesSum]) {
             botReply += INSdata.lancersSpeciaux[dicesSum]["autre"];
         }
     }
 
-    if (args[0] === "check" || args[0] === "verif" || INSdata.listeAutoVerifications.includes(message.author.id) && lancerSpecial == false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
+    if (args[0] === "check" || args[0] === "verif" || INSdata.listeAutoVerifications.includes(message.author.id) && lancerSpecial === false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
         let minimumStat = -2 ;
         let nomMinimumStat = "" ;
         let maximumRoll = 110;
@@ -183,7 +183,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ){
         minimumStat = INSdata.tum[i]["stat"];
         nomMinimumStat = INSdata.tum[i]["nomStat"];
 
-        if(args[0] === "check" || INSdata.listeAutoVerifications.includes(message.author.id)) { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
+        if (args[0] === "check" || INSdata.listeAutoVerifications.includes(message.author.id)) { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
             if (minimumStat <= 0 ) {
                 botReply += ` Réussite quelque soit la stat.`;    
             }

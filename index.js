@@ -1,23 +1,17 @@
 const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
 const aliases = require('./Données/aliases.json'); // Ce fichier contient les noms alternatifs des commandes
 const outils = require("./Commandes/outils.js");
-let statsLancers = require('./Données/stats.json');
 
 const requireDir = require('require-dir');
 const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes commandes du dossier commande.
 
-//const Discord = require("discord.js");
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES], partials: ["CHANNEL"]});
-const fs = require('fs');
-const { stringify } = require('querystring');
-const { verifierNaN } = require('./Commandes/outils.js');
 
 process.on('uncaughtException', function (err) {
     console.error(err);
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
     });
-
 
 let prefix = ";"; // Set the prefix
 console.log("Ready!");
@@ -32,7 +26,7 @@ client.on("messageCreate", (message) => {
     let nbBoucles = 0;
 
     // Si l'utilisateur utilise deux fois le préfix, on considère qu'il veut recevoir la réponse par mp
-    if (message.content.startsWith(prefix + prefix)){
+    if (message.content.startsWith(prefix + prefix)) {
         envoyerPM = true;
         message.content = message.content.slice(prefix.length);
     }
@@ -48,7 +42,7 @@ client.on("messageCreate", (message) => {
     try {
         // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
         aliases.forEach(alias => {
-            if (command == alias["nom"]){
+            if (command === alias["nom"]) {
                 command = alias["alias"];
                 eval(alias["commande"]); 
                 return;
@@ -56,38 +50,40 @@ client.on("messageCreate", (message) => {
         })
 
         outils.verifierNaN([nbBouclesMax]);
-        if(nbBouclesMax > 10 && message.author.id !== config.admin ) {
+        if (nbBouclesMax > 10 && message.author.id !== config.admin ) {
             nbBouclesMax = 5;
         }
 
         [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
 
-        while (nbBoucles < nbBouclesMax){
-            if(command === "code" || command === "source") {
+        while (nbBoucles < nbBouclesMax) {
+            if (command === "code" || command === "source") {
                 mesCommandes.outils.envoyerMessage(client, "https://github.com/Buwaro-bots/Discord-bots", message);
             }
 
-            if(command === "help" || command === "aide" || command === "commande" || command === "commandes") {
-                mesCommandes.outils.envoyerMessage(client, 
-                    "**;roll** pour faire des jets. Il est possible de juste mettre le nombre de faces comme **;roll *20***, des commandes plus compliquées comme **;roll *1d10 + 1d8 + 3***, " +
-                    "ou juste **;roll** pour avoir la commande par défaut qui en général est 100. **;roll setup *1d10 + 1d8*** permets de changer le roll par défaut. Il est aussi possible d'abréger en **;r**.\r\n" +
-                    "**;d2**, ;d4, ;d6, ;d8, ;d10, ;d12, ;d20 et ;d100 sont des raccourcis pour les jets correspondant.\r\n" +
-                    "\r\n" +
-                    "**;ins** pour faire un jet pour In Nomine Satanis / Magna Veritas. **;ins commandes** a la liste des commandes spécifiques.\r\n"+            
-                    "**;dng stat** pour faire un jet pour Donjons et Groudon, **;ins commandes** a la liste des commandes spécifiques et une aide rapide pour les lancers.\r\n" +
-                    "**;num *test*** pour faire un lancer de numénera. \r\n" +
-                    "\r\n" +
-                    "=> Pour les lancers de jdr, rajouter un ping à la fin du message permet d'envoyer le roll en privé à vous et à la personne pingée. Sinon mettre deux **;** envoit le résultat en privé.\r\n" +
-                    "**;repeat** permet de faire plusieurs fois la même commandes comme **;repeat 3 dng 4** pour faire 3 rolls de dng avec une stat de 4.\r\n" +
-                    "\r\n" +
-                    "**;isekai** pour vous faire réincarner en pokémon. Il est possible de roll dans une catégorie telle que les types, Femelle/Mâle, gen1, DnG. " +
-                    "**;isekai disable** permet d'enlever des pokémons de vos rolls, soit en les listant ou en listant les tags.\r\n"
-                    , message, envoyerPM
-                )
+            if (command === "patchnotes") {
+                mesCommandes.outils.envoyerMessage(client, "https://github.com/Buwaro-bots/Discord-bots/commits/main", message);
+            }
+
+            if (command === "help" || command === "aide" || command === "commande" || command === "commandes") {
+                botReply = "**;roll** pour faire des jets. Il est possible de juste mettre le nombre de faces comme **;roll *20***, des commandes plus compliquées comme **;roll *1d10 + 1d8 + 3***, " +
+                            "ou juste **;roll** pour avoir la commande par défaut qui en général est 100. **;roll setup *1d10 + 1d8*** permets de changer le roll par défaut. Il est aussi possible d'abréger en **;r**.\r\n" +
+                            "**;d2**, ;d4, ;d6, ;d8, ;d10, ;d12, ;d20 et ;d100 sont des raccourcis pour les jets correspondant.\r\n" +
+                            "\r\n" +
+                            "**;ins** pour faire un jet pour In Nomine Satanis / Magna Veritas. **;ins commandes** a la liste des commandes spécifiques.\r\n"+
+                            "**;dng stat** pour faire un jet pour Donjons et Groudon, **;ins commandes** a la liste des commandes spécifiques et une aide rapide pour les lancers.\r\n" +
+                            "**;num *test*** pour faire un lancer de numénera. \r\n" +
+                            "\r\n" +
+                            "=> Pour les lancers de jdr, rajouter un ping à la fin du message permet d'envoyer le roll en privé à vous et à la personne pingée. Sinon mettre deux **;** envoit le résultat en privé.\r\n" +
+                            "**;repeat** permet de faire plusieurs fois la même commandes comme **;repeat 3 dng 4** pour faire 3 rolls de dng avec une stat de 4.\r\n" +
+                            "\r\n" +
+                            "**;isekai** pour vous faire réincarner en pokémon. Il est possible de roll dans une catégorie telle que les types, Femelle/Mâle, gen1, DnG. " +
+                            "**;isekai disable** permet d'enlever des pokémons de vos rolls, soit en les listant ou en listant les tags.\r\n" +
+                mesCommandes.outils.envoyerMessage(client, botReply , message, envoyerPM);
                 return;
             }
 
-            else if(command === "pokemon") {
+            else if (command === "pokemon") {
                 let dexDng = require('./Données/dex-dng.json');
                 let pokemonDemande = outils.normalisationString(args.join(" "));
 
@@ -116,35 +112,35 @@ client.on("messageCreate", (message) => {
                 return;
             }
 
-            else if(command === "isekai") {
+            else if (command === "isekai") {
                 mesCommandes.isekai.isekai(client, message, args, command);
             }
 
-            else if(command === "horoscope") {
+            else if (command === "horoscope") {
                 mesCommandes.horoscope.horoscope(client, message, args)
             }
 
-            else if(command === "dng") {
+            else if (command === "dng") {
                 mesCommandes.dng.dng(client, message, args, envoyerPM, idMJ);
             }
 
-            else if(command === "ins") { 
+            else if (command === "ins") { 
                 mesCommandes.ins.ins(client, message, args, envoyerPM, idMJ);
             }
 
-            else if(command === "num") { 
+            else if (command === "num") { 
                 mesCommandes.num.num(client, message, args, envoyerPM, idMJ);
             }
 
-            else if(command === "roll") {
+            else if (command === "roll") {
                 mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
             }
 
-            else if(command === "log") {
+            else if (command === "log") {
                 mesCommandes.log.log(client, message, args, envoyerPM, idMJ);
             }
 
-            else if(command === "ramoloss") {
+            else if (command === "ramoloss") {
                 async function speak() {
                     temps = 5*60*1000 + mesCommandes.outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
                     console.log(temps/1000)
@@ -186,7 +182,7 @@ client.on("messageCreate", (message) => {
                 tarot = ["I le magicien", "II la grande prêtresse", "III l'impératrice", "IV l'empereur", "V l'hiérophante", "VI les amoureux", "VII le chariot", "VIII la justice", "IX l'ermite", "X la roue de fortune", "XI la force",
                 "XII le pendu", "XIII la mort", "XIV la tempérance", "XV le diable", "XVI la maison dieu", "XVII l'étoile", "XVIII la lune", "XIX le soleil", "XX le jugement", "XXI le monde", "le fou"]
                 
-                verifierNaN(args);
+                outils.verifierNaN(args);
                 nombreCartes = args.length > 0 ? args[0] : 1;
                 phraseCartes = nombreCartes > 1 ? "les cartes" : "la carte";
 
@@ -198,7 +194,7 @@ client.on("messageCreate", (message) => {
                 outils.logLancer(message.author.username, cartesTirées, "tarot");
             }
 
-            else if(command === "test") { 
+            else if (command === "test") { 
                 mesCommandes.roll.roll(client, message, ["100"], envoyerPM, idMJ, commandBody);
 
                 const filter = (reaction, user) => {
@@ -215,7 +211,7 @@ client.on("messageCreate", (message) => {
                 });
             }
 
-            else if(command === "fermer" && message.author.id === config.admin) {
+            else if (command === "fermer" && message.author.id === config.admin) {
                 console.log("ok");
                 client.destroy();
             }

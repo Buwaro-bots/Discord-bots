@@ -1,10 +1,10 @@
 const outils = require("./outils.js");
 const horoscope = require('../Données/horoscope.json');
 
-exports.horoscope = function(client, message, args){
+exports.horoscope = function(client, message, args) {
     let nbBoucle = 1
-    if (args.length > 0 && args[0] == "hybride"){
-        if (args.length > 1){
+    if (args.length > 0 && args[0] === "hybride") {
+        if (args.length > 1) {
             nbBoucle = parseInt(args[1]);
         }
         else {
@@ -15,19 +15,19 @@ exports.horoscope = function(client, message, args){
     let animal = "";
     let boucleEnCours = 1;
 
-    while (boucleEnCours <= nbBoucle){
+    while (boucleEnCours <= nbBoucle) {
         let continuer = true;
         let alea = 0;
 
         let famille = horoscope;
-        while (continuer){
+        while (continuer) {
             alea = outils.randomNumber(100);
             process.stdout.write(`${alea} => `);
             let nouvelleFamille;
             famille.forEach(element => {
-                if (alea > 0 && alea <= element["probabilité"]){
+                if (alea > 0 && alea <= element["probabilité"]) {
                     nouvelleFamille = element["liste"];
-                    if (element["type"] == "liste"){
+                    if (element["type"] === "liste") {
                         continuer = false;
                     }
                 }
@@ -37,7 +37,7 @@ exports.horoscope = function(client, message, args){
         }
 
         animal += famille[outils.randomNumber(famille.length)-1];
-        if (boucleEnCours < nbBoucle){
+        if (boucleEnCours < nbBoucle) {
             animal += "-";
         }
         boucleEnCours += 1;
