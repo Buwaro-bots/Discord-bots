@@ -4,18 +4,35 @@ const disable = require('../Données/disable-isekai.json');
 const fs = require('fs');
 
 exports.isekai = function(client, message, args, command){
+    // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
+    let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
+    "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
+    "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Non-pokemon", "Digimon"]
+
     if (args[0] == "disable") {
         if(!disable.hasOwnProperty(message.author.id)){
             disable[message.author.id] = {"pokemons" : [], "tags" : []}; 
         }
         if (args[1] == "tags") {
             for(let i = 2; i < args.length; i++){
-                disable[message.author.id].tags.push(args[i]);
+                tagADisable = outils.rattrapageFauteOrthographe(listeTags, args[i]);
+                disable[message.author.id].tags.push(tagADisable);
             }
         }
         else {
+            let listePokemon = [];
+            for (let i = 0; i < pokedex.length; i++) {
+                listePokemon.push(pokedex[i].nom);
+            }
             for(let i = 1; i < args.length; i++){
-                disable[message.author.id].pokemons.push(args[i]);
+                pokemonADisable = outils.rattrapageFauteOrthographe(listePokemon, args[i]);
+                if (disable[message.author.id].pokemons.length < 150) {
+                    disable[message.author.id].pokemons.push(pokemonADisable);
+                }
+                else {
+                    outils.envoyerMessage(client, botReply, "Vous avez déjà atteint la limite de pokemons à désactiver. Vous pouvez désactiver uniquement 150 pokemons à la fois.");
+                    break;
+                }
             }
         }
 
@@ -49,12 +66,10 @@ exports.isekai = function(client, message, args, command){
         args = ["Nouveau"];
     }
     if (args.length > 0){ // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
-
-        let listeSubstitues = {"Electrik": "Electrique", "Électrik": "Electrique", "Électrique": "Electrique", "Fee": "Fée", "Insect" : "Insecte", "Derg" : "Dragon", "Dng" : "DnG", "Pasdng" : "PasDnG"}
+        let tagsEnvoye = [];
         for (let i = 0; i < args.length; i++){
-            args[i] = args[i].charAt(0).toUpperCase() + args[i].slice(1); // On met la première lettre en majuscule
-            args[i] = args[i] in listeSubstitues ? listeSubstitues[args[i]] : args[i] // On corrige les fautes courantes
-        }
+            tagsEnvoye.push(outils.rattrapageFauteOrthographe(listeTags, args[i]));
+        } 
 
         // Etablissement de la disable list
         let disablePokemons = [];
@@ -69,8 +84,8 @@ exports.isekai = function(client, message, args, command){
         for (let i = 0; i < pokedex.length; i++){ // On fait une boucle sur tout le pokédex
             if(!disablePokemons.includes(pokedex[i]["nom"])) { // Si le pokémon n'est pas disabled
                 let valide = true;
-                for (let j = 0; j < args.length ; j++){ // On fait une deuxième boucle sur la liste des tags
-                    if(!pokedex[i]["tags"].includes(args[j])){
+                for (let j = 0; j < tagsEnvoye.length ; j++){ // On fait une deuxième boucle sur la liste des tags
+                    if(!pokedex[i]["tags"].includes(tagsEnvoye[j])){
                         valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
                     }
                 }
