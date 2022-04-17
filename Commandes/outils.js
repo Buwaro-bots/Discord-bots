@@ -80,7 +80,7 @@ module.exports = {
     },
 
     rattrapageFauteOrthographe: function(liste, entree){
-        if (typeof liste === 'object'){
+        if (!Array.isArray(liste)){
             liste = Object.keys(liste);
         }
         let min = 1000;
@@ -90,8 +90,8 @@ module.exports = {
             let elementTableau = this.normalisationString(liste[i]);
             let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
 
-            if (distance < 3.05) {
-                console.log(entree + " " + liste[i] + " " + distance);
+            if (distance < 3) {
+                console.log(liste[i] + " " + distance);
             }
 
             if (distance < min){
@@ -99,7 +99,12 @@ module.exports = {
                 minIndex = i;
             }
         }
-        return liste[minIndex];
+        if (min < 4){
+            return liste[minIndex];
+        }
+        else {
+            throw("Aucun résultat trouvé");
+        }
     },
 
     // Cette fonction permet d'enlever les accents et majuscules d'une chaîne de caractères.
