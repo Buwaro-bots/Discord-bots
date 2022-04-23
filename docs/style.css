@@ -1,0 +1,39 @@
+body {
+    background-color: #36393F;
+
+}
+
+span {
+    font-weight: bold;
+}
+.commande {
+    color: rgb(83, 204, 188);
+}
+
+.variable {
+    color: rgb(250, 58, 0);
+}
+
+.parametre {
+    color: rgb(212, 250, 0);
+}
+/* Change bootstrap accordion background color */
+.accordion-item {
+    background-color: #36393F;
+    color: #eee;
+}
+
+.accordion-button{
+    background-color: #222;
+    color: #eee;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #111;
+    color: #eee;
+}
+
+/* Remove blue border when a div on clicked on*/
+.accordion-button:active {
+    border-color: #111;
+}
