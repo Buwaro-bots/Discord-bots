@@ -17,6 +17,14 @@ span {
 .parametre {
     color: rgb(212, 250, 0);
 }
+
+.discord-exemples {
+	max-width: 100%;
+}
+
+.description-de-base {
+    margin-left: 1.25em;
+}
 /* Change bootstrap accordion background color */
 .accordion-item {
     background-color: #36393F;

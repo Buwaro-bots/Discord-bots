@@ -10,69 +10,128 @@
 </head>
 <body>
     <div class="accordion" id="accordionExample">
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="roll">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-roll" aria-expanded="false" aria-controls="collapse-roll">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-roll" aria-expanded="false" aria-controls="collapse-roll">
                     Commandes de rolls
                 </button>
             </h2>
-            <div id="collapse-roll" class="accordion-collapse collapse show" aria-labelledby="roll" data-bs-parent="#accordionExample">
+            <div id="collapse-roll" class="accordion-collapse collapse" aria-labelledby="roll" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <p>Tout d'abord, si vous voulez lancer un dé à 100 faces, faîtes juste <span class="commande">;roll</span> ou <span class="commande">;r</span> et ça lancera le lancer par défaut.</p>
-                    <img src="images\roll_1.png" class="discord-exemples" alt=";roll devient &rarr sur 1d100 a lancé 46."><br/>
+                    <img src="images/roll_1.png" class="discord-exemples" alt=";roll devient &rarr sur 1d100 a lancé 46."><br/>
                     <br/>
                     <p>Pour lancer <strong>juste</strong> un dé, vous pouvez faire soit <span class="commande">;r</span> <span class="variable">nombre de faces</span>, soit <span class="commande">;d</span><span class="variable">20</span></p>
-                    <img src="images\roll_2.png" class="discord-exemples" alt=";r 20 devient &rarr sur 1d20 a lancé 16."><br/>
+                    <img src="images/roll_2.png" class="discord-exemples" alt=";r 20 devient &rarr sur 1d20 a lancé 16."><br/>
                     <br/>
-                    <p>Vous pouvez lancer plusieurs dés avec soit <span class="commande">;r</span> <span class="variable">nombre de dés</span><span class="parametre"> d </span><span class="variable">nombre de faces</span>, soit faire des calculs comme <span class="commande">;r</span><span class="variable">1</span><span class="parametre">d</span><span class="variable">20</span></p>
-                    <img src="images\roll_3.png" class="discord-exemples" alt=";r d20 + d10 devient &rarr sur 1d20 + 1d10 a lancé [18] + [3] , ce qui donne 21."><img src="images\roll_4.png" class="discord-exemples" alt=";r 2d20 - 5 devient &rarr sur 2d20 - 5 a lancé [17, 15] - 5 , ce qui donne 27.">
+                    <p>Vous pouvez lancer plusieurs dés avec soit <span class="commande">;r</span> <span class="variable">nombre de dés</span><span class="parametre"> d </span><span class="variable">nombre de faces</span>, soit faire des calculs comme <span class="commande">;r</span><span class="variable">1</span><span class="parametre">d</span><span class="variable">20</span><br/>
+                    Si plusieurs dés sont lancés, les lancers sont mis entre crochets pour pouvoir mieux les distinguer entre eux, et des eventuelles nombres inclus dans le calcul.</p>
+                    <img src="images/roll_3.png" class="discord-exemples" alt=";r d20 + d10 devient &rarr sur 1d20 + 1d10 a lancé [18] + [3] , ce qui donne 21."><img src="images\roll_4.png" class="discord-exemples" alt=";r 2d20 - 5 devient &rarr sur 2d20 - 5 a lancé [17, 15] - 5 , ce qui donne 27.">
 
                 </div>
             </div>
         </div>
 
-
-
-
         <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <h2 class="accordion-header" id="DNG">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG" aria-expanded="false" aria-controls="collapse-DNG">
                     Donjons et Groudon
                 </button>
             </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div id="collapse-DNG" class="accordion-collapse collapse show" aria-labelledby="DNG" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    
-
                     <div class="accordion" id="accordion-DNG">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="DNG-1">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-1" aria-expanded="true" aria-controls="collapse-DNG-1">
-                                    Point 1
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-1" aria-expanded="false" aria-controls="collapse-DNG-1">
+                                    Règles de base
                                 </button>
                             </h2>
                             <div id="collapse-DNG-1" class="accordion-collapse collapse show" aria-labelledby="DNG-1" data-bs-parent="#accordion-DNG">
                                 <div class="accordion-body">
-                                    TO DO
+                                    <p class="description-de-base"> 
+                                        Le premier lancer correspond au jet de caractéristique, le dé lancé correspond à votre stat. Pour une action normale, le jet est une réussite si ce jet est supérieur à 3. (soit 4 ou plus)<br/>
+                                        Le second lancer correspond au jet de critique, plus le lancer est haut, plus la réussite ou l'échec est importante, en général un 19 ou un 20 vaut une réussite ou échec critique. (des effets peuvent augmenter les chances de faire un critique, de 17 à 20 voire même de 13 à 20)<br/>
+                                        Si un échec a un petit lancer de critique, il peut devenir une réussite si vous avez un avantage. Avec un avantage, un échec devient une réussite si le lancer de critique est entre 1 et 4. L'inverse est aussi vraie pour les petites réussites.<br/>
+                                        <br/>
+                                        Pour faire un lancer, la commande est <span class="commande">;dng</span> <span class="variable">votre stat</span>. Si un effet vous demande de lancer deux jets de caractéristique, la commande est <span class="commande">;dng</span> <span class="variable">votre stat</span> <span class="parametre">2</span>.<br/>
+                                        <img src="images/dng_1.png" class="discord-exemples" alt=";dng 3 devient &rarr sur 1d20 a lancé 16.">
+                                        <img src="images/dng_2.png" class="discord-exemples" alt=";dng 3 2 devient &rarr sur 1d20 a lancé 16.">
+                                    </p>
                                 </div>
                             </div>
                         </div>
+
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="DNG-2">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-2" aria-expanded="false" aria-controls="collapse-DNG-2">
-                                    Point 2
+                                    Jets d'initiatives
                                 </button>
                             </h2>
-                            <div id="collapse-DNG-2" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion-DNG">
+                            <div id="collapse-DNG-2" class="accordion-collapse collapse" aria-labelledby="DNG-2" data-bs-parent="#accordion-DNG">
                                 <div class="accordion-body">
-                                    TO DO
+                                    <p>Les jets d'initiatives servent à déterminer qui agit en premier lors d'un combat. Pour en lancer un, la commande est <span class="commande">;dng</span> <span class="parametre">ini</span> <span class="variable">votre stat d'instinct</span> <span class="parametre">(espace)</span> <span class="variable">votre stat d'agilité</span>.<br/>
+                                    Pour départager les égalités, un troisième dé peut-être lancé. Pour rendre le jeu plus fluide, le bot lance un dé qui détermine les dixièmes.</p>
+                                    <img src="images/dng_3.png" class="discord-exemples" alt=";dng ini 3 4 devient &rarr sur 1d8 + 1d10 + 1d9 / 10 a lancé [1] + [3] + [9] / 10, ce qui donne 4,9.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="DNG-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-3" aria-expanded="false" aria-controls="collapse-DNG-3">
+                                    Puissance cachée
+                                </button>
+                            </h2>
+                            <div id="collapse-DNG-3" class="accordion-collapse collapse" aria-labelledby="DNG-3" data-bs-parent="#accordion-DNG">
+                                <div class="accordion-body">
+                                    <p>Au cours de votre aventure vous avez la possibilité de faire éclore puis évoluer votre puissance cachée.<br/>
+                                    Du point de vue du gameplay, votre jauge de puissance cachée est de 4 + votre échelon. L'échelon détermine aussi le niveau des dés que vous lancez. 
+                                    Vous pouvez puiser dans votre jauge pour améliorer votre lancer, il est amélioré de 1 pour chaque point dépensé si vous le faîtes avant le lancer, ou de 1 pour chaque <strong>deux points</strong> dépensés si vous le faîtes après. 
+                                    Si vous dépensez votre dernier point de cette manière, le bonus est doublé, mais avoir sa jauge de puissance cachée à zéro fait que vous tombez au sol comme si vous aviez perdus tout vos PV. La jauge  se remplit du quart de sa valeur maximale (arrondi à l’inférieur) par repos complet<br/>
+                                    Pour réussir une imprégnation, il faut faire plus que 5, pour réussir sa puissance cachée de son thème principal, en général il faut faire plus que 10, et plus que 14 pour un thème secondaire. Une imprégnation coûte un point de jauge, le reste est à déterminer avec le MJ.</br>
+                                    Pour le lancer, la commande est <span class="commande">;dng</span> <span class="parametre">pc</span> <span class="variable">votre échelon</span> (et éventuellement) <span class="parametre">+</span> <span class="variable">le nombre de points supplémentaires que vous dépensez</span>
+                                </p>
+                                <img src="images/dng_4.png" class="discord-exemples" alt=";dng pc 4 +2 devient &rarr sur 2d6 + 2 a lancé [6,3] + 2, ce qui donne 11.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="DNG-4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-4" aria-expanded="false" aria-controls="collapse-DNG-4">
+                                    Pokédex
+                                </button>
+                            </h2>
+                            <div id="collapse-DNG-4" class="accordion-collapse collapse" aria-labelledby="DNG-4" data-bs-parent="#accordion-DNG">
+                                <div class="accordion-body">
+                                    <p>Si vous avez le moindre doûte sur votre fiche, n'hésitez par à vérifier la fiche de votre espèce avec la commande <span class="commande">;dng</span> <span class="parametre">pokemon</span> <span class="variable">votre espèce</span>.</p>
+                                    <img src="images/dng_5a.png" class="discord-exemples" alt=";dng pokemon Symbios affiche la fiche de Symbios.">
+                                    <img src="images/dng_5b.png" class="discord-exemples" alt=";dex Kaimimi affiche la fiche de Kaiminus.">
+                                    <br/>
+                                    <p>Si vous avez besoin de la description complète d'un trait, la commande est <span class="commande">;dng</span> <span class="parametre">trait</span> <span class="variable">le nom du trait</span>.</p>
+                                    <img src="images/dng_6.png" class="discord-exemples" alt=";dng trait Gecko affiche les détails du trait Gecko.">
+                                    <br/><br/>
+                                    <p>Ces deux commandes bénéficient d'une correction orthographique, donc n'ayez pas peur de vous tromper ou d'abréger les traits trop longs.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="DNG-5">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-5" aria-expanded="false" aria-controls="collapse-DNG-5">
+                                    Autres
+                                </button>
+                            </h2>
+                            <div id="collapse-DNG-5" class="accordion-collapse collapse" aria-labelledby="DNG-5" data-bs-parent="#accordion-DNG">
+                                <div class="accordion-body">
+                                    <p>N'hésitez pas à refaire <span class="commande">;dng</span> <span class="parametre">aide</span> pour avoir la liste des liens utiles et un rappel rapide des commandes. 
+                                        Si vous estimez que d'autres informations mériteraient d'être sur cette page, n'hésitez pas à me prévenir voir même de m'aider à l'écrire.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
                     
                 </div>
             </div>
@@ -109,15 +168,20 @@
             </h2>
             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    22 Avril : Possibilité de faire n'importe quel lancer en faisant une commande genre ;d15.<br/>
-                    17 Avril : DnG : Ajout d'un d9 pour départager les jets d'initiatives.<br/>
-                    15 Avril : DnG : Mode d'emploi si quelqu'un fait juste ;dng ini.<br/>
-                    15 Avril : DnG : Vérification orthographique pour les recherches de pokémons et traits.<br/>
+                    <span class="commande">22 Avril</span> : <span class="variable">Rolls</span> : Possibilité de faire n'importe quel lancer en faisant une commande genre ;d15.<br/>
+                    <span class="commande">17 Avril</span> : <span class="variable">DnG</span> : Ajout d'un d9 pour départager les jets d'initiatives.<br/>
+                    <span class="commande">15 Avril</span> : <span class="variable">DnG</span> : Mode d'emploi si quelqu'un fait juste ;dng ini.<br/>
+                    <span class="commande">15 Avril</span> : <span class="variable">DnG</span> : Vérification orthographique pour les recherches de pokémons et traits.<br/>
+                    <span class="commande">12 Avril</span> : <span class="variable">DnG</span> : Ajout d'un d9 pour départager les jets d'initiatives. Ajout de la commande pour rechercher un trait.<br/>
+                    <span class="commande">02 Avril</span> : <span class="variable">DnG</span> : Ajout de la commande dex/pokemon rechercher un pokémon.<br/>
+                    <span class="commande">27 Mars</span> : <span class="variable">INS</span> : Afficher la liste des messages persos ;ins message liste .<br/>
+
+
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </html>
