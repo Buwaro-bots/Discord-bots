@@ -5,7 +5,7 @@ const levenshtein = require('js-levenshtein');
 module.exports = {
     randomNumber: function(maximum) {
         if (maximum < 2) {
-            throw 'dé inférieur à 2';
+            throw '󠀾2️⃣⬆️dé inférieur à 2';
         }
         // Cette fonction sert à tirer un nombre au pif de 1 à x, j'en ai beaucoup besoin.
         return Math.floor(Math.random() * maximum) + 1;
@@ -15,7 +15,7 @@ module.exports = {
     verifierNaN: function(array) {
         for(let i = 0; i < array.length; i++)
         if (isNaN(array[i])) {
-        throw 'nan error';
+        throw '🔢nan error';
         }
     },
 
@@ -103,7 +103,7 @@ module.exports = {
             return liste[minIndex];
         }
         else {
-            throw("Aucun résultat trouvé");
+            throw("✍️🤷Aucun résultat trouvé");
         }
     },
 

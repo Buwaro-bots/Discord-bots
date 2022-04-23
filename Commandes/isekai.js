@@ -102,7 +102,7 @@ exports.isekai = function(client, message, args, command) {
         }
 
         if (nouvelleListe.length === 0) { // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
-            throw("Aucun pokémon avec ses tags");
+            throw("✍️🤷Aucun pokémon avec ses tags");
         }
         
         listePokemon = nouvelleListe;

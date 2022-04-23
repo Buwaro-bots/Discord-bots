@@ -85,7 +85,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         let modificateur = args.length > 2 ? `+ ${parseInt(args[args.length -1])}` : "";
 
         if ( stat < 1 || stat > 20 ) {
-            throw("Stat incorrecte");
+            throw("🔢Stat incorrecte");
         }
 
         let lancer = `${dexDng.LancersPC[stat]} ${modificateur}`;

@@ -221,6 +221,9 @@ client.on("messageCreate", (message) => {
     }
 
     catch(err) {
+        if (err.charAt(0).match(/^(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udff3\udff4]|\ud83c[\udf00-\udfff]|\ud83e[\udd00-\uddff])$/)) {
+            message.react(err.charAt(0));
+        }
         message.react('❌');
         console.log(err/*.substring(0, 200)*/);
         }
