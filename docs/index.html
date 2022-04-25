@@ -13,7 +13,7 @@
 
         <div class="accordion-item">
             <h2 class="accordion-header" id="roll">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-roll" aria-expanded="false" aria-controls="collapse-roll">
+                <button id="button-roll" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-roll" aria-expanded="false" aria-controls="collapse-roll">
                     Commandes de rolls
                 </button>
             </h2>
@@ -34,26 +34,26 @@
         </div>
 
         <div class="accordion-item">
-            <h2 class="accordion-header" id="DNG">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG" aria-expanded="false" aria-controls="collapse-DNG">
+            <h2 class="accordion-header" id="dng">
+                <button id="button-dng" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng" aria-expanded="false" aria-controls="collapse-dng">
                     Donjons et Groudon
                 </button>
             </h2>
-            <div id="collapse-DNG" class="accordion-collapse collapse show" aria-labelledby="DNG" data-bs-parent="#accordionExample">
+            <div id="collapse-dng" class="accordion-collapse collapse" aria-labelledby="dng" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <div class="accordion" id="accordion-DNG">
+                    <div class="accordion" id="accordion-dng">
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="DNG-1">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-1" aria-expanded="false" aria-controls="collapse-DNG-1">
+                            <h2 class="accordion-header" id="dng-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-1" aria-expanded="false" aria-controls="collapse-dng-1">
                                     Règles de base
                                 </button>
                             </h2>
-                            <div id="collapse-DNG-1" class="accordion-collapse collapse show" aria-labelledby="DNG-1" data-bs-parent="#accordion-DNG">
+                            <div id="collapse-dng-1" class="accordion-collapse collapse show" aria-labelledby="dng-1" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
                                     <p class="description-de-base"> 
-                                        Le premier lancer correspond au jet de caractéristique, le dé lancé correspond à votre stat. Pour une action normale, le jet est une réussite si ce jet est supérieur à 3. (soit 4 ou plus)<br/>
-                                        Le second lancer correspond au jet de critique, plus le lancer est haut, plus la réussite ou l'échec est importante, en général un 19 ou un 20 vaut une réussite ou échec critique. (des effets peuvent augmenter les chances de faire un critique, de 17 à 20 voire même de 13 à 20)<br/>
-                                        Si un échec a un petit lancer de critique, il peut devenir une réussite si vous avez un avantage. Avec un avantage, un échec devient une réussite si le lancer de critique est entre 1 et 4. L'inverse est aussi vraie pour les petites réussites.<br/>
+                                        Le premier lancer correspond au jet de caractéristique, le dé lancé correspond à votre stat. Pour une action normale, le jet est une réussite si ce jet est supérieur à 3. (soit 4 ou plus)<br/><br/>
+                                        Le second lancer correspond au jet de critique, plus le lancer est haut, plus la réussite ou l'échec est importante, en général un 19 ou un 20 vaut une réussite ou échec critique. (des effets peuvent augmenter les chances de faire un critique, de 17 à 20 voire même de 13 à 20)<br/><br/>
+                                        Si un échec a un petit lancer de critique, il peut devenir une réussite si vous avez un avantage. Avec un avantage, un échec devient une réussite si le lancer de critique est entre 1 et 4. L'inverse est aussi vraie pour les petites réussites. Si il y a un avantage et un désavantage, les deux s'annulent mutuellement. Il est possible de cumuler plusieurs avantages, mais ils doivent provenir de sources différentes. Lors du lancer il n'est pas possible d'avoir plus de 3 avantages ou 3 désavantages.<br/>
                                         <br/>
                                         Pour faire un lancer, la commande est <span class="commande">;dng</span> <span class="variable">votre stat</span>. Si un effet vous demande de lancer deux jets de caractéristique, la commande est <span class="commande">;dng</span> <span class="variable">votre stat</span> <span class="parametre">2</span>.<br/>
                                         <img src="images/dng_1.png" class="discord-exemples" alt=";dng 3 devient &rarr sur 1d20 a lancé 16.">
@@ -64,12 +64,12 @@
                         </div>
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="DNG-2">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-2" aria-expanded="false" aria-controls="collapse-DNG-2">
+                            <h2 class="accordion-header" id="dng-2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-2" aria-expanded="false" aria-controls="collapse-dng-2">
                                     Jets d'initiatives
                                 </button>
                             </h2>
-                            <div id="collapse-DNG-2" class="accordion-collapse collapse" aria-labelledby="DNG-2" data-bs-parent="#accordion-DNG">
+                            <div id="collapse-dng-2" class="accordion-collapse collapse" aria-labelledby="dng-2" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
                                     <p>Les jets d'initiatives servent à déterminer qui agit en premier lors d'un combat. Pour en lancer un, la commande est <span class="commande">;dng</span> <span class="parametre">ini</span> <span class="variable">votre stat d'instinct</span> <span class="parametre">(espace)</span> <span class="variable">votre stat d'agilité</span>.<br/>
                                     Pour départager les égalités, un troisième dé peut-être lancé. Pour rendre le jeu plus fluide, le bot lance un dé qui détermine les dixièmes.</p>
@@ -79,12 +79,12 @@
                         </div>
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="DNG-3">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-3" aria-expanded="false" aria-controls="collapse-DNG-3">
+                            <h2 class="accordion-header" id="dng-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-3" aria-expanded="false" aria-controls="collapse-dng-3">
                                     Puissance cachée
                                 </button>
                             </h2>
-                            <div id="collapse-DNG-3" class="accordion-collapse collapse" aria-labelledby="DNG-3" data-bs-parent="#accordion-DNG">
+                            <div id="collapse-dng-3" class="accordion-collapse collapse" aria-labelledby="dng-3" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
                                     <p>Au cours de votre aventure vous avez la possibilité de faire éclore puis évoluer votre puissance cachée.<br/>
                                     Du point de vue du gameplay, votre jauge de puissance cachée est de 4 + votre échelon. L'échelon détermine aussi le niveau des dés que vous lancez. 
@@ -99,12 +99,12 @@
                         </div>
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="DNG-4">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-4" aria-expanded="false" aria-controls="collapse-DNG-4">
+                            <h2 class="accordion-header" id="dng-4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-4" aria-expanded="false" aria-controls="collapse-dng-4">
                                     Pokédex
                                 </button>
                             </h2>
-                            <div id="collapse-DNG-4" class="accordion-collapse collapse" aria-labelledby="DNG-4" data-bs-parent="#accordion-DNG">
+                            <div id="collapse-dng-4" class="accordion-collapse collapse" aria-labelledby="dng-4" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
                                     <p>Si vous avez le moindre doûte sur votre fiche, n'hésitez par à vérifier la fiche de votre espèce avec la commande <span class="commande">;dng</span> <span class="parametre">pokemon</span> <span class="variable">votre espèce</span>.</p>
                                     <img src="images/dng_5a.png" class="discord-exemples" alt=";dng pokemon Symbios affiche la fiche de Symbios.">
@@ -119,12 +119,12 @@
                         </div>
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="DNG-5">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-DNG-5" aria-expanded="false" aria-controls="collapse-DNG-5">
+                            <h2 class="accordion-header" id="dng-5">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-5" aria-expanded="false" aria-controls="collapse-dng-5">
                                     Autres
                                 </button>
                             </h2>
-                            <div id="collapse-DNG-5" class="accordion-collapse collapse" aria-labelledby="DNG-5" data-bs-parent="#accordion-DNG">
+                            <div id="collapse-dng-5" class="accordion-collapse collapse" aria-labelledby="dng-5" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
                                     <p>N'hésitez pas à refaire <span class="commande">;dng</span> <span class="parametre">aide</span> pour avoir la liste des liens utiles et un rappel rapide des commandes. 
                                         Si vous estimez que d'autres informations mériteraient d'être sur cette page, n'hésitez pas à me prévenir voir même de m'aider à l'écrire.</p>
@@ -137,37 +137,130 @@
             </div>
         </div>
         <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <h2 class="accordion-header" id="ins">
+                <button id="button-ins" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ins" aria-expanded="false" aria-controls="collapse-ins">
                     INS / MV
                 </button>
             </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div id="collapse-ins" class="accordion-collapse collapse" aria-labelledby="ins" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    TO DO
+                    <div class="accordion" id="accordion-ins">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="ins-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ins-1" aria-expanded="false" aria-controls="collapse-ins-1">
+                                    Règles de base
+                                </button>
+                            </h2>
+                            <div id="collapse-dng-1" class="accordion-collapse collapse show" aria-labelledby="ins-1" data-bs-parent="#accordion-ins">
+                                <div class="accordion-body">
+                                    <p class="description-de-base">Les lancers sont constitués de trois dés à 6 faces. Les deux premiers dés correspondent à si le jet est une réussite ou non, plus le jet est bas, mieux c'est. Le troisième dé correspond au degré de réussite ou d'echec, plus le jet est élevé, plus l'effet est fort. Lors de l'affichage du résultat, les deux premiers dés et le troisième sont séparés pour faciliter la lecture.</br>
+                                        Pour les réussites/echecs critiques, pour les démons une réussite critique correspond à un triple 6, et un échec critique un triple 1. Et inversement pour les anges. Pour les humains, la réussite critique correspond à un triple 3 et les triples 1 et 6 à des échecs critiques.<br/>
+                                        Pour faire un lancer, la commande est <span class="commande">;ins</span></p>
+                                        <img src="images/ins_1.png" class="discord-exemples" alt=";ins devient &rarr a lancé [43] + [4].">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="ins-2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ins-2" aria-expanded="false" aria-controls="collapse-ins-2">
+                                    Stats et réussites
+                                </button>
+                            </h2>
+                            <div id="collapse-ins-2" class="accordion-collapse collapse" aria-labelledby="ins-2" data-bs-parent="#accordion-ins">
+                                <div class="accordion-body">
+                                    <p>Pour déterminer si un jet est réussi ou pas, il faut se référer à la Table Unique Multiple, regarder sa stat, puis éventuellement compter des colonnes de bonus ou de malus. Cependant ce procédé est relativement long, c'est pour ça qu'il existe une commande pour automatiquement voir à partir de quelle stat l'action réussie. C'est <span class="commande">;ins</span> <span class="parametre">autocheck</span>, après ça tout vos jets appraitront comme ça.</p>
+                                    <img src="images/ins_2.png" class="discord-exemples" alt=";ins autocheck affiche Vous avez activé la vérification automatique.">
+                                    <img src="images/ins_3.png" class="discord-exemples" alt=";ins devient &rarr [15] + [1]. Réussite quelque soit la stat."><br/><br/>
+                                    <p>Si vous avez un bonus de colonne, la commande est <span class="commande">;ins</span> <span class="parametre">+</span> <span class="variable">nombre de colonnes</span>. Si vous avez un malus de colonnes, remplacez le <span class="parametre">+</span> par un <span class="parametre">-</span>. Si vous n'avez pas activé la vérification automatique, la commande est <span class="commande">;ins check</span>.</p>
+                                    <img src="images/ins_4.png" class="discord-exemples" alt=";ins +4 devient &rarr a lancé [52] + [4]. Réussite avec une stat d'au minimum 1+.">
+                                    <img src="images/ins_5.png" class="discord-exemples" alt=";ins check -4 devient &rarr [22] + [2]. Réussite avec une stat d'au moins 2+.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="ins-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ins-3" aria-expanded="false" aria-controls="collapse-ins-3">
+                                    Messages personalisés
+                                </button>
+                            </h2>
+                            <div id="collapse-ins-3" class="accordion-collapse collapse" aria-labelledby="ins-3" data-bs-parent="#accordion-ins">
+                                <div class="accordion-body">
+                                    <p> Etant donné que les critiques sont rares, il est possible d'afficher un message personalisé quand un certain jet arrive.<br/>
+                                        Pour ajouter un message, la commande est <span class="commande">;ins</span> <span class="parametre">message</span> <span class="variable">le lancer (comme par exemple 421)</span> (espace) <span class="variable">votre message</span>. Vous pouvez mettre de la mise en forme ou des emotes tant que le bot est sur le même serveur où l'emote est hebergé.
+                                    </p>
+                                    <img src="images/ins_6.png" class="discord-exemples" alt=";ins message 666 Revelry in darkness affiche Maintenant, pour le lancer 666, je vais afficher le message : Revelry in darkness."><br/>
+
+                                    <p> Vous pouvez avoir accès aux messages que vous avez ajouté avec <span class="commande">;ins</span> <span class="parametre">message liste</span>, vous recevrez en privé vos messages, avec aussi, indiqué en italiques, les messages communs à tout le monde.</p>
+                                    <img src="images/ins_7.png" class="discord-exemples" alt=";ins message liste affiche la liste des messages persos."><br/>
+
+                                    <p> Vous pouvez supprimer un message avec <span class="commande">;ins</span> <span class="parametre">message</span> <span class="variable">le lancer</span> <span class="parametre">deletethis</span>. (Par ailleurs si vous n'aimez pas un message par défaut, vous pouvez toujours envoyer un message vide à la place.)</p>
+                                    <img src="images/ins_8.png" class="discord-exemples" alt=";ins message 421 deletethis affiche Votre message pour le lancer 421 a été supprimé.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="ins-4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ins-4" aria-expanded="false" aria-controls="collapse-ins-4">
+                                    Autres commandes
+                                </button>
+                            </h2>
+                            <div id="collapse-ins-4" class="accordion-collapse collapse" aria-labelledby="ins-4" data-bs-parent="#accordion-ins">
+                                <div class="accordion-body">
+                                    <p>Si vous dépensez vos PA en utilisant la roulette, il y a la commande <span class="commande">;ins</span> <span class="parametre">gacha</span> qui lance les deux dés et affiche ce que vous obtenez.</p>
+                                    <img src="images/ins_10.png" class="discord-exemples" alt=";ins gacha devient &rarr a lancé au gacha [16] ce qui correspond à : Amélioration de pouvoir physique. Coût variable d’environ 3PA."><br/><br/>
+
+                                    <p>Si vous voulez vous défouler, il existe la commande <span class="commande">;ins</span> <span class="parametre">purge</span> qui vous lance 216 lancers en un coup.</p>
+                                    <img src="images/ins_9.png" class="discord-exemples" alt=";ins purge devient &rarr une liste de 216 lancers."><br/><br/>
+
+                                    <p>Il est possible d'afficher la TUM avec <span class="commande">;ins</span> <span class="parametre">tum</span>.<br/>
+                                    Si pour quelconque raison vous voulez tricher sur votre lancer, la commande est <span class="commande">;ins</span> <span class="parametre">cheat</span> <span class="variable">le lancer</span>.<br/>
+                                    La commande <span class="commande">;ins</span> <span class="parametre">aide</span> permet d'afficher un rappel rapide des commandes.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Autres commandes.
+            <h2 class="accordion-header" id="autres">
+                <button id="button-autres" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres" aria-expanded="false" aria-controls="collapse-autres">
+                    Autres commandes
                 </button>
             </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+            <div id="collapse-autres" class="accordion-collapse collapse" aria-labelledby="autres" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    TO DO
+                    <p>Si vous souhaitez recevoir un résultat en privé, il suffit juste de mettre deux point-virgule au début de la commande. Si vous souhaitez recevoir le résultat en privé ET que le MJ reçoive aussi le résultat, mentionnez le à la fin de la commande.</p>
+                    <img src="images/autres_2.png" class="discord-exemples" alt=";;dng 4 fait réagir avec une emote et envoit un mp."><br/><br/>
+                    
+                    <p>Si vous voulez faire plusieurs fois la même commande, il est possible de faire <span class="commande">;repeat</span> <span class="parametre">nombre de messages à envoyer</span> <span class="variable">la commande que vous vouler faire sans le point-virgule</span>. Evitez de demander plus de 5 fois la même commande ou d'en abuser.</p>
+                    <img src="images/autres_3.png" class="discord-exemples" alt=";repeat 3 dng 4 envoit 3 messages de lancers avec dng et une stat de 4."><br/><br/>
+
+                    <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span> (facultatif) <span class="variable">type et/ou génération</span>. (pour une génération, il faut écrire gen5)</p>
+                    <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."><br/><br/>
+
+                    <p>Il est possible de tirer des cartes de tarot <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
+                    <img src="images/autres_3.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
+
+                    <p><span class="commande">;ramoloss</span> fait quelque chose, peut-etre.</p>
+
                 </div>
             </div>
         </div>
         <div class="accordion-item">
-            <h2 class="accordion-header" id="headingFour">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            <h2 class="accordion-header" id="patch">
+                <button id="button-patch" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-patch" aria-expanded="false" aria-controls="collapse-patch">
                     Patch notes
                 </button>
             </h2>
-            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+            <div id="collapse-patch" class="accordion-collapse collapse" aria-labelledby="patch" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
+                    <span class="commande">25 Avril</span> : <span class="variable">INS</span> : Simplification de la commande pour indiquer des colonnes de bonus.<br/>
                     <span class="commande">22 Avril</span> : <span class="variable">Rolls</span> : Possibilité de faire n'importe quel lancer en faisant une commande genre ;d15.<br/>
                     <span class="commande">17 Avril</span> : <span class="variable">DnG</span> : Ajout d'un d9 pour départager les jets d'initiatives.<br/>
                     <span class="commande">15 Avril</span> : <span class="variable">DnG</span> : Mode d'emploi si quelqu'un fait juste ;dng ini.<br/>
@@ -182,6 +275,17 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        // Si la variable mode est définie, alors...
+        if (window.location.search.indexOf('mode=') > -1) {
+            // ...on déplie d'avance la section correspondante. 
+            let mode = window.location.search.split('mode=')[1].split('&')[0];
+            boutonAChanger = document.querySelector(`#button-${mode}`);
+            boutonAChanger.classList.remove("collapsed");
+            boutonAChanger = document.querySelector(`#collapse-${mode}`);
+            boutonAChanger.classList.add("show");
+        }
+    </script>
 </body>
 
 </html>

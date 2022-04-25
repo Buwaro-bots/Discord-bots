@@ -11,7 +11,7 @@ span {
 }
 
 .variable {
-    color: rgb(250, 58, 0);
+    color: rgb(255, 80, 80);
 }
 
 .parametre {
@@ -19,7 +19,7 @@ span {
 }
 
 .discord-exemples {
-	max-width: 100%;
+	max-width: calc(100% + 1.25rem);
 }
 
 .description-de-base {
