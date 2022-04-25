@@ -20,12 +20,12 @@
             <div id="collapse-roll" class="accordion-collapse collapse" aria-labelledby="roll" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <p>Tout d'abord, si vous voulez lancer un dé à 100 faces, faîtes juste <span class="commande">;roll</span> ou <span class="commande">;r</span> et ça lancera le lancer par défaut.</p>
-                    <img src="images/roll_1.png" class="discord-exemples" alt=";roll devient &rarr sur 1d100 a lancé 46."><br/>
+                    <img src="images/roll_1.png" class="discord-exemples" alt=";roll devient &rarr sur 1d100 a lancé 46."><br/><br/>
                     <br/>
                     <p>Pour lancer <strong>juste</strong> un dé, vous pouvez faire soit <span class="commande">;r</span> <span class="variable">nombre de faces</span>, soit <span class="commande">;d</span><span class="variable">20</span></p>
-                    <img src="images/roll_2.png" class="discord-exemples" alt=";r 20 devient &rarr sur 1d20 a lancé 16."><br/>
+                    <img src="images/roll_2.png" class="discord-exemples" alt=";r 20 devient &rarr sur 1d20 a lancé 16."><br/><br/>
                     <br/>
-                    <p>Vous pouvez lancer plusieurs dés avec soit <span class="commande">;r</span> <span class="variable">nombre de dés</span><span class="parametre"> d </span><span class="variable">nombre de faces</span>, soit faire des calculs comme <span class="commande">;r</span><span class="variable">1</span><span class="parametre">d</span><span class="variable">20</span><br/>
+                    <p>Vous pouvez lancer plusieurs dés avec soit <span class="commande">;r</span> <span class="variable">nombre de dés</span><span class="parametre"> d </span><span class="variable">nombre de faces</span>, soit faire des calculs comme <span class="commande">;r</span><span class="variable">2</span><span class="parametre">d</span><span class="variable">20</span> <span class="parametre">-</span> <span class="variable">5</span>.<br/>
                     Si plusieurs dés sont lancés, les lancers sont mis entre crochets pour pouvoir mieux les distinguer entre eux, et des eventuelles nombres inclus dans le calcul.</p>
                     <img src="images/roll_3.png" class="discord-exemples" alt=";r d20 + d10 devient &rarr sur 1d20 + 1d10 a lancé [18] + [3] , ce qui donne 21."><img src="images\roll_4.png" class="discord-exemples" alt=";r 2d20 - 5 devient &rarr sur 2d20 - 5 a lancé [17, 15] - 5 , ce qui donne 27.">
 
@@ -66,12 +66,12 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="dng-2">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-2" aria-expanded="false" aria-controls="collapse-dng-2">
-                                    Jets d'initiatives
+                                    Jets d'initiative
                                 </button>
                             </h2>
                             <div id="collapse-dng-2" class="accordion-collapse collapse" aria-labelledby="dng-2" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
-                                    <p>Les jets d'initiatives servent à déterminer qui agit en premier lors d'un combat. Pour en lancer un, la commande est <span class="commande">;dng</span> <span class="parametre">ini</span> <span class="variable">votre stat d'instinct</span> <span class="parametre">(espace)</span> <span class="variable">votre stat d'agilité</span>.<br/>
+                                    <p>Les jets d'initiatives servent à déterminer qui agit en premier lors d'un combat. Pour en lancer un, la commande est <span class="commande">;dng</span> <span class="parametre">ini</span> <span class="variable">votre stat d'instinct</span> (espace) <span class="variable">votre stat d'agilité</span>.<br/>
                                     Pour départager les égalités, un troisième dé peut-être lancé. Pour rendre le jeu plus fluide, le bot lance un dé qui détermine les dixièmes.</p>
                                     <img src="images/dng_3.png" class="discord-exemples" alt=";dng ini 3 4 devient &rarr sur 1d8 + 1d10 + 1d9 / 10 a lancé [1] + [3] + [9] / 10, ce qui donne 4,9.">
                                 </div>
@@ -108,7 +108,7 @@
                                 <div class="accordion-body">
                                     <p>Si vous avez le moindre doûte sur votre fiche, n'hésitez par à vérifier la fiche de votre espèce avec la commande <span class="commande">;dng</span> <span class="parametre">pokemon</span> <span class="variable">votre espèce</span>.</p>
                                     <img src="images/dng_5a.png" class="discord-exemples" alt=";dng pokemon Symbios affiche la fiche de Symbios.">
-                                    <img src="images/dng_5b.png" class="discord-exemples" alt=";dex Kaimimi affiche la fiche de Kaiminus.">
+                                    <img src="images/dng_5b.png" class="discord-exemples" alt=";dex Kaimimi affiche la fiche de Kaiminus."><br/><br/>
                                     <br/>
                                     <p>Si vous avez besoin de la description complète d'un trait, la commande est <span class="commande">;dng</span> <span class="parametre">trait</span> <span class="variable">le nom du trait</span>.</p>
                                     <img src="images/dng_6.png" class="discord-exemples" alt=";dng trait Gecko affiche les détails du trait Gecko.">
@@ -151,7 +151,7 @@
                                     Règles de base
                                 </button>
                             </h2>
-                            <div id="collapse-dng-1" class="accordion-collapse collapse show" aria-labelledby="ins-1" data-bs-parent="#accordion-ins">
+                            <div id="collapse-ins-1" class="accordion-collapse collapse show" aria-labelledby="ins-1" data-bs-parent="#accordion-ins">
                                 <div class="accordion-body">
                                     <p class="description-de-base">Les lancers sont constitués de trois dés à 6 faces. Les deux premiers dés correspondent à si le jet est une réussite ou non, plus le jet est bas, mieux c'est. Le troisième dé correspond au degré de réussite ou d'echec, plus le jet est élevé, plus l'effet est fort. Lors de l'affichage du résultat, les deux premiers dés et le troisième sont séparés pour faciliter la lecture.</br>
                                         Pour les réussites/echecs critiques, pour les démons une réussite critique correspond à un triple 6, et un échec critique un triple 1. Et inversement pour les anges. Pour les humains, la réussite critique correspond à un triple 3 et les triples 1 et 6 à des échecs critiques.<br/>
@@ -191,10 +191,10 @@
                                     <p> Etant donné que les critiques sont rares, il est possible d'afficher un message personalisé quand un certain jet arrive.<br/>
                                         Pour ajouter un message, la commande est <span class="commande">;ins</span> <span class="parametre">message</span> <span class="variable">le lancer (comme par exemple 421)</span> (espace) <span class="variable">votre message</span>. Vous pouvez mettre de la mise en forme ou des emotes tant que le bot est sur le même serveur où l'emote est hebergé.
                                     </p>
-                                    <img src="images/ins_6.png" class="discord-exemples" alt=";ins message 666 Revelry in darkness affiche Maintenant, pour le lancer 666, je vais afficher le message : Revelry in darkness."><br/>
+                                    <img src="images/ins_6.png" class="discord-exemples" alt=";ins message 666 Revelry in darkness affiche Maintenant, pour le lancer 666, je vais afficher le message : Revelry in darkness."><br/><br/>
 
                                     <p> Vous pouvez avoir accès aux messages que vous avez ajouté avec <span class="commande">;ins</span> <span class="parametre">message liste</span>, vous recevrez en privé vos messages, avec aussi, indiqué en italiques, les messages communs à tout le monde.</p>
-                                    <img src="images/ins_7.png" class="discord-exemples" alt=";ins message liste affiche la liste des messages persos."><br/>
+                                    <img src="images/ins_7.png" class="discord-exemples" alt=";ins message liste affiche la liste des messages persos."><br/><br/>
 
                                     <p> Vous pouvez supprimer un message avec <span class="commande">;ins</span> <span class="parametre">message</span> <span class="variable">le lancer</span> <span class="parametre">deletethis</span>. (Par ailleurs si vous n'aimez pas un message par défaut, vous pouvez toujours envoyer un message vide à la place.)</p>
                                     <img src="images/ins_8.png" class="discord-exemples" alt=";ins message 421 deletethis affiche Votre message pour le lancer 421 a été supprimé.">
@@ -241,10 +241,10 @@
                     <p>Si vous voulez faire plusieurs fois la même commande, il est possible de faire <span class="commande">;repeat</span> <span class="parametre">nombre de messages à envoyer</span> <span class="variable">la commande que vous vouler faire sans le point-virgule</span>. Evitez de demander plus de 5 fois la même commande ou d'en abuser.</p>
                     <img src="images/autres_3.png" class="discord-exemples" alt=";repeat 3 dng 4 envoit 3 messages de lancers avec dng et une stat de 4."><br/><br/>
 
-                    <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span> (facultatif) <span class="variable">type et/ou génération</span>. (pour une génération, il faut écrire gen5)</p>
+                    <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span>.  Pour restreindre la commande à une génération et/ou un type, il faut faire  <span class="commande">;isekai</span> <span class="variable">type et/ou génération</span>. (abrégé par <span class="variable">gen</span> et sans espace avant le numéro)</p>
                     <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."><br/><br/>
 
-                    <p>Il est possible de tirer des cartes de tarot <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
+                    <p>Il est possible de tirer des cartes de tarot avec <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
                     <img src="images/autres_3.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
 
                     <p><span class="commande">;ramoloss</span> fait quelque chose, peut-etre.</p>
