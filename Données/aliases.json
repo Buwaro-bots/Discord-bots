@@ -26,57 +26,6 @@
         "commande" : ""
     },
 
-
-    {
-        "nom" : "d2",
-        "alias" : "roll",
-        "commande" : "args.unshift('2');"
-    },
-
-    
-    {
-        "nom" : "d4",
-        "alias" : "roll",
-        "commande" : "args.unshift('4');"
-    },
-
-    {
-        "nom" : "d6",
-        "alias" : "roll",
-        "commande" : "args.unshift('6');"
-    },
-
-    
-    {
-        "nom" : "d8",
-        "alias" : "roll",
-        "commande" : "args.unshift('8');"
-    },
-
-    {
-        "nom" : "d10",
-        "alias" : "roll",
-        "commande" : "args.unshift('10');"
-    },
-
-    {
-        "nom" : "d12",
-        "alias" : "roll",
-        "commande" : "args.unshift('12');"
-    },
-    
-    {
-        "nom" : "d20",
-        "alias" : "roll",
-        "commande" : "args.unshift('20');"
-    },
- 
-    {
-        "nom" : "d100",
-        "alias" : "roll",
-        "commande" : "args.unshift('100');"
-    },
-
     {
         "nom" : "num1",
         "alias" : "num",
