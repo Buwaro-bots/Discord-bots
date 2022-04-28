@@ -10,27 +10,21 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         let espaces = "                ";
         let botReply = "." + 
         espaces + "**Liens utiles**\r\n" +
+        "**Mode d'emploi du bot** : <https://buwaro-bots.github.io/Discord-bots/?mode=dng>\r\n" +
         strings["DnG-Help"] +
         " \r\n" +
         espaces + "**Commandes**\r\n" +
         "**;dng table** pour la table des types.\r\n" +
-        "**;dng trait** pour avoir la description complète d'un trait. Je conseille de faire **;pokemon *espèce*** pour avoir le nom exact.\r\n" +
+        "**;dng trait** pour avoir la description complète d'un trait. **;dex *espèce*** permet de vous rappeler les traits que vous avez.\r\n" +
         " \r\n" +
         "**;dng *stat*** pour un jet normal, la stat doit normalement être entre 1 et 5.\r\n" +
         "**;dng ini *instinct* + *agilité*** pour un jet d'initiative.\r\n" +
-        "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée," +
-        " la stat correspond à l'échelon entre 1 et 20. La jauge a 4 points de plus que le niveau de l'échelon. \r\n" +
-        " \r\n" +
-        espaces + "**Jets normaux**\r\n" +
-        "Le premier lancer correspond au jet de caractéristique, le dé lancer correspond à votre stat. Pour une action normale, le jet est une réussite si le jet est supérieur à 3. (soit 4 ou plus).\r\n" +
-        "Le second lancer correspond au jet de crtitique, plus le lancer est haut, plus la réussite ou l'échec est importante, en général un 19 ou un 20 vaut une réussite ou échec critique." +
-        " Si un échec a un petit lancer de critique, il peut devenir une réussite si vous avez un avantage. Avec un avantage, un échec devient une réussite si le lancer de critique est entre 1 et 4. L'inverse est aussi vraie pour les petites réussites.\r\n";
-
+        "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée."
 
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         return;
     }
-    if (args[0] === "table" || args[0] === "types") {
+    if (args[0] === "table" || args[0] === "types" || args[0] === "type") {
         outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ);
         return;
     }

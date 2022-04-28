@@ -16,6 +16,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
         outils.envoyerMessage(client, 
+            "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=ins>\r\n" +
             "**;ins** permet de faire un jet normal.\r\n" +
             ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +
             ";ins **check** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins check +3**.\r\n" +
