@@ -79,7 +79,7 @@ module.exports = {
         console.log("Lancers effacés.")
     },
 
-    rattrapageFauteOrthographe: function(liste, entree) {
+    rattrapageFauteOrthographe: function(liste, entree, force = "faible") {
         if (!Array.isArray(liste)) {
             liste = Object.keys(liste);
         }
@@ -88,18 +88,30 @@ module.exports = {
         entree = this.normalisationString(entree);
         for (let i = 0; i < liste.length; i++) {
             let elementTableau = this.normalisationString(liste[i]);
-            let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
+            if (force === "faible") {
+                let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
 
-            if (distance < 3) {
-                console.log(liste[i] + " " + distance);
+                if (distance < 3) {
+                    console.log(liste[i] + " " + distance);
+                }
+
+                if (distance < min) {
+                    min = distance;
+                    minIndex = i;
+                }
             }
-
-            if (distance < min) {
-                min = distance;
-                minIndex = i;
+            else {
+                let distance = levenshtein(entree, elementTableau);
+                if (distance < entree.length / 2) {
+                    console.log(liste[i] + " " + distance);
+                    if (distance < min) {
+                        min = distance;
+                        minIndex = i;
+                    }
+                }
             }
         }
-        if (min < 4) {
+        if (min < 4 || (force === "fort" && min < 1000)) {
             return liste[minIndex];
         }
         else {
