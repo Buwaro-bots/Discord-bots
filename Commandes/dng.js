@@ -34,6 +34,35 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ);
         return;
     }
+
+    if (args[0] === "pokemon") {
+        args.shift();
+        let pokemonDemande = outils.normalisationString(args.join(" "));
+
+        if (!dexDng.Pokemons.hasOwnProperty(pokemonDemande)) {
+            pokemonDemande = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande, "fort");
+        }
+
+        let botReply = `**${pokemonDemande}**\r\n`;
+        let pokemon = dexDng.Pokemons[pokemonDemande];
+        botReply += pokemon.types.length > 1 ? `Types : **${pokemon.types[0]} / ${pokemon.types[1]}**\r\n` : `Type : **${pokemon.types[0]}**\r\n`;
+        botReply += `Style : **${pokemon.style}**\r\n`;
+        botReply += `Grade : **${pokemon.grade}**\r\n`;
+        botReply += `Arbres : **${pokemon.arbres}**\r\n\r\n`;
+        botReply += `Traits :\r\n`;
+        // On parcourt les traits du pokémon
+        for (let numero in pokemon.traits) {
+            let trait = pokemon.traits[numero];
+            let description = "";
+            if (dexDng.Traits.hasOwnProperty(trait)) {
+                description = ` : ${dexDng.Traits[trait].DescriptionCourte}`;
+            }
+            botReply += `**${trait}**${description}\r\n`;
+        }
+
+        outils.envoyerMessage(client, botReply, message, envoyerPM);
+        return;
+    }
     if (args[0] === "trait") {
         if (args.length === 1) {
             let listeTraits = "La liste des traits est : ";

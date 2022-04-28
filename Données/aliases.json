@@ -133,7 +133,13 @@
 
     {
         "nom" : "dex",
-        "alias" : "pokemon",
-        "commande" : ""
+        "alias" : "dng",
+        "commande" : "args.unshift('pokemon');"
+    },
+
+    {
+        "nom" : "pokemon",
+        "alias" : "dng",
+        "commande" : "args.unshift('pokemon');"
     }
 ]

@@ -83,35 +83,6 @@ client.on("messageCreate", (message) => {
                 return;
             }
 
-            else if (command === "pokemon") {
-                let dexDng = require('./Données/dex-dng.json');
-                let pokemonDemande = outils.normalisationString(args.join(" "));
-
-                if (!dexDng.Pokemons.hasOwnProperty(pokemonDemande)) {
-                    pokemonDemande = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande);
-                }
-                
-                let botReply = `**${pokemonDemande}**\r\n`;
-                let pokemon = dexDng.Pokemons[pokemonDemande];
-                botReply += pokemon.types.length > 1 ? `Types : **${pokemon.types[0]} / ${pokemon.types[1]}**\r\n` : `Type : **${pokemon.types[0]}**\r\n`;
-                botReply += `Style : **${pokemon.style}**\r\n`;
-                botReply += `Grade : **${pokemon.grade}**\r\n`;
-                botReply += `Arbres : **${pokemon.arbres}**\r\n\r\n`;
-                botReply += `Traits :\r\n`;
-                // On parcourt les traits du pokémon
-                for (let numero in pokemon.traits) {
-                    let trait = pokemon.traits[numero];
-                    let description = "";
-                    if (dexDng.Traits.hasOwnProperty(trait)) {
-                        description = ` : ${dexDng.Traits[trait].DescriptionCourte}`;
-                    }
-                    botReply += `**${trait}**${description}\r\n`;
-                }
-
-                mesCommandes.outils.envoyerMessage(client, botReply, message, envoyerPM);
-                return;
-            }
-
             else if (command === "isekai") {
                 mesCommandes.isekai.isekai(client, message, args, command);
             }
