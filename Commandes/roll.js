@@ -26,7 +26,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody) {
         args[0] = args[0].toLowerCase().replace("d", "");
         outils.verifierNaN(args);
         let lancer = parseInt(args[0]);
-        if (lancer > 9000000000000000) throw("♾️Nombre trop grand");
+        if (lancer > 9000000000000000) throw("Nombre trop grand");
         let resultat = outils.randomNumber(lancer) ;
         let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${resultat}**.`;
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
@@ -89,8 +89,8 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody) {
         reponseCommandes = reponseCommandes.replaceAll('*', '\\*');
         reponseLancers = reponseLancers.replaceAll('*', '\\*');
         let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
-        if (botReply.length >= 2000) throw("♾️Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
-        if (Math.abs(reponseSomme) > 9000000000000000) throw("♾️Nombre trop grand");
+        if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
+        if (Math.abs(reponseSomme) > 9000000000000000) throw("Nombre trop grand");
         outils.verifierNaN([reponseSomme]);
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         outils.logLancer(message.author.username, `${reponseLancers}= ${reponseSomme}` , reponseCommandes);

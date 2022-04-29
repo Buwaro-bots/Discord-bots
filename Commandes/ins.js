@@ -10,7 +10,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
             return lancer.substring(0,3);
         }
         else {
-            throw(`🔢Le lancer n'est pas valide.`);
+            throw(`Le lancer n'est pas valide.`);
         }
     }
 
