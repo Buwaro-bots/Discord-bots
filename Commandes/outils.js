@@ -111,7 +111,7 @@ module.exports = {
                 }
             }
         }
-        if (min < 4 || (force === "fort" && min < 1000)) {
+        if (min < 3 || (force === "fort" && min < 1000)) {
             return liste[minIndex];
         }
         else {

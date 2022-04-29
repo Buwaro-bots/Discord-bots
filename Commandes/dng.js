@@ -31,10 +31,22 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
 
     if (args[0] === "pokemon") {
         args.shift();
-        let pokemonDemande = outils.normalisationString(args.join(" "));
-
-        if (!dexDng.Pokemons.hasOwnProperty(pokemonDemande)) {
+        let pokemonDemande = args.join(" ");
+        if (!(dexDng.Pokemons.hasOwnProperty(pokemonDemande))) { // Vérifier pourquoi ça marche pas
+            try {
             pokemonDemande = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande, "fort");
+            } catch (e) {
+                // On regarde si le pokémon existe dans la commande isekai, s'il existe, on répond désolé mais ce pokémon n'est pas dans DnG
+                let dexIsekai = require('../Données/pokedex.json');
+                let listePokemons = [];
+                for (let i = 0; i < dexIsekai.length; i++) {
+                    listePokemons.push(dexIsekai[i].nom);
+                }
+                pokemonDemande = outils.normalisationString(args.join(" "));
+                pokemonDemande = outils.rattrapageFauteOrthographe(listePokemons, pokemonDemande, "fort");
+                envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ);
+                return;
+            }
         }
 
         let botReply = `**${pokemonDemande}**\r\n`;
