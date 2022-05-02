@@ -4,7 +4,6 @@ const fs = require('fs');
 const { verifierNaN } = require("./outils.js");
 
 exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody) {
-
     if (args[0] === "setup") {
         config.lancerParDefault = args[1];
         let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
@@ -34,65 +33,81 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody) {
     }
 
     else {
-        let listeCommandes = []; // [commande, bool estLancer, [lancers], somme]
-        let listeOperateurs = ["+","-","*","/","(",")",">","<"];
+        let commandeLancer = args.join(" ");
+        let [reponseCommandes, listeLancers, reponseLancers, reponseSomme] = this.commandeComplexe(commandeLancer);
 
-        args = commandBody // On refait args pour pouvoir séparer mieux
-        for (let i = 0; i < listeOperateurs.length; i+=1) {
-            args = args.split(`${listeOperateurs[i]}`).join(` ${listeOperateurs[i]} `);
-        }
-        args = args.toLowerCase().split(/ +/);
-        args.shift(); if (commandBody.startsWith("repeat")) {args.shift();} // Si la commande ;repeat x est utilisée, il faut aussi enlever le premier paramètre
-        if (idMJ != null) { args = args.splice(0, args.length-4); }
-
-
-        for (let i = 0; i < args.length; i++) { // On cherche ce que sont chaque commande
-            if (args[i].includes("d")) { // Si la commande a d...
-                args[i] = args[i].charAt(0) === "d" ? "1" + args[i] : args[i];
-                args[i] = args[i].split("d");
-                verifierNaN(args[i]);
-                if (args[i].length === 2 && parseInt(args[i][0]) > 0) { // On regarde si il y a bien deux nombres qui soient valides
-                    let lancer = 0;
-                    let lancers = [];
-                    let somme = 0;
-                    
-                    for (let j = 0; j < args[i][0]; j++) { // On lance les dés
-                        lancer = outils.randomNumber(args[i][1]);
-                        lancers.push(lancer);
-                        somme += lancer;                                
-                    }
-                    listeCommandes.push([args[i][0] +"d" + args[i][1], true, lancers.join(", "), somme]); // On rajoute la commande, les lancers et le résultat du lancers dans la liste des commandes
-                }
-            }
-            else if (listeOperateurs.includes(args[i]) || !isNaN(parseInt(args[i]))) { // Sinon si c'est un opréateur, on rajoute tout simplement dans la liste des commandes
-                listeCommandes.push([args[i], false]);
-            }
-            
-        }
-        let reponseCommandes = "";
-        let reponseLancers = "";
-        let reponseSomme = "";
-
-        for (let i = 0; i < listeCommandes.length; i++) { // On écrit la réponse
-            reponseCommandes += listeCommandes[i][0] + " ";
-            if (listeCommandes[i][1]) { // Si la commande est un lancer, alors la liste des lancers doit s'afficher sans la liste des lancers et dans la formule de calcul
-                reponseLancers += `[${listeCommandes[i][2]}] `;
-                reponseSomme += listeCommandes[i][3];
-            }
-            else { // Sinon on affiche l'opérateur
-                reponseLancers += listeCommandes[i][0] + " ";
-                reponseSomme += listeCommandes[i][0];
-            }
-        }
-        //console.log(reponseSomme);
-        reponseSomme = Math.round(eval(reponseSomme)*100)/100; // On calcule le résultat...
-        reponseCommandes = reponseCommandes.replaceAll('*', '\\*');
-        reponseLancers = reponseLancers.replaceAll('*', '\\*');
         let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
-        if (botReply.length >= 2000) throw("Réponse trop longue"); // Puis on vérifie que la réponse ne soit pas trop longue.
-        if (Math.abs(reponseSomme) > 9000000000000000) throw("Nombre trop grand");
-        outils.verifierNaN([reponseSomme]);
+        if (botReply.length > 2000) throw ("Réponse trop longue");
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         outils.logLancer(message.author.username, `${reponseLancers}= ${reponseSomme}` , reponseCommandes);
+        return;
     }
-}
+};
+
+/**
+ * @param {string} commandeLancer 
+ * @returns {Array} [reponseCommandes (le lancer tel qu'il a été entré après épuration), listeLancers (contient la liste brute des lancers),
+ *                  reponseLancers (les lancers de dés tels qu'ils sont affichés avec la commande roll), reponseSomme]
+ * @description Cette fonction permet d'effectuer un lancer complexe et de renvoyer les éléments pour qu'elles puissent être réutiliser par d'autres commandes.
+ * 
+ * Exemple : 1d20+1d10+1 renvoit "1d20 + 1d10 + 1" ; [8, 6] ; "[8] + [6] + 1" ; 15
+ */
+exports.commandeComplexe = function(commandeLancer) {
+    let listeCommandes = []; // [commande, bool estLancer, [lancers], somme]
+    let listeOperateurs = ["+","-","*","/","(",")",">","<"];
+
+    for (let i = 0; i < listeOperateurs.length; i+=1) {
+        commandeLancer = commandeLancer.split(`${listeOperateurs[i]}`).join(` ${listeOperateurs[i]} `);
+    }
+    commandeLancer = commandeLancer.toLowerCase().split(/ +/);
+    let listeLancers = [];
+
+    for (let i = 0; i < commandeLancer.length; i++) { // On cherche ce que sont chaque commande
+        if (commandeLancer[i].includes("d")) { // Si la commande a d...
+            commandeLancer[i] = commandeLancer[i].charAt(0) === "d" ? "1" + commandeLancer[i] : commandeLancer[i];
+            commandeLancer[i] = commandeLancer[i].split("d");
+            verifierNaN(commandeLancer[i]);
+            if (commandeLancer[i].length === 2 && parseInt(commandeLancer[i][0]) > 0) { // On regarde si il y a bien deux nombres qui soient valides
+                let lancer = 0;
+                let lancers = [];
+                let somme = 0;
+                
+                for (let j = 0; j < commandeLancer[i][0]; j++) { // On lance les dés
+                    lancer = outils.randomNumber(commandeLancer[i][1]);
+                    lancers.push(lancer);
+                    listeLancers.push(lancer);
+                    somme += lancer;                                
+                }
+                listeCommandes.push([commandeLancer[i][0] +"d" + commandeLancer[i][1], true, lancers.join(", "), somme]); // On rajoute la commande, les lancers et le résultat du lancers dans la liste des commandes
+            }
+        }
+        else if (listeOperateurs.includes(commandeLancer[i]) || !isNaN(parseInt(commandeLancer[i]))) { // Sinon si c'est un opréateur, on rajoute tout simplement dans la liste des commandes
+            listeCommandes.push([commandeLancer[i], false]);
+        }
+        
+    }
+    let reponseCommandes = "";
+    let reponseLancers = "";
+    let reponseSomme = "";
+
+    for (let i = 0; i < listeCommandes.length; i++) { // On écrit la réponse
+        reponseCommandes += listeCommandes[i][0] + " ";
+        if (listeCommandes[i][1]) { // Si la commande est un lancer, alors la liste des lancers doit s'afficher sans la liste des lancers et dans la formule de calcul
+            reponseLancers += `[${listeCommandes[i][2]}] `;
+            reponseSomme += listeCommandes[i][3];
+        }
+        else { // Sinon on affiche l'opérateur
+            reponseLancers += listeCommandes[i][0] + " ";
+            reponseSomme += listeCommandes[i][0];
+        }
+    }
+    //console.log(reponseSomme);
+    reponseSomme = Math.round(eval(reponseSomme)*100)/100; // On calcule le résultat...
+    reponseCommandes = reponseCommandes.replaceAll('*', '\\*');
+    reponseLancers = reponseLancers.replaceAll('*', '\\*');
+    
+    outils.verifierNaN([reponseSomme]);
+    if (Math.abs(reponseSomme) > 9000000000000000) throw("Nombre trop grand");
+
+    return [reponseCommandes, listeLancers, reponseLancers, reponseSomme];    
+};
