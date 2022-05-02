@@ -140,10 +140,10 @@ exports.isekai = function(client, message, args, command) {
         suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
         suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
     }
-    console.log(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}].`); // Console.log pour pas faire bugger le then
+    process.stdout.write(`${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => `);
     outils.logLancer(message.author.username, `${pokemonNomForme}${estShiny}`, `isekai ${args.join(" ")}`);
 
-    message.channel.send(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
+    outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message)
     .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
         setTimeout(function() {
             if (pokemonChoisi["tags"].includes("Digimon")) {

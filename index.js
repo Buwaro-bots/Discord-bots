@@ -85,8 +85,7 @@ client.on("messageCreate", (message) => {
                             "=> Pour les lancers de jdr, rajouter un ping à la fin du message permet d'envoyer le roll en privé à vous et à la personne pingée. Sinon mettre deux **;** envoit le résultat en privé.\r\n" +
                             "**;repeat** permet de faire plusieurs fois la même commandes comme **;repeat 3 dng 4** pour faire 3 rolls de dng avec une stat de 4.\r\n" +
                             "\r\n" +
-                            "**;isekai** pour vous faire réincarner en pokémon. Il est possible de roll dans une catégorie telle que les types, Femelle/Mâle, gen1, DnG. " +
-                            "**;isekai disable** permet d'enlever des pokémons de vos rolls, soit en les listant ou en listant les tags.\r\n";
+                            "**;isekai** pour vous faire réincarner en pokémon. Il est possible de roll dans une catégorie telle que les types, Femelle/Mâle, gen1, DnG. ";
                 mesCommandes.outils.envoyerMessage(client, botReply , message, envoyerPM);
                 return;
             }
