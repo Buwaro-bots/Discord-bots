@@ -119,11 +119,31 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`); // Etant donné que j'ai déjà fait une fonction pour faire des sommes de dés, je la réutilise ici.
         return;
     }
-    if (args[0] === "pc" && args.length > 1) {
+    if (args[0] === "pc") {
+        if (args.length === 1) {
+            outils.envoyerMessage(client, "Pour faire un jet de PC, la commande est **;dng pc *niveau de jauge* + *(points ajoutés)***.", message, false, null);
+            return;
+        }
+        let stat;
+        let modificateur;
 
-        verifierNaN([args[1], args[args.length -1]]);
-        let stat = parseInt(args[1]);
-        let modificateur = args.length > 2 ? `+ ${parseInt(args[args.length -1])}` : "";
+        if (args.length === 2) {
+            if (args[1].includes("+")) {
+                stat = parseInt(args[1].split("+")[0]);
+                modificateur = parseInt(args[1].split("+")[1]);
+            }
+            else {
+                stat = parseInt(args[1]);
+                modificateur = 0;
+            }
+        }
+        else {
+            stat = parseInt(args[1]);
+            modificateur = parseInt(args[args.length -1]);
+        }
+
+        verifierNaN([stat, modificateur]);
+        modificateur = modificateur === 0 ? "" : `+ ${modificateur}`;
 
         if ( stat < 1 || stat > 20 ) {
             throw("Stat incorrecte");
