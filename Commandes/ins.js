@@ -4,6 +4,7 @@ const config = require('../config.json');
 const fs = require('fs');
 
 exports.ins = function(client, message, args, envoyerPM, idMJ) {
+    // Plusieurs commandes demandent de rentrer un lancer, cette fonction vérifie s'il est valide.
     function verifierRegexLancer(lancer) {
         let regex = new RegExp('[1-6]{3}');
         if (regex.test(lancer)) {

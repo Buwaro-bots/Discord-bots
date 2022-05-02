@@ -8,7 +8,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
         let espaces = "                ";
-        let botReply = "." + 
+        let botReply = "." + // Nécéssaire pour que discord n'enlève pas les espaces.
         espaces + "**Liens utiles**\r\n" +
         "**Mode d'emploi du bot** : <https://buwaro-bots.github.io/Discord-bots/?mode=dng>\r\n" +
         strings["DnG-Help"] +
@@ -56,7 +56,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         botReply += `Grade : **${pokemon.grade}**\r\n`;
         botReply += `Arbres : **${pokemon.arbres}**\r\n\r\n`;
         botReply += `Traits :\r\n`;
-        // On parcourt les traits du pokémon
+        // On parcourt les traits du pokémon pour afficher la description courte.
         for (let numero in pokemon.traits) {
             let trait = pokemon.traits[numero];
             let description = "";
@@ -69,7 +69,9 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         outils.envoyerMessage(client, botReply, message, envoyerPM);
         return;
     }
+
     if (args[0] === "trait") {
+        // Si l'utilisateur d'envoit pas de trait, on affiche la liste entière pour ne pas renvoyer d'erreur.
         if (args.length === 1) {
             let listeTraits = "La liste des traits est : ";
             for (let trait in dexDng.Traits) {
@@ -109,8 +111,8 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         }
         verifierNaN([de1, de2]);
         let lancer = de1 === de2 ? `2d${de1}` : `1d${de1}+1d${de2}`;
-        lancer += ' + 1d9 / 10';
-        roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`);
+        lancer += ' + 1d9 / 10'; // On lance un d9 pour accélérer les jets, étant donné qu'il y a pas mal d'égalités.
+        roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`); // Etant donné que j'ai déjà fait une fonction pour faire des sommes de dés, je la réutilise ici.
         return;
     }
     if (args[0] === "pc" && args.length > 1) {
@@ -131,7 +133,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
     outils.verifierNaN(args);
 
     let stat = args.length > 0 ? parseInt(args[0]) : 3; // Si aucune information est donnée, on assume que la stat est de 3 et le dd de 3. Si ça pose problème de toute façon le bot le mentionne.
-    let nombreLancers = args.length > 1 ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1;
+    let nombreLancers = args.length > 1 ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1; // Si l'utilisateur ne mentionne pas le nombre de lancer, il n'en fait qu'un.
     let alerteStatLimite = stat > 5 ? "(Attention, normalement les stats ne dépassent pas 5.)" : "";
     
     let lancerCritique = outils.randomNumber(20);
@@ -146,7 +148,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
             listeLancers.push(outils.randomNumber((1+stat)*2));
         }
         
-        let meilleurLancer = Math.max.apply(Math, listeLancers);
+        let meilleurLancer = Math.max.apply(Math, listeLancers); // On récupère le meilleur lancer pour le mettre en gras après.
         lancerCaracteristique = listeLancers.join(", ");
         lancerCaracteristique = lancerCaracteristique.replace(meilleurLancer, `**${meilleurLancer}**`);
     }

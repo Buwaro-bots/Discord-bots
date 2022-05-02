@@ -25,18 +25,18 @@ module.exports = {
         });
     },  
 
-    // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot. Si la réponse doit être par mp, envoyerPM doit être égal à true
+    // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
     envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
         console.log(botReply.substring(0, 100));
         if (envoyerPM) {
-            message.author.send(botReply);
             if (idMJ != null) {
                 client.users.cache.get(idMJ).send(botReply);
             }
             message.react('📬');
+            return message.author.send(botReply);
         }
         else {
-            message.channel.send(botReply);
+            return message.channel.send(botReply);
         }
     },
 

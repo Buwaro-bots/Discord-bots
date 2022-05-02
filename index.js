@@ -17,7 +17,7 @@ let prefix = ";"; // Set the prefix
 console.log("Ready!");
 
 client.on("messageCreate", (message) => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;     // Exit and stop if the prefix is not there or if user is a bot
+    if (!message.content.startsWith(prefix) || message.author.bot) return; // On ne fait rien si le message n'a pas le préfixe ou si l'auteur est un bot.
     
     process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
     let envoyerPM = false; // Cette variable indique si la réponse doit être envoyée par mp.
@@ -42,7 +42,7 @@ client.on("messageCreate", (message) => {
     args        : tableau qui contient tout les paramètres après la commande
     command     : string qui est la commande après le préfix
     */
-    let commandBody = message.content.slice(prefix.length);     // Cette partie sert à séparer la commande des arguments.
+    let commandBody = message.content.slice(prefix.length); // Cette partie sert à séparer la commande des arguments.
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     let command = outils.normalisationString(args.shift());
     try {
@@ -57,10 +57,10 @@ client.on("messageCreate", (message) => {
 
         outils.verifierNaN([nbBouclesMax]);
         if (nbBouclesMax > 10 && message.author.id !== config.admin ) {
-            nbBouclesMax = 5;
+            nbBouclesMax = 5; // Pour eviter les abus, on limite le nombre de boucles à 5, le nombre de messages qui peut-être envoyé toutes les 5 secondes.
         }
 
-        [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM);
+        [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM); // Avoir un ping au milieu d'un message peut poser problème, donc on l'enlève ici.
 
         while (nbBoucles < nbBouclesMax) {
             if (command === "code" || command === "source") {
