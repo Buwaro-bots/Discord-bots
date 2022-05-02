@@ -101,22 +101,26 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
             return;
         }
 
-        let de1; let de2;
+        let stat1; let stat2; let de1; let de2;
         let stats = {"1": "4", "2": "6", "3": "8", "4": "10", "5": "12"};
 
         // Si l'utilisateur écrit quelque chose comme 4+3, il faut rechercher le premier et dernier caractère, sinon on part du principe qu'il a bien séparé les stats par un espace.
         if (args.length === 2) {
-            de1 = stats[parseInt(args[1][0])];
-            de2 = stats[parseInt(args[1][args[1].length -1])];
+            stat1 = parseInt(args[1][0]);
+            stat2 = parseInt(args[1][args[1].length -1]);
         }
         else {
-            de1 = stats[parseInt(args[1])];
-            de2 = stats[parseInt(args[args.length -1])];
+            stat1 = parseInt(args[1]);
+            stat2 = parseInt(args[args.length -1]);
         }
+        de1 = stats[stat1]; de2 = stats[stat2];
         verifierNaN([de1, de2]);
-        let lancer = de1 === de2 ? `2d${de1}` : `1d${de1}+1d${de2}`;
-        lancer += ' + 1d9 / 10'; // On lance un d9 pour accélérer les jets, étant donné qu'il y a pas mal d'égalités.
-        roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`); // Etant donné que j'ai déjà fait une fonction pour faire des sommes de dés, je la réutilise ici.
+        let lancer = `1d${de1} + 1d${de2} + (1d10-1) / 10`; // On lance un d10 pour accélérer les jets, étant donné qu'il y a pas mal d'égalités.
+        let [reponseCommandes, listeLancers, reponseLancers, reponseSomme] =  roll.commandeComplexe(lancer);
+        let lancerAAfficher = `[${listeLancers[0]} + ${listeLancers[1]}] + [${listeLancers[2] - 1}]`
+        let botReply = `${message.author.toString()} Avec des stats de ${stat1} et ${stat2}, vous avez fait ${lancerAAfficher} ce qui donne : **${reponseSomme}**`;
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.logLancer(message.author.username, `${lancerAAfficher} = ${reponseSomme}`, `dng ini ${stat1} + ${stat2}`);
         return;
     }
     if (args[0] === "pc") {
