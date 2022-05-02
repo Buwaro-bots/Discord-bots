@@ -29,22 +29,25 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         return;
     }
 
+    // Cette commande recherche le pokémon demandé dans la base de données de DnG.
     if (args[0] === "pokemon") {
         args.shift();
         let pokemonDemande = args.join(" ");
-        if (!(dexDng.Pokemons.hasOwnProperty(pokemonDemande))) { // Vérifier pourquoi ça marche pas
+        if (!(dexDng.Pokemons.hasOwnProperty(pokemonDemande))) {
             try {
-            pokemonDemande = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande, "fort");
+                pokemonDemande = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande, "fort");
             } catch (e) {
-                // On regarde si le pokémon existe dans la commande isekai, s'il existe, on répond désolé mais ce pokémon n'est pas dans DnG
+                // On regarde si le pokémon existe dans la commande isekai pour donner un meilleur message d'erreur. Le dex de la commande isekai étant complet, il a plus de chance de retrouver le nom.
                 let dexIsekai = require('../Données/pokedex.json');
                 let listePokemons = [];
                 for (let i = 0; i < dexIsekai.length; i++) {
-                    listePokemons.push(dexIsekai[i].nom);
+                    if (dexIsekai[i].tags.includes("PasDnG")) {
+                        listePokemons.push(dexIsekai[i].nom);
+                    }
                 }
                 pokemonDemande = outils.normalisationString(args.join(" "));
-                pokemonDemande = outils.rattrapageFauteOrthographe(listePokemons, pokemonDemande, "fort");
-                envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ);
+                pokemonDemande = outils.rattrapageFauteOrthographe(listePokemons, pokemonDemande);
+                outils.envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ);
                 return;
             }
         }
@@ -101,6 +104,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         let de1; let de2;
         let stats = {"1": "4", "2": "6", "3": "8", "4": "10", "5": "12"};
 
+        // Si l'utilisateur écrit quelque chose comme 4+3, il faut rechercher le premier et dernier caractère, sinon on part du principe qu'il a bien séparé les stats par un espace.
         if (args.length === 2) {
             de1 = stats[parseInt(args[1][0])];
             de2 = stats[parseInt(args[1][args[1].length -1])];

@@ -102,7 +102,7 @@ module.exports = {
             }
             else {
                 let distance = levenshtein(entree, elementTableau);
-                if (distance < entree.length / 2) {
+                if (distance < entree.length / 3) {
                     console.log(liste[i] + " " + distance);
                     if (distance < min) {
                         min = distance;
