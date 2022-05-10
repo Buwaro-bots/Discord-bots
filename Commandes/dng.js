@@ -2,6 +2,7 @@ let dexDng = require('../Données/dex-dng.json');
 const { verifierNaN } = require("./outils.js");
 const outils = require("./outils.js");
 const roll = require('./roll.js');
+const isekai = require('./isekai.js');
 let strings = require('../Données/textes-privés.json');
 
 exports.dng = function(client, message, args, envoyerPM, idMJ) {
@@ -32,20 +33,34 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
     // Cette commande recherche le pokémon demandé dans la base de données de DnG.
     if (args[0] === "pokemon") {
         args.shift();
-        let pokemonDemande = args.join(" ");
+        let pokemonDemande;
+        if (args.length === 0 || args[0] === "alea") {
+            args.length === 0 ? args.push("base") : args.shift();
+            args.push("DnG");
+            let nouveauPokemon = isekai.tiragePokemon(args);
+            if (nouveauPokemon.hasOwnProperty("nomForme")) {
+                pokemonDemande = nouveauPokemon.nomForme;
+            }
+            else {
+                pokemonDemande = nouveauPokemon.nom;
+            }
+        }
+        else {
+            pokemonDemande = args.join(" ");
+        }
         if (!(dexDng.Pokemons.hasOwnProperty(pokemonDemande))) {
             try {
-                pokemonDemande = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande, "fort");
+                let resultat = outils.rattrapageFauteOrthographe(dexDng.Pokemons, pokemonDemande, "fort");
+                pokemonDemande = resultat;
             } catch (e) {
                 // On regarde si le pokémon existe dans la commande isekai pour donner un meilleur message d'erreur. Le dex de la commande isekai étant complet, il a plus de chance de retrouver le nom.
                 let dexIsekai = require('../Données/pokedex.json');
                 let listePokemons = [];
                 for (let i = 0; i < dexIsekai.length; i++) {
                     if (dexIsekai[i].tags.includes("PasDnG")) {
-                        listePokemons.push(dexIsekai[i].nom);
+                        dexIsekai[i].hasOwnProperty("nomForme") ? listePokemons.push(dexIsekai[i].nomForme) : listePokemons.push(dexIsekai[i].nom);
                     }
                 }
-                pokemonDemande = outils.normalisationString(args.join(" "));
                 pokemonDemande = outils.rattrapageFauteOrthographe(listePokemons, pokemonDemande);
                 outils.envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ);
                 return;
@@ -158,9 +173,35 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         return;
     }
 
+    if (args.length === 0) {
+        message.react("1️⃣").then(() => message.react("2️⃣").then(() => message.react("3️⃣").then(() => message.react("4️⃣").then(() => message.react("5️⃣")))));
+        let dummyMessage = message;
+
+        const reactionFilter = (reaction, user) => {
+            return true;
+        };
+        const collector = message.createReactionCollector({
+            reactionFilter, 
+            time: 60000
+        });
+        collector.on('collect', (reaction, user) => {
+            if(!user.bot) {
+                console.log(reaction.emoji.name);
+                listeReactions = {"1️⃣": "1", "2️⃣": "2", "3️⃣": "3", "4️⃣": "4", "5️⃣": "5"};
+                if (listeReactions.hasOwnProperty(reaction.emoji.name)) {
+                    dummyMessage.author = user;
+                    //console.log(dummyMessage);
+                    this.dng(client, dummyMessage, [listeReactions[reaction.emoji.name]], envoyerPM, idMJ);
+                }
+                //msg.edit("réussi");
+            }
+        });
+        return;
+    }
+
     outils.verifierNaN(args);
 
-    let stat = args.length > 0 ? parseInt(args[0]) : 3; // Si aucune information est donnée, on assume que la stat est de 3 et le dd de 3. Si ça pose problème de toute façon le bot le mentionne.
+    let stat = parseInt(args[0]);
     let nombreLancers = args.length > 1 ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1; // Si l'utilisateur ne mentionne pas le nombre de lancer, il n'en fait qu'un.
     let alerteStatLimite = stat > 5 ? "(Attention, normalement les stats ne dépassent pas 5.)" : "";
     
