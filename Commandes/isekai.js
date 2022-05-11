@@ -53,32 +53,102 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         outils.envoyerMessage(client, botReply, message);
         return;
     }
-    
-    
-    let pokemonChoisi = null;
-    let listePokemon = pokedex;
-
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 3;
+    let tauxDeNouveau = 2;
     let rollNouveau = outils.randomNumber(100);
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
         args = ["Nouveau"];
     }
-    if (args.length > 0) { // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
+
+    let pokemonChoisi = this.tiragePokemon(args, message.author.id);
+    let rollShiny = outils.randomNumber(128);
+    let estShiny = "";
+    let suffixe = "";
+
+    if (rollShiny === 1) {
+        estShiny = " **shiny**";
+        suffixe += "✨";
+    }
+
+    let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
+    let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
+    if (pokemonChoisi.hasOwnProperty("nomForme")) {
+        pokemonNumeroForme = pokemonChoisi.numeroForme;
+        pokemonNomForme = pokemonChoisi.nomForme;
+        suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
+        suffixe += pokemonChoisi.tags.includes("Galar") ? "🍵" : "";
+        suffixe += pokemonChoisi.tags.includes("Hisui") ? "🍙" : "";
+        suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
+        suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
+    }
+    process.stdout.write(`${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => `);
+    outils.logLancer(message.author.username, `${pokemonNomForme}${estShiny}`, `isekai ${args.join(" ")}`);
+
+    if (messageReroll === null) {
+        outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message, envoyerPM, idMJ)
+        .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
+            setTimeout(function() {
+                if (pokemonChoisi["tags"].includes("Digimon")) {
+                    msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                }
+                else {
+                    msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                }
+
+                msg.react("🎲");
+            }, 4500)
+            const collector = msg.createReactionCollector({
+                time: 1 * 60 * 1000
+            });
+            collector.on('collect', (reaction, user) => {
+                if(user.id === message.author.id && reaction.emoji.name === "🎲") {
+                    reaction.users.remove(user);
+                    module.exports.isekai(client, message, args, envoyerPM, idMJ, msg);
+                }
+            });
+            collector.on('end', collected => {
+                msg.reactions.removeAll();
+            });
+        })
+    }
+    else {
+        let messageOriginel = messageReroll.content + "\r\n";
+        messageReroll.edit(messageOriginel + `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
+        .then((msg)=> { 
+            setTimeout(function() {
+                if (pokemonChoisi["tags"].includes("Digimon")) {
+                    msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                }
+                else {
+                    msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                }
+                
+            }, 4500)
+        });
+    }
+    return;
+};
+
+exports.tiragePokemon = function(listeTagsDemandes, idUtilisateur = null) {
+
+    let pokemonChoisi = null;
+    let listePokemon = pokedex;
+
+    if (listeTagsDemandes.length > 0) { // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
         let tagsEnvoye = [];
-        for (let i = 0; i < args.length; i++) {
-            tagsEnvoye.push(outils.rattrapageFauteOrthographe(listeTags, args[i]));
+        for (let i = 0; i < listeTagsDemandes.length; i++) {
+            tagsEnvoye.push(outils.rattrapageFauteOrthographe(listeTags, listeTagsDemandes[i]));
         } 
 
         // Etablissement de la disable list
         let disablePokemons = [];
         let disableTags = [];
 
-        if (disable.hasOwnProperty(message.author.id) && command === "isekai") { // La disable list ne marche que sur la commande isekai
-            disablePokemons = disable[message.author.id].pokemons;
-            disableTags = disable[message.author.id].tags;
+        if (idUtilisateur != null && disable.hasOwnProperty(idUtilisateur)) {
+            disablePokemons = disable[idUtilisateur].pokemons;
+            disableTags = disable[idUtilisateur].tags;
         }
 
         let nouvelleListe = [];
@@ -103,6 +173,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         }
 
         if (nouvelleListe.length === 0) { // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
+            console.log(listeTagsDemandes);
             throw("Aucun pokémon avec ses tags");
         }
         
@@ -121,41 +192,5 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         }
     }
 
-    let rollShiny = outils.randomNumber(128);
-    let estShiny = "";
-    let suffixe = "";
-
-    if (rollShiny === 1) {
-        estShiny = " **shiny**";
-        suffixe += "✨";
-    }
-
-    let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
-    let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
-    if (pokemonChoisi.hasOwnProperty("nomForme")) {
-        pokemonNumeroForme = pokemonChoisi.numeroForme;
-        pokemonNomForme = pokemonChoisi.nomForme;
-        suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
-        suffixe += pokemonChoisi.tags.includes("Galar") ? "🍵" : "";
-        suffixe += pokemonChoisi.tags.includes("Hisui") ? "🍙" : "";
-        suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
-        suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
-    }
-    process.stdout.write(`${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => `);
-    outils.logLancer(message.author.username, `${pokemonNomForme}${estShiny}`, `isekai ${args.join(" ")}`);
-
-    outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message)
-    .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
-        setTimeout(function() {
-            if (pokemonChoisi["tags"].includes("Digimon")) {
-                msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-            }
-            else {
-                msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-            }
-        }, 4500)
-    });
-
-    return;
-}
-
+    return pokemonChoisi;
+};
