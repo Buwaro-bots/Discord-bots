@@ -3,7 +3,7 @@ const config = require('../config.json');
 const fs = require('fs');
 const { verifierNaN } = require("./outils.js");
 
-exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody) {
+exports.roll = function(client, message, args, envoyerPM, idMJ) {
     if (args[0] === "setup") {
         config.lancerParDefault = args[1];
         let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
@@ -15,7 +15,6 @@ exports.roll = function(client, message, args, envoyerPM, idMJ, commandBody) {
 
     if (args.length === 0) { // Si il y a juste roll, je fais le lancer par défaut
         args = [config.lancerParDefault];
-        commandBody += " " + config.lancerParDefault;
     }
     
     if (args.length === 1 && args[0].includes("^")) args[0] = String(parseInt(args[0]) ** 2);

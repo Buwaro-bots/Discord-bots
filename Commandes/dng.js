@@ -169,7 +169,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         }
 
         let lancer = `${dexDng.LancersPC[stat]} ${modificateur}`;
-        roll.roll(client, message, [lancer], envoyerPM, idMJ, `roll ${lancer}`);
+        roll.roll(client, message, [lancer], envoyerPM, idMJ);
         return;
     }
 

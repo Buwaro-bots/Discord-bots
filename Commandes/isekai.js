@@ -3,11 +3,12 @@ const pokedex = require('../Données/pokedex.json');
 const disable = require('../Données/disable-isekai.json');
 const fs = require('fs');
 
-exports.isekai = function(client, message, args, command) {
-    // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
-    let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
-    "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
-    "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Non-pokemon", "Digimon"]
+// Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
+let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
+"Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
+"Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Non-pokemon", "Digimon"]
+
+exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null) {
 
     if (args[0] === "disable") {
         if (!disable.hasOwnProperty(message.author.id)) {

@@ -91,7 +91,7 @@ client.on("messageCreate", (message) => {
             }
 
             else if (command === "isekai") {
-                mesCommandes.isekai.isekai(client, message, args, command);
+                mesCommandes.isekai.isekai(client, message, args, envoyerPM, idMJ, null);
             }
 
             else if (command === "horoscope") {
@@ -111,7 +111,7 @@ client.on("messageCreate", (message) => {
             }
 
             else if (command === "roll") {
-                mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ, commandBody);
+                mesCommandes.roll.roll(client, message, args, envoyerPM, idMJ);
             }
 
             else if (command === "log") {
@@ -145,14 +145,14 @@ client.on("messageCreate", (message) => {
                 }
                 else if (typeLancer <= 84) {
                     nombreLancer = nombreLancer > 30 ? "100" : (nombreLancer > 10 ? "2d20" : "4d6 - 3");
-                    mesCommandes.roll.roll(client, message, [nombreLancer], envoyerPM, idMJ, `roll ${nombreLancer}`);
+                    mesCommandes.roll.roll(client, message, [nombreLancer], envoyerPM, idMJ);
                 }
                 else if (typeLancer <= 92) {
                     args = nombreLancer <= 25 ? ["5"] : [];
                     command === "tarot"
                 }
                 else {
-                    mesCommandes.isekai.isekai(client, message, ["DnG"], "isekai");
+                    mesCommandes.isekai.isekai(client, message, ["DnG"], envoyerPM, idMJ, null);
                 }
             }
 
