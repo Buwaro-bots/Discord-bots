@@ -1,9 +1,11 @@
 const outils = require("./outils.js");
 const INSdata = require('../Données/ins.json');
-const config = require('../config.json');
 const fs = require('fs');
+const config = require('../config.json');
 
 exports.ins = function(client, message, args, envoyerPM, idMJ) {
+    let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
+
     // Plusieurs commandes demandent de rentrer un lancer, cette fonction vérifie s'il est valide.
     function verifierRegexLancer(lancer) {
         let regex = new RegExp('[1-6]{3}');
@@ -57,12 +59,12 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
     if (args[0] === "message") { // Commande permettant à quelqu'un de rajouter un message personalisé
         if (args[1] === "liste") {
             let botReply = "";
-            for (const lancer in INSdata.lancersSpeciaux) {
-                if (INSdata.lancersSpeciaux[lancer].hasOwnProperty(message.author.id)) {
-                    botReply += `${lancer} : ${INSdata.lancersSpeciaux[lancer][message.author.id]}\r\n`;
+            for (const lancer in paramJoueurs.ins.lancersSpeciaux) {
+                if (paramJoueurs.ins.lancersSpeciaux[lancer].hasOwnProperty(message.author.id)) {
+                    botReply += `${lancer} : ${paramJoueurs.ins.lancersSpeciaux[lancer][message.author.id]}\r\n`;
                 }
-                else if (INSdata.lancersSpeciaux[lancer].hasOwnProperty("autre")) {
-                    botReply += `*${lancer}* : ${INSdata.lancersSpeciaux[lancer]["autre"]}\r\n`;
+                else if (paramJoueurs.ins.lancersSpeciaux[lancer].hasOwnProperty("autre")) {
+                    botReply += `*${lancer}* : ${paramJoueurs.ins.lancersSpeciaux[lancer]["autre"]}\r\n`;
                 }
             }
             outils.envoyerMessage(client, botReply, message, true, idMJ);
@@ -74,28 +76,28 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
         let lancer = verifierRegexLancer(args[1]);
 
         if (args[2] === "deletethis") {
-            delete INSdata.lancersSpeciaux[lancer][message.author.id];
+            delete paramJoueurs.ins.lancersSpeciaux[lancer][message.author.id];
             let botReply = `${message.author.toString()} : Votre message pour le lancer ${lancer} a été supprimé.`;	
             outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         }
         else {
-            if (!(lancer in INSdata.lancersSpeciaux)) { // Si le lancer n'existait pas dans la base, on le rajoute
-                INSdata.lancersSpeciaux[lancer] = {};
+            if (!(lancer in paramJoueurs.ins.lancersSpeciaux)) { // Si le lancer n'existait pas dans la base, on le rajoute
+                paramJoueurs.ins.lancersSpeciaux[lancer] = {};
             }
 
             phrase = " "; // Très mauvaise manière de récupérer la phrase qui a été découpée avant, à revoir
             for (let i= 2; i < args.length; i++) {
                 phrase += args[i] + " ";
             }
-            INSdata.lancersSpeciaux[lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
+            paramJoueurs.ins.lancersSpeciaux[lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
             outils.envoyerMessage(client, botReply, message);
             client.channels.cache.get(config.canalLogs).send(botReply);
         }
 
-        let writer = JSON.stringify(INSdata, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/ins.json', writer);
+        let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/param-joueurs.json', writer);
         
 
         return;
@@ -103,19 +105,19 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
 
     if (args[0] === "autocheck") {
         let botReply = "";
-        if (INSdata.listeAutoVerifications.includes(message.author.id)) {
-            const index = INSdata.listeAutoVerifications.indexOf(message.author.id);
-            INSdata.listeAutoVerifications.splice(index, 1);
+        if (paramJoueurs.ins.listeAutoVerifications.includes(message.author.id)) {
+            const index = paramJoueurs.ins.listeAutoVerifications.indexOf(message.author.id);
+            paramJoueurs.ins.listeAutoVerifications.splice(index, 1);
             botReply = `${message.author.toString()} : Vous avez désactivé la vérification automatique.`;
         }
         else {
-            INSdata.listeAutoVerifications.push(message.author.id)
+            paramJoueurs.ins.listeAutoVerifications.push(message.author.id)
             botReply = `${message.author.toString()} : Vous avez activé la vérification automatique.`;
         }
 
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-        let writer = JSON.stringify(INSdata, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/ins.json', writer);
+        let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/param-joueurs.json', writer);
         
         return;
     }
@@ -150,17 +152,17 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
     let botReply = `${message.author.toString()} a ${verbe} [${dices[0]}${dices[1]}] + [${dices[2]}].`;
 
 
-    if (dicesSum in INSdata.lancersSpeciaux) {
-        if (message.author.id in INSdata.lancersSpeciaux[dicesSum]) {
-            botReply += INSdata.lancersSpeciaux[dicesSum][message.author.id];
+    if (dicesSum in paramJoueurs.ins.lancersSpeciaux) {
+        if (message.author.id in paramJoueurs.ins.lancersSpeciaux[dicesSum]) {
+            botReply += paramJoueurs.ins.lancersSpeciaux[dicesSum][message.author.id];
             lancerSpecial = true; // Si le lancer est "spécial", c'est à dire qu'il a un message perso, on n'a pas besoin de préciser si c'est une réussite ou pas.
         }
-        else if ("autre" in INSdata.lancersSpeciaux[dicesSum]) {
-            botReply += INSdata.lancersSpeciaux[dicesSum]["autre"];
+        else if ("autre" in paramJoueurs.ins.lancersSpeciaux[dicesSum]) {
+            botReply += paramJoueurs.ins.lancersSpeciaux[dicesSum]["autre"];
         }
     }
 
-    if (args[0] === "check" || args[0] === "verif" || INSdata.listeAutoVerifications.includes(message.author.id) && lancerSpecial === false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
+    if (args[0] === "check" || args[0] === "verif" || paramJoueurs.ins.listeAutoVerifications.includes(message.author.id) && lancerSpecial === false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
         let minimumStat = -2 ;
         let nomMinimumStat = "" ;
         let maximumRoll = 110;
@@ -171,7 +173,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
         }
         i -= 1; // Je fais ça en attendant d'avoir une solution
 
-        if ((INSdata.listeAutoVerifications.includes(message.author.id) && args.length >= 1) || (args[0] === "check" && args.length >= 2) || (args[0] === "verif" && args.length >= 3)) { // On regarde si on demande une modifications du nombre de jets de colonnes.
+        if ((paramJoueurs.ins.listeAutoVerifications.includes(message.author.id) && args.length >= 1) || (args[0] === "check" && args.length >= 2) || (args[0] === "verif" && args.length >= 3)) { // On regarde si on demande une modifications du nombre de jets de colonnes.
             outils.verifierNaN(args[args.length-1]);
             let rowBonus = -parseInt(args[args.length-1]);
             i += rowBonus;
@@ -180,7 +182,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
         minimumStat = INSdata.tum[i]["stat"];
         nomMinimumStat = INSdata.tum[i]["nomStat"];
 
-        if (args[0] === "check" || INSdata.listeAutoVerifications.includes(message.author.id)) { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
+        if (args[0] === "check" || paramJoueurs.ins.listeAutoVerifications.includes(message.author.id)) { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
             if (minimumStat <= 0 ) {
                 botReply += ` Réussite quelque soit la stat.`;    
             }
