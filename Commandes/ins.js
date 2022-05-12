@@ -104,24 +104,10 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
     }
 
     if (args[0] === "autocheck") {
-        let botReply = "";
-        if (paramJoueurs.ins.listeAutoVerifications.includes(message.author.id)) {
-            const index = paramJoueurs.ins.listeAutoVerifications.indexOf(message.author.id);
-            paramJoueurs.ins.listeAutoVerifications.splice(index, 1);
-            botReply = `${message.author.toString()} : Vous avez désactivé la vérification automatique.`;
-        }
-        else {
-            paramJoueurs.ins.listeAutoVerifications.push(message.author.id)
-            botReply = `${message.author.toString()} : Vous avez activé la vérification automatique.`;
-        }
-
+        let botReply = message.author.toString() + outils.gestionAutocheck("ins", message.author.id);
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-        let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/param-joueurs.json', writer);
-        
         return;
     }
-
 
     if (args[0] === "gacha") {
 

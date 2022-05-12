@@ -122,5 +122,25 @@ module.exports = {
     // Cette fonction permet d'enlever les accents et majuscules d'une chaîne de caractères.
     normalisationString : function(string) {
         return string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    },
+
+    gestionAutocheck : function(mode, idJoueur) {
+        let paramJoueurs = require('../Données/param-joueurs.json');
+
+        let botReply = "";
+        if (paramJoueurs[mode].listeAutoVerifications.includes(idJoueur)) {
+            const index = paramJoueurs[mode].listeAutoVerifications.indexOf(idJoueur);
+            paramJoueurs[mode].listeAutoVerifications.splice(index, 1);
+            botReply = " : Vous avez désactivé la vérification automatique.";
+        }
+        else {
+            paramJoueurs[mode].listeAutoVerifications.push(idJoueur)
+            botReply = " : Vous avez activé la vérification automatique.";
+        }
+
+        let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/param-joueurs.json', writer);
+
+        return botReply;
     }
 }
