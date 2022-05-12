@@ -4,8 +4,11 @@ const outils = require("./outils.js");
 const roll = require('./roll.js');
 const isekai = require('./isekai.js');
 let strings = require('../Données/textes-privés.json');
+const fs = require('fs');
+
 
 exports.dng = function(client, message, args, envoyerPM, idMJ) {
+    let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
         let espaces = "                ";
@@ -173,9 +176,16 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         return;
     }
 
-    if (args.length === 0) {
+    if (args[0] === "autocheck") {
+        let botReply = message.author.toString() + outils.gestionAutocheck("dng", message.author.id);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        return;
+    }
+
+    if (args.length === 0 || args[0].includes("dd")) {
         message.react("1️⃣").then(() => message.react("2️⃣").then(() => message.react("3️⃣").then(() => message.react("4️⃣").then(() => message.react("5️⃣")))));
         let dummyMessage = message;
+        let dd = args.length > 0? args[0] : "1";
 
         const collector = message.createReactionCollector({
             time: 5 * 60 * 1000
@@ -185,7 +195,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
                 listeReactions = {"1️⃣": "1", "2️⃣": "2", "3️⃣": "3", "4️⃣": "4", "5️⃣": "5"};
                 if (listeReactions.hasOwnProperty(reaction.emoji.name)) {
                     dummyMessage.author = user;
-                    this.dng(client, dummyMessage, [listeReactions[reaction.emoji.name]], envoyerPM, idMJ);
+                    this.dng(client, dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
                     reaction.users.remove(user);
                 }
             }
@@ -196,17 +206,19 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         return;
     }
 
-    outils.verifierNaN(args);
-
     let stat = parseInt(args[0]);
-    let nombreLancers = args.length > 1 ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1; // Si l'utilisateur ne mentionne pas le nombre de lancer, il n'en fait qu'un.
+    outils.verifierNaN([stat]);
+
+    let nombreLancers = args.length > 1 && !(args[1].includes("dd")) ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1; // Si l'utilisateur ne mentionne pas le nombre de lancer, il n'en fait qu'un.
     let alerteStatLimite = stat > 5 ? "(Attention, normalement les stats ne dépassent pas 5.)" : "";
     
     let lancerCritique = outils.randomNumber(20);
     let lancerCaracteristique = "";
+    let meilleurLancer = "";
 
     if (nombreLancers === 1) {
         lancerCaracteristique = outils.randomNumber((1+stat)*2);
+        meilleurLancer = lancerCaracteristique;
     }
     else {
         let listeLancers = [];
@@ -214,20 +226,25 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
             listeLancers.push(outils.randomNumber((1+stat)*2));
         }
         
-        let meilleurLancer = Math.max.apply(Math, listeLancers); // On récupère le meilleur lancer pour le mettre en gras après.
+        meilleurLancer = Math.max.apply(Math, listeLancers); // On récupère le meilleur lancer pour le mettre en gras après.
         lancerCaracteristique = listeLancers.join(", ");
         lancerCaracteristique = lancerCaracteristique.replace(meilleurLancer, `**${meilleurLancer}**`);
     }
 
     let botReply = `${message.author.toString()} avec une stat de ${stat}, a lancé [${lancerCaracteristique}] [${lancerCritique}]. ${alerteStatLimite}`;
+
+    botReply += paramJoueurs.dng.listeAutoVerifications.includes(message.author.id) ? this.verificationReussite(meilleurLancer, lancerCritique, args) : "";
+
+
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     outils.logLancer(message.author.username, `[${lancerCaracteristique}] [${lancerCritique}]`, `dng ${stat}`);
 
 
 }
-    //#region 
-    /*
-    let calculer_reussite = false; // On ne dit si c'est une réussite ou pas que si le dd ou l'avantage est donné.
+
+
+exports.verificationReussite = function(lancerCaracteristique, lancerCritique, args) {
+    console.log(lancerCaracteristique);
     let dd = 3;
     let avantage = 0;
     let avantage_mis = false;
@@ -235,34 +252,28 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
     for (let i = 0; i < args.length; i++) { // On regarde la liste des paramètres données, on peut les mettre dans n'importe quel ordre car les trois ont leur propre nomenclature.
         if (args[i][0] === "+" || args[i][0] === "-") { // Si ça commence par + ou -, c'est des avantages / désavantages
             avantage_mis = true;
-            calculer_reussite = true;
             avantage = parseInt(args[i]);
         }
         else if (args[i].includes("dd")) { // Si ça commence par dd, c'est le dd.
-            calculer_reussite = true;
             dd = parseInt(args[i][2])
         }
-        else {
-            stat = parseInt(args[i]) // Sinon c'est la stat.
-        }
     }
-    outils.verifierNaN([stat, dd, avantage]);
-    */
+    outils.verifierNaN([dd, avantage]);
 
-
-    /*
-    let message_reussite_un = "";
-    let message_reussite_deux = "";
-    if (calculer_reussite) {
-        message_reussite_un = ` un dd de ${dd}`;
-        if (avantage_mis) {
-            message_reussite_un += avantage > 0 ? ` et ${avantage} avantages` : ` et ${-avantage} désavantages`
-        }
-
-        message_reussite_deux = (dices[0] > dd && dices[1] >= avantage * -4 )|| dices[1] <= avantage * 4 ? `C'est une réussite !` : `C'est un échec !`
-
+    let message_reussite = ` Avec un dd de ${dd}`;
+    if (avantage_mis) {
+        message_reussite += avantage > 0 ? ` et ${avantage} avantage${avantage > 1 ? "s" : ""}` : ` et ${-avantage} désavantage${avantage < -1 ? "s" : ""}`
     }
 
-    let botReply = `${message.author.toString()} avec une stat de ${stat},${message_reussite_un} a lancé [${dices[0]}] [${dices[1]}]. ${message_reussite_deux} ${alerteStatLimite}`;
-    */
-   //#endregion
+    if ( (lancerCaracteristique > dd && lancerCritique > avantage * -4) || lancerCritique <= avantage * 4 ) {
+        message_reussite += ", c'est une réussite";
+    }
+    else {
+        message_reussite += ", c'est un échec";
+        message_reussite += ( lancerCaracteristique <= dd && lancerCritique <= 12 && lancerCritique <= (avantage+1) * 4) || ( lancerCaracteristique > dd && lancerCritique > (avantage + 1) * -4 ) ? " *(sauf avec un avantage supplémentaire)*" : "";
+    }
+    message_reussite += lancerCritique >= 19 ? " **critique** !" : ".";
+
+    return message_reussite;
+    
+}
