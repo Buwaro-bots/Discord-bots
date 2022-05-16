@@ -95,17 +95,22 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                 }
                 else {
                     msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+
                 }
 
                 msg.react("🎲");
-            }, 4500)
+            }, timerSpoiler)
             const collector = msg.createReactionCollector({
-                time: 1 * 60 * 1000
+                time: 40 * 1000
             });
             collector.on('collect', (reaction, user) => {
                 if(user.id === message.author.id && reaction.emoji.name === "🎲") {
-                    reaction.users.remove(user);
-                    module.exports.isekai(client, message, args, envoyerPM, idMJ, msg);
+                    collector.resetTimer({time: 40 * 1000});
+                    timerSpoiler = timerSpoiler * 0.75 + 600; // Formule pour accélérer les tirages, mais pas trop
+                    module.exports.isekai(client, message, args, envoyerPM, idMJ, msg, timerSpoiler);
+                    setTimeout(function() {
+                        reaction.users.remove(user);
+                    }, timerSpoiler + 250);
                 }
             });
             collector.on('end', collected => {
@@ -125,7 +130,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                     msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
                 }
                 
-            }, 4500)
+            }, timerSpoiler)
         });
     }
     return;

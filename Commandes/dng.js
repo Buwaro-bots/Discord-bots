@@ -188,12 +188,13 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         let dd = args.length > 0? args[0] : "1";
 
         const collector = message.createReactionCollector({
-            time: 5 * 60 * 1000
+            time: 400 * 1000
         });
         collector.on('collect', (reaction, user) => {
             if(!user.bot) {
                 listeReactions = {"1️⃣": "1", "2️⃣": "2", "3️⃣": "3", "4️⃣": "4", "5️⃣": "5"};
                 if (listeReactions.hasOwnProperty(reaction.emoji.name)) {
+                    collector.resetTimer({time: 400 * 1000});
                     dummyMessage.author = user;
                     this.dng(client, dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
                     reaction.users.remove(user);
