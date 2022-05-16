@@ -22,4 +22,48 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
         message.react('👍');
         return;
     }
+
+    nombreHeures = args.length > 0 ? parseInt(args[0]) : 4;
+    outils.verifierNaN([nombreHeures]);
+
+    let listeJoueurs = this.listeJoueurs(nombreHeures);
+    let nomsJoueurs  = Object.keys(listeJoueurs).sort();
+    let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\n\n`;
+    for (let i = 0; i < nomsJoueurs.length; i++) {
+        let ajout = `${nomsJoueurs[i]} : ${listeJoueurs[nomsJoueurs[i]]}\n\n`;
+        if (botReply.length + ajout.length > 2000) {
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+            botReply = "";
+        }
+        if (ajout.length > 2000) {
+            outils.envoyerMessage(client, message, ajout.slice(0,2000), envoyerPM, idMJ);
+        }
+        else {
+            botReply += ajout;
+        }
+    }
+    console.log(botReply);
+    outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+}
+
+exports.listeJoueurs = function(nombreHeures) {
+    let jets = JSON.parse(fs.readFileSync(__dirname + '/../Données/stats.json', 'utf-8'))
+    let listeJoueurs = {};
+
+    for (let [key, value] of Object.entries(jets)) {
+		nomJoueur = `${key}`;
+        listeLancers = [];
+		for (roll of value) {
+            if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))) {
+				texte = ` ${roll["lancer"]}`;
+				texte += roll["type"] == "1d100" ? "" : ` (${roll["type"]})`;
+                listeLancers.push(texte);
+            }
+		}
+        if (listeLancers.length > 0) {
+            listeJoueurs[nomJoueur] = listeLancers;
+        }
+	}
+
+    return listeJoueurs;
 }
