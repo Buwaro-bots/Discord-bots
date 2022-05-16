@@ -90,6 +90,30 @@ client.on("messageCreate", (message) => {
                 return;
             }
 
+            else if (command === "everyone" && args.length > 0) {
+                let commande = args.shift();
+                if (mesCommandes.hasOwnProperty(commande)) {
+                    message.react("🎲");
+                    let dummyMessage = message;
+
+                    const collector = message.createReactionCollector({
+                        time: 400 * 1000
+                    });
+
+                    collector.on('collect', (reaction, user) => {
+                        if(!user.bot && reaction.emoji.name === "🎲") {
+                            collector.resetTimer({time: 400 * 1000});
+                            dummyMessage.author = user;
+                            mesCommandes[commande][commande](client, dummyMessage, args, envoyerPM, idMJ);
+                            reaction.users.remove(user);
+                        }
+                    });
+                    collector.on('end', collected => {
+                        message.reactions.removeAll();
+                    });
+                }
+            }
+
             else if (command === "isekai") {
                 mesCommandes.isekai.isekai(client, message, args, envoyerPM, idMJ, null);
             }
