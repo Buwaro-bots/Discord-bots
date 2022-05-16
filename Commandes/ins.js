@@ -160,7 +160,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
         i -= 1; // Je fais ça en attendant d'avoir une solution
 
         if ((paramJoueurs.ins.listeAutoVerifications.includes(message.author.id) && args.length >= 1) || (args[0] === "check" && args.length >= 2) || (args[0] === "verif" && args.length >= 3)) { // On regarde si on demande une modifications du nombre de jets de colonnes.
-            outils.verifierNaN(args[args.length-1]);
+            outils.verifierNaN([args[args.length-1]]);
             let rowBonus = -parseInt(args[args.length-1]);
             i += rowBonus;
             i = Math.max(Math.min(i, INSdata.tum.length -1), 0); // On vérifie qu'après les modifs de colonnes, qu'on ne sorte pas du tableau.

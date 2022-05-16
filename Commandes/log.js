@@ -1,6 +1,6 @@
+const fs = require('fs');
 const outils = require("./outils.js");
 const config = require('../config.json');
-const fs = require('fs');
 
 exports.log = function(client, message, args, envoyerPM, idMJ) {
     // Si l'argument est effacer et que l'utilisateur est l'admin, on effectue une copie de sauvegarde en mettant la date du jour, puis on efface les logs
