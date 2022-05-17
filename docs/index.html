@@ -34,6 +34,25 @@
         </div>
 
         <div class="accordion-item">
+            <h2 class="accordion-header" id="everyone">
+                <button id="button-everyone" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-everyone" aria-expanded="false" aria-controls="collapse-everyone">
+                    Lancers collectifs
+                </button>
+            </h2>
+            <div id="collapse-everyone" class="accordion-collapse collapse" aria-labelledby="everyone" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>Dans le cas où tout les joueurs ont besoin de faire le même jet, il est possible de faire <span class="commande">;everyone</span> <span class="parametre">type du jet</span> <span class="variable">(le lancer)</span>, une emote apparaîtra en dessous du message, et cliquer dessus lancera les dés demandés. Cette commande fonctionne avec quasiment toutes les commandes du bot, y compris les jets d'INS et isekai.</p>
+                    <img src="images/everyone_1.png" class="discord-exemples" alt=";everyone roll 1d100">
+                    <img src="images/everyone_2.png" class="discord-exemples" alt=";everyone ins"><br/><br/>
+                    <br/>
+                    <p>Note : Pour Donjons et Groudon, étant donné que le nombre de faces dépend de la stat, à la place, il faut faire <span class="commande">;dng</span> et cliquer sur l'un des nombres en réaction.</p>
+                    <img src="images/everyone_3.png" class="discord-exemples" alt=";dng">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
             <h2 class="accordion-header" id="dng">
                 <button id="button-dng" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng" aria-expanded="false" aria-controls="collapse-dng">
                     Donjons et Groudon
@@ -56,9 +75,29 @@
                                         Si un échec a un petit lancer de critique, il peut devenir une réussite si vous avez un avantage. Avec un avantage, un échec devient une réussite si le lancer de critique est entre 1 et 4. L'inverse est aussi vraie pour les petites réussites. Si il y a un avantage et un désavantage, les deux s'annulent mutuellement. Il est possible de cumuler plusieurs avantages, mais ils doivent provenir de sources différentes. Lors du lancer il n'est pas possible d'avoir plus de 3 avantages ou 3 désavantages.<br/>
                                         <br/>
                                         Pour faire un lancer, la commande est <span class="commande">;dng</span> <span class="variable">votre stat</span>. Si un effet vous demande de lancer deux jets de caractéristique, la commande est <span class="commande">;dng</span> <span class="variable">votre stat</span> <span class="parametre">2</span>.<br/>
-                                        <img src="images/dng_1.png" class="discord-exemples" alt=";dng 3 devient &rarr sur 1d20 a lancé 16.">
-                                        <img src="images/dng_2.png" class="discord-exemples" alt=";dng 3 2 devient &rarr sur 1d20 a lancé 16.">
+                                        <img src="images/dng_1.png" class="discord-exemples" alt=";dng 3 devient &rarr avec une stat de 3, a lancé [2] [14].">
+                                        <img src="images/dng_2.png" class="discord-exemples" alt=";dng 3 2 devient &rarr avec une stat de 3, a lancé [5, 3] [11].">
                                     </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="dng-6">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-6" aria-expanded="false" aria-controls="collapse-dng-1">
+                                    Vérification automatique
+                                </button>
+                            </h2>
+                            <div id="collapse-dng-6" class="accordion-collapse collapse" aria-labelledby="dng-6" data-bs-parent="#accordion-dng">
+                                <div class="accordion-body">
+                                    <p>Si vous avez des difficultés à appréhender les résultats des jets, vous pouvez faire <span class="commande">;dng</span> <span class="parametre">autocheck</span>. Cela indiquera à chaque lancer si le lancer est une réussite ou non.</p>
+                                        <img src="images/dng_7a.png" class="discord-exemples" alt=";dng 3 devient &rarr xxx.">
+                                        <img src="images/dng_7b.png" class="discord-exemples" alt=";dng 3 devient &rarr xxx."><br/><br/>
+                                    <p>Cependant, avant de lancer, vous devez vous assurer de savoir si le degré de difficulté est bien de 3, sinon vous devez rajouter après la stat <span class="parametre">dd</span>&thinsp;<span class="variable">niveau de difficulté</span>.<br/>
+                                    Si vous bénéficiez d'un ou plusieurs avantages, il faut rajouter <span class="parametre">+</span>&thinsp;<span class="variable">nombre d'avantages</span>, même chose si vous avez des désavantages, mais avec un <span class="parametre">-</span> à la place du <span class="parametre">+</span>.</p>
+                                    <img src="images/dng_8a.png" class="discord-exemples" alt=";dng 3 xxx devient &rarr xxx.">
+                                    <img src="images/dng_8b.png" class="discord-exemples" alt=";dng 3 xxx devient &rarr xxx.">
+                                    <img src="images/dng_8c.png" class="discord-exemples" alt=";dng 3 xxx devient &rarr xxx.">
                                 </div>
                             </div>
                         </div>
@@ -114,7 +153,8 @@
                                     <img src="images/dng_6.png" class="discord-exemples" alt=";dng trait Gecko affiche les détails du trait Gecko.">
                                     <br/><br/>
                                     <p>Ces deux commandes bénéficient d'une correction orthographique, donc n'ayez pas peur de vous tromper ou d'abréger les traits trop longs. Si vous avez écrit le nom correctement mais que le bot ne renvoit pas le bon pokémon, il est fort probable qu'il ne soit pas dans le pokédex de DnG.<br/>
-                                    <span class="commande">;dng</span> <span class="parametre">trait</span> permet aussi d'afficher la liste complète des traits.</p>
+                                    <span class="commande">;dng</span> <span class="parametre">trait</span> permet aussi d'afficher la liste complète des traits.<br/>
+                                    <span class="commande">;dng</span> permet de tirer un pokémon de base au hasard si vous ne savez pas qui prendre.</p>
                                 </div>
                             </div>
                         </div>
@@ -243,12 +283,16 @@
                     <img src="images/autres_3.png" class="discord-exemples" alt=";repeat 3 dng 4 envoit 3 messages de lancers avec dng et une stat de 4."><br/><br/>
 
                     <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span>.  Pour restreindre la commande à une génération et/ou un type, il faut faire  <span class="commande">;isekai</span> <span class="variable">type et/ou génération</span>. (abrégé par <span class="variable">gen</span> et sans espace avant le numéro)</p>
+                    <p>Si le pokémon lancé ne vous plait pas, vous pouvez en tirer un autre en cliquant sur l'emote dé en dessous de la réponse.</p>
                     <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."><br/><br/>
 
                     <p>Il est possible de tirer des cartes de tarot avec <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
                     <img src="images/autres_3.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
 
-                    <p><span class="commande">;ramoloss</span> fait quelque chose, peut-etre.</p>
+                    <p>
+                        <span class="commande">;log</span> <span class="variable">nombre d'heures</span> affiche les derniers jets effectués. Attention, cette commande peut éventuellement envoyer plusieurs messages si beaucoup de lancers ont été faits.<br/>
+                        <span class="commande">;ramoloss</span> fait quelque chose, peut-etre.
+                    </p>
 
                 </div>
             </div>
@@ -261,6 +305,10 @@
             </h2>
             <div id="collapse-patch" class="accordion-collapse collapse" aria-labelledby="patch" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
+                    <span class="commande">16 Mai</span> : <span class="variable">Isekai</span> : Retrait de la commande disable pour simplifier la commande, les relances étant plus pratique.<br/>
+                    <span class="commande">13 Mai</span> : <span class="variable">Logs</span> : Commande ;log pour affiche les derniers jets.<br/>
+                    <span class="commande">10 Mai</span> : <span class="variable">DnG</span> : Possibilité de faire un roll en rajoutant une emote.<br/>
+                    <span class="commande">10 Mai</span> : <span class="variable">Isekai</span> : Possibilité de faire un reroll en rajoutant une emote.<br/>
                     <span class="commande">25 Avril</span> : <span class="variable">INS</span> : Simplification de la commande pour indiquer des colonnes de bonus.<br/>
                     <span class="commande">22 Avril</span> : <span class="variable">Rolls</span> : Possibilité de faire n'importe quel lancer en faisant une commande genre ;d15.<br/>
                     <span class="commande">17 Avril</span> : <span class="variable">DnG</span> : Ajout d'un d9 pour départager les jets d'initiatives.<br/>

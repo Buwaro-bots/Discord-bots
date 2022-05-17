@@ -26,6 +26,9 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
     nombreHeures = args.length > 0 ? parseInt(args[0]) : 4;
     outils.verifierNaN([nombreHeures]);
 
+    // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
+    nombreHeures = message.author.id === config.admin ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
+
     let listeJoueurs = this.listeJoueurs(nombreHeures);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort();
     let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\n\n`;
