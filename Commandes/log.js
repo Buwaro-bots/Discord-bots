@@ -49,7 +49,8 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 }
 
-exports.listeJoueurs = function(nombreHeures) {
+// Pour l'instant je ne rajoute pas de fonctionalité pour récupérer les PM.
+exports.listeJoueurs = function(nombreHeures, recupererPM = false) {
     let jets = JSON.parse(fs.readFileSync(__dirname + '/../Données/stats.json', 'utf-8'))
     let listeJoueurs = {};
 
@@ -57,7 +58,8 @@ exports.listeJoueurs = function(nombreHeures) {
 		nomJoueur = `${key}`;
         listeLancers = [];
 		for (roll of value) {
-            if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))) {
+            if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
+            && (recupererPM || roll.estPM === false)) {
 				texte = ` ${roll["lancer"]}`;
 				texte += roll["type"] == "1d100" ? "" : ` (${roll["type"]})`;
                 listeLancers.push(texte);

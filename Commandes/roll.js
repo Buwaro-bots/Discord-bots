@@ -28,7 +28,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ) {
         let resultat = outils.randomNumber(lancer) ;
         let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${resultat}**.`;
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-        outils.logLancer(message.author.username, resultat, `1d${lancer}`);
+        outils.logLancer(message.author.username, resultat, `1d${lancer}`, envoyerPM);
     }
 
     else {
@@ -38,7 +38,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ) {
         let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
         if (botReply.length > 2000) throw ("Réponse trop longue");
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-        outils.logLancer(message.author.username, `${reponseLancers}= ${reponseSomme}` , reponseCommandes);
+        outils.logLancer(message.author.username, `${reponseLancers}= ${reponseSomme}` , reponseCommandes, envoyerPM);
         return;
     }
 };

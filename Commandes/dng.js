@@ -138,7 +138,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         let lancerAAfficher = `[${listeLancers[0]} + ${listeLancers[1]}] + [${listeLancers[2] - 1}]`
         let botReply = `${message.author.toString()} Avec des stats de ${stat1} et ${stat2}, vous avez fait ${lancerAAfficher} ce qui donne : **${reponseSomme}**`;
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-        outils.logLancer(message.author.username, `${lancerAAfficher} = ${reponseSomme}`, `dng ini ${stat1} + ${stat2}`);
+        outils.logLancer(message.author.username, `${lancerAAfficher} = ${reponseSomme}`, `dng ini ${stat1} + ${stat2}`, envoyerPM);
         return;
     }
     if (args[0] === "pc") {
@@ -238,7 +238,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
 
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-    outils.logLancer(message.author.username, `[${lancerCaracteristique}] [${lancerCritique}]`, `dng ${stat}`);
+    outils.logLancer(message.author.username, `[${lancerCaracteristique}] [${lancerCritique}]`, `dng ${stat}`, envoyerPM);
 
 
 }

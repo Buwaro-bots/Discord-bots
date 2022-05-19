@@ -196,5 +196,5 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 
-    outils.logLancer(message.author.username, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, "INS");
+    outils.logLancer(message.author.username, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, "INS", envoyerPM);
 }
