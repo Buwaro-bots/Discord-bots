@@ -8,7 +8,9 @@ let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "
 "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
 "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Non-pokemon", "Digimon"]
 
-exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, timerSpoiler = 4500) {
+exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, nombreReroll = 0) {
+
+    let timerSpoiler = 4000 - 800 * Math.sqrt(nombreReroll);
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
@@ -20,7 +22,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
     }
 
     let pokemonChoisi = this.tiragePokemon(args, message.author.id);
-    let rollShiny = outils.randomNumber(128);
+    let rollShiny = outils.randomNumber(100 * 1.5 ** nombreReroll);
     let estShiny = "";
     let suffixe = "";
 
@@ -63,11 +65,11 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
             collector.on('collect', (reaction, user) => {
                 if(user.id === message.author.id && reaction.emoji.name === "🎲") {
                     collector.resetTimer({time: 40 * 1000});
-                    timerSpoiler = timerSpoiler * 0.75 + 600; // Formule pour accélérer les tirages, mais pas trop
-                    module.exports.isekai(client, message, args, envoyerPM, idMJ, msg, timerSpoiler);
+                    nombreReroll += 1;
+                    module.exports.isekai(client, message, args, envoyerPM, idMJ, msg, nombreReroll);
                     setTimeout(function() {
                         reaction.users.remove(user);
-                    }, timerSpoiler + 250);
+                    }, 4200 - 800 * Math.sqrt(nombreReroll));
                 }
             });
             collector.on('end', collected => {
@@ -93,7 +95,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
     return;
 };
 
-exports.tiragePokemon = function(listeTagsDemandes, idUtilisateur = null) {
+exports.tiragePokemon = function(listeTagsDemandes) {
 
     let pokemonChoisi = null;
     let listePokemon = pokedex;
