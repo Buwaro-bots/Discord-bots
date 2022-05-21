@@ -6,7 +6,7 @@ const fs = require('fs');
 // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
 let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
 "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
-"Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Non-pokemon", "Digimon"]
+"Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon"]
 
 exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, nombreReroll = 0) {
 
@@ -21,7 +21,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         args = ["Nouveau"];
     }
 
-    let pokemonChoisi = this.tiragePokemon(args, message.author.id);
+    let pokemonChoisi = this.tiragePokemon(args, nombreReroll);
     let rollShiny = outils.randomNumber(100 * 1.5 ** nombreReroll);
     let estShiny = "";
     let suffixe = "";
@@ -95,7 +95,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
     return;
 };
 
-exports.tiragePokemon = function(listeTagsDemandes) {
+exports.tiragePokemon = function(listeTagsDemandes, nombreReroll) {
 
     let pokemonChoisi = null;
     let listePokemon = pokedex;
@@ -129,7 +129,8 @@ exports.tiragePokemon = function(listeTagsDemandes) {
     const tailleListe = listePokemon.length;
     while (pokemonChoisi === null) {
         nouveauPokemon = tailleListe === 1? listePokemon[0] : listePokemon[outils.randomNumber(tailleListe)-1];
-        if (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()) {
+        if ( (!("probabilite" in nouveauPokemon) || nouveauPokemon.probabilite > Math.random()) && // Le pokémon est pris s'il n'a pas de probabilité ou si il réussi le roll,
+        !(nouveauPokemon.tags.includes("Légendaire") && Math.random() > 0.9 ** (nombreReroll ** 2) ) ) { // s'il est un légendaire un autre roll doit être fait en fonction du nombre de rerolls
             pokemonChoisi = nouveauPokemon;
         }    
         else {
