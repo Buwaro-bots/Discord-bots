@@ -93,7 +93,7 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
             outils.envoyerMessage(client, botReply, message);
-            client.channels.cache.get(config.canalLogs).send(botReply);
+            if (client !== null) client.channels.cache.get(config.canalLogs).send(botReply);
         }
 
         let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
@@ -113,9 +113,9 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
 
         let lancer = outils.randomNumber(6) * 10 +  outils.randomNumber(6);
         let resultat = INSdata.gacha[lancer];
+        let botReply = `${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ||${resultat}||`;
 
-        console.log(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
-        message.channel.send(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ||${resultat}||`)
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
         .then((msg)=> {
             setTimeout(function() {
                 msg.edit(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);

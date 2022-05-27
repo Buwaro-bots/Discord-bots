@@ -27,6 +27,7 @@ module.exports = {
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
     envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
+        if (client === null) {console.log('\x1b[32m%s\x1b[0m', botReply); return;}
         console.log(botReply.substring(0, 100));
         if (envoyerPM) {
             if (idMJ != null) {
@@ -125,7 +126,7 @@ module.exports = {
     },
 
     gestionAutocheck : function(mode, idJoueur) {
-        let paramJoueurs = require('../Données/param-joueurs.json');
+        let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'));
 
         let botReply = "";
         if (paramJoueurs[mode].listeAutoVerifications.includes(idJoueur)) {
