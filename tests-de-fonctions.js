@@ -132,7 +132,7 @@ else {
 				commentaire : "Affiche les données de Goupix d'Alola"
 			},
 			{
-				args : ["pokemon", "aaaaaaaaaaaaaaaa"],
+				args : ["pokemon", "bbbbbbbbbbbbbbbbbb"],
 				commentaire : "Renvoie une erreur"
 			},
 			{

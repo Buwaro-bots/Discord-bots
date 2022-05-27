@@ -245,7 +245,6 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
 
 
 exports.verificationReussite = function(lancerCaracteristique, lancerCritique, args) {
-    console.log(lancerCaracteristique);
     let dd = 3;
     let avantage = 0;
     let avantage_mis = false;

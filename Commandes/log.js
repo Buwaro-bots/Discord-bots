@@ -39,13 +39,12 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
             botReply = "";
         }
         if (ajout.length > 2000) {
-            outils.envoyerMessage(client, message, ajout.slice(0,2000), envoyerPM, idMJ);
+            outils.envoyerMessage(client, ajout.slice(0,2000), message, envoyerPM, idMJ);
         }
         else {
             botReply += ajout;
         }
     }
-    console.log(botReply);
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 }
 

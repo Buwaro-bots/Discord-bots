@@ -193,25 +193,9 @@ client.on("messageCreate", (message) => {
                 cartesTirées = cartesTirées.join(",  ");
 
                 outils.envoyerMessage(client, `${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
-                outils.logLancer(message.author.username, cartesTirées, "tarot");
+                outils.logLancer(message.author.username, cartesTirées, "tarot", envoyerPM);
             }
 
-            else if (command === "test") { 
-                mesCommandes.roll.roll(client, message, ["100"], envoyerPM, idMJ, commandBody);
-
-                const filter = (reaction, user) => {
-                    return true;//reaction.emoji.name === '👍' && user.id === message.author.id;
-                };
-                const collector = message.createReactionCollector({ filter, time: 15000 });
-                
-                collector.on('collect', (reaction, user) => {
-                    console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-                });
-                
-                collector.on('end', collected => {
-                    console.log(`Collected ${collected.size} items`);
-                });
-            }
 
             else if (command === "fermer" && message.author.id === config.admin) {
                 console.log("ok");
