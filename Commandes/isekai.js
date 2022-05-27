@@ -2,26 +2,34 @@ const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
 const disable = require('../Données/disable-isekai.json');
 const fs = require('fs');
+let historique = [];
 
 // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
 let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
 "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
 "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon"]
 
-exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, nombreReroll = 0) {
+exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, listePokemonsDejaTires = []) {
 
+    let nombreReroll = listePokemonsDejaTires.length;
     let timerSpoiler = 4000 - 800 * Math.sqrt(nombreReroll);
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
     let tauxDeNouveau = 2;
     let rollNouveau = outils.randomNumber(100);
+    let pokemonChoisi;
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
-        args = ["Nouveau"];
+        pokemonChoisi = this.tiragePokemon(["Nouveau"], listePokemonsDejaTires);
+    }
+    else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 3) || nombreReroll > 15 )  {
+        pokemonChoisi = this.tiragePokemon(["Digimon"], listePokemonsDejaTires);
+    }
+    else {
+        pokemonChoisi = this.tiragePokemon(args, listePokemonsDejaTires);
     }
 
-    let pokemonChoisi = this.tiragePokemon(args, nombreReroll);
     let rollShiny = outils.randomNumber(100 * 1.5 ** nombreReroll);
     let estShiny = "";
     let suffixe = "";
@@ -44,6 +52,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
     }
     process.stdout.write(`${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => `);
     outils.logLancer(message.author.username, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
+    listePokemonsDejaTires.push(pokemonChoisi);
 
     if (messageReroll === null) {
         outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message, envoyerPM, idMJ)
@@ -57,7 +66,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
 
                 }
 
-                msg.react("🎲");
+                msg.react("🎲").then(() => msg.react("🖼️"));
             }, timerSpoiler)
             const collector = msg.createReactionCollector({
                 time: 40 * 1000
@@ -66,10 +75,25 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                 if(user.id === message.author.id && reaction.emoji.name === "🎲") {
                     collector.resetTimer({time: 40 * 1000});
                     nombreReroll += 1;
-                    module.exports.isekai(client, message, args, envoyerPM, idMJ, msg, nombreReroll);
-                    setTimeout(function() {
-                        reaction.users.remove(user);
-                    }, 4200 - 800 * Math.sqrt(nombreReroll));
+                    let dernierPokemon = module.exports.isekai(client, message, args, envoyerPM, idMJ, msg, listePokemonsDejaTires);
+                    if ( !(dernierPokemon.tags.includes("Digimon")) ) {
+                        setTimeout(function() {
+                            reaction.users.remove(user);
+                        }, 4200 - 800 * Math.sqrt(nombreReroll));
+                    }
+                    else {
+                        collector.resetTimer({time: 4200 - 800 * Math.sqrt(nombreReroll)});
+                    }
+                }
+                else if (user.id === message.author.id && reaction.emoji.name === "🖼️") {
+                    reaction.users.remove(user);
+
+                    let dernierPokemon = listePokemonsDejaTires[listePokemonsDejaTires.length - 1];
+                    let dernierPokemonNumero = outils.pad(dernierPokemon.numero, 3);
+                    if (dernierPokemon.hasOwnProperty("numeroForme")) { dernierPokemonNumero += "-" + dernierPokemon.numeroForme.slice(dernierPokemon.numeroForme.length -1);}
+
+                    let messageEdite = `${msg.content} (https://www.serebii.net/pokedex-swsh/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
+                    msg.edit(messageEdite);
                 }
             });
             collector.on('end', collected => {
@@ -92,13 +116,14 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
             }, timerSpoiler)
         });
     }
-    return;
+    return pokemonChoisi;
 };
 
-exports.tiragePokemon = function(listeTagsDemandes, nombreReroll) {
+exports.tiragePokemon = function(listeTagsDemandes, listePokemonsDejaTires = []) {
 
     let pokemonChoisi = null;
     let listePokemon = pokedex;
+    let nombreReroll = listePokemonsDejaTires.length;
 
     if (listeTagsDemandes.length > 0) { // Si l'utilisateur mets un tag, on recherche les pokémons avec ses tags
         let tagsEnvoye = [];
@@ -114,6 +139,7 @@ exports.tiragePokemon = function(listeTagsDemandes, nombreReroll) {
                     valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
                 }
             }
+            if (listePokemonsDejaTires.includes(pokedex[i])) {valide = false;}
             if (valide) {nouvelleListe.push(pokedex[i]);}
         }
 
@@ -122,6 +148,17 @@ exports.tiragePokemon = function(listeTagsDemandes, nombreReroll) {
             throw("Aucun pokémon avec ses tags");
         }
         
+        listePokemon = nouvelleListe;
+    }
+    else {
+        let nouvelleListe = [];
+        let pokemonsARetirer = listePokemonsDejaTires.concat(historique);
+        for (let i = 0; i < pokedex.length; i++) {
+            if ( !(pokemonsARetirer.includes(pokedex[i]))) {
+                nouvelleListe.push(pokedex[i]);
+            }
+        }
+
         listePokemon = nouvelleListe;
     }
 
@@ -137,6 +174,9 @@ exports.tiragePokemon = function(listeTagsDemandes, nombreReroll) {
             process.stdout.write(`[${nouveauPokemon.hasOwnProperty("nomForme") ? nouveauPokemon.nomForme : nouveauPokemon.nom }]`);
         }
     }
+
+    historique.push(pokemonChoisi);
+    if (historique.length > 50) historique.shift();
 
     return pokemonChoisi;
 };
