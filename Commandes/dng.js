@@ -234,11 +234,19 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
 
     let botReply = `${message.author.toString()} avec une stat de ${stat}, a lancé [${lancerCaracteristique}] [${lancerCritique}]. ${alerteStatLimite}`;
 
-    botReply += paramJoueurs.dng.listeAutoVerifications.includes(message.author.id) ? this.verificationReussite(meilleurLancer, lancerCritique, args) : "";
+    let message_reussite;
+    let estReussite = null;
+    if (paramJoueurs.dng.listeAutoVerifications.includes(message.author.id)) {
+        [message_reussite, estReussite] = this.verificationReussite(meilleurLancer, lancerCritique, args);
+        botReply += message_reussite;
+    }
+
+    
+    let affichageLancerDemande = "dng " + args.toString().replace(",", " ");
 
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-    outils.logLancer(message.author.username, `[${lancerCaracteristique}] [${lancerCritique}]`, `dng ${stat}`, envoyerPM);
+    outils.logLancer(message.author.username, `[${lancerCaracteristique}] [${lancerCritique}]`, affichageLancerDemande, envoyerPM, estReussite);
 
 
 }
@@ -248,6 +256,7 @@ exports.verificationReussite = function(lancerCaracteristique, lancerCritique, a
     let dd = 3;
     let avantage = 0;
     let avantage_mis = false;
+    let estReussite;
 
     for (let i = 0; i < args.length; i++) { // On regarde la liste des paramètres données, on peut les mettre dans n'importe quel ordre car les trois ont leur propre nomenclature.
         if (args[i][0] === "+" || args[i][0] === "-") { // Si ça commence par + ou -, c'est des avantages / désavantages
@@ -267,13 +276,15 @@ exports.verificationReussite = function(lancerCaracteristique, lancerCritique, a
 
     if ( (lancerCaracteristique > dd && lancerCritique > avantage * -4) || lancerCritique <= avantage * 4 ) {
         message_reussite += ", c'est une réussite";
+        estReussite = true;
     }
     else {
         message_reussite += ", c'est un échec";
         message_reussite += ( lancerCaracteristique <= dd && lancerCritique <= 12 && lancerCritique <= (avantage+1) * 4) || ( lancerCaracteristique > dd && lancerCritique > (avantage + 1) * -4 ) ? " *(sauf avec un avantage supplémentaire)*" : "";
+        estReussite = false;
     }
     message_reussite += lancerCritique >= 19 ? " **critique** !" : ".";
 
-    return message_reussite;
+    return [message_reussite, estReussite];
     
 }

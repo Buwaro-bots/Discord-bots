@@ -58,7 +58,7 @@ module.exports = {
         return [args, envoyerPM, null];
     },
 
-    logLancer: function(auteur, lancer, typeLancer, estPM = false) {
+    logLancer: function(auteur, lancer, typeLancer, estPM = false, estReussite = null) {
         if (!(auteur in statsLancers)) { // Si le lancer n'existait pas dans la base, on le rajoute
             statsLancers[auteur] = [];
         }
@@ -71,7 +71,7 @@ module.exports = {
         dateHeure = new Date();
         dateHeure = pad(dateHeure.getDate()) + '/' + pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + pad(dateHeure.getHours()) + ':' + pad(dateHeure.getMinutes()) + ':' + pad(dateHeure.getSeconds());
 
-        statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM});
+        statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM, "estReussite": estReussite});
     
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/stats.json', writer);

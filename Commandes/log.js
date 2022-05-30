@@ -25,11 +25,11 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
 
     nombreHeures = args.length > 0 ? parseInt(args[0]) : 4;
     outils.verifierNaN([nombreHeures]);
-
+    let estCouleurs = args.includes("couleur");
     // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
     nombreHeures = message.author.id === config.admin ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
 
-    let listeJoueurs = this.listeJoueurs(nombreHeures);
+    let listeJoueurs = this.listeJoueurs(nombreHeures, estCouleurs);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort();
     let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\n\n`;
     for (let i = 0; i < nomsJoueurs.length; i++) {
@@ -46,26 +46,62 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
         }
     }
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+    console.log("\x1b[0;37m");
 }
 
 // Pour l'instant je ne rajoute pas de fonctionalité pour récupérer les PM.
-exports.listeJoueurs = function(nombreHeures, recupererPM = false) {
+exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM = false) {
     let jets = JSON.parse(fs.readFileSync(__dirname + '/../Données/stats.json', 'utf-8'))
     let listeJoueurs = {};
 
     for (let [key, value] of Object.entries(jets)) {
-		nomJoueur = `${key}`;
-        listeLancers = [];
-		for (roll of value) {
-            if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
-            && (recupererPM || roll.estPM === false)) {
-				texte = ` ${roll["lancer"]}`;
-				texte += roll["type"] == "1d100" ? "" : ` (${roll["type"]})`;
-                listeLancers.push(texte);
+        if (estCouleurs) {
+            let nomJoueur = `\`\`\`ansi\r\n\u001b[0;34m${key}\u001b[0;37m`;
+            let listeLancers = "";
+            for (roll of value) {
+                if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
+                && (recupererPM || roll.estPM === false)) {
+                    if (roll.estReussite === null) {
+                        let texte = `${roll["lancer"]}`;
+                        texte += roll["type"] == "1d100" ? ", " : ` \u001b[0;33m(${roll["type"]})\u001b[0;37m, `;
+                        listeLancers += texte;
+                    }
+                    else if (roll.estReussite) {
+                        let texte = `\u001b[0;32m${roll["lancer"]}`;
+                        texte += roll["type"] == "1d100" ? "\u001b[0;37m, " : ` (${roll["type"]})\u001b[0;37m, `;
+                        listeLancers += texte;
+                    }
+                    else {
+                        let texte = `\u001b[0;31m${roll["lancer"]}`;
+                        texte += roll["type"] == "1d100" ? "\u001b[0;37m, " : ` (${roll["type"]})\u001b[0;37m, `;
+                        listeLancers += texte;
+                    }
+                }
+	    	}
+            if (listeLancers.length > 0) {
+                let nombreCaracteres = Math.min(listeLancers.length-2, 1997);
+                listeLancers = listeLancers.slice(0,nombreCaracteres) + "\`\`\`";
+                listeJoueurs[nomJoueur] = listeLancers;
             }
-		}
-        if (listeLancers.length > 0) {
-            listeJoueurs[nomJoueur] = listeLancers;
+        }
+        else {
+            let nomJoueur = `${key}`;
+            let listeLancers = [];
+            for (roll of value) {
+                if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
+                && (recupererPM || roll.estPM === false)) {
+                    let etoiles = "";
+                    if ( !(roll.estReussite === null) ) {
+                        etoiles = roll.estReussite ? "**" : "*";
+                    }
+                    let texte = ` ${etoiles}${roll["lancer"]}${etoiles}`;
+                    texte += roll["type"] == "1d100" ? "" : ` (${roll["type"]})`;
+                    listeLancers.push(texte);
+                }
+            }
+            if (listeLancers.length > 0) {
+                listeJoueurs[nomJoueur] = listeLancers;
+            }
         }
 	}
 

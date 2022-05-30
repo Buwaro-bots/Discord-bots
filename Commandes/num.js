@@ -12,9 +12,8 @@ exports.num = function(client, message, args, envoyerPM, idMJ, commandBody) {
     let estReussite = lancer >= test * 3;
 
     botReply += estReussite ? "C'est une réussite" : "C'est un échec";
-    let affichageLancer = estReussite ? `**${lancer}**` : `*${lancer}*`;
     botReply += lancer === 1 || lancer === 20 ? " **critique !**" : ".";
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-    outils.logLancer(message.author.username, affichageLancer, `test de ${test}`, envoyerPM);
+    outils.logLancer(message.author.username, lancer, `test de ${test}`, envoyerPM, estReussite);
 }
