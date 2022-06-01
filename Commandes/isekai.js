@@ -51,7 +51,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
     }
     process.stdout.write(`${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => `);
-    outils.logLancer(message.author.username, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
+    outils.logLancer(message, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
     listePokemonsDejaTires.push(pokemonChoisi);
 
     if (messageReroll === null) {

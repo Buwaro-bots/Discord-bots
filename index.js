@@ -193,7 +193,7 @@ client.on("messageCreate", (message) => {
                 cartesTirées = cartesTirées.join(",  ");
 
                 outils.envoyerMessage(client, `${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
-                outils.logLancer(message.author.username, cartesTirées, "tarot", envoyerPM);
+                outils.logLancer(message, cartesTirées, "tarot", envoyerPM);
             }
 
 

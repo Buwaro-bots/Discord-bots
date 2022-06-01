@@ -31,7 +31,7 @@ module.exports = {
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
     envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
-        if (client === null) {console.log('\x1b[32m%s\x1b[0m', botReply); return;}
+        if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
         console.log(botReply.substring(0, 100));
         if (envoyerPM) {
             if (idMJ != null) {
@@ -58,7 +58,9 @@ module.exports = {
         return [args, envoyerPM, null];
     },
 
-    logLancer: function(auteur, lancer, typeLancer, estPM = false, estReussite = null) {
+    logLancer: function(message, lancer, typeLancer, estPM = false, estReussite = null) {
+        let auteur = message.author.username;
+        let canal = message.channelId;
         if (!(auteur in statsLancers)) { // Si le lancer n'existait pas dans la base, on le rajoute
             statsLancers[auteur] = [];
         }
@@ -71,7 +73,7 @@ module.exports = {
         dateHeure = new Date();
         dateHeure = pad(dateHeure.getDate()) + '/' + pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + pad(dateHeure.getHours()) + ':' + pad(dateHeure.getMinutes()) + ':' + pad(dateHeure.getSeconds());
 
-        statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM, "estReussite": estReussite});
+        statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM, "estReussite": estReussite, "canal": canal});
     
         let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/stats.json', writer);

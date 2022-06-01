@@ -23,7 +23,7 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
         return;
     }
 
-    nombreHeures = args.length > 0 ? parseInt(args[0]) : 4;
+    nombreHeures = args.length > 0 && !isNaN(args[0]) ? parseFloat(args[0]) : 4;
     outils.verifierNaN([nombreHeures]);
     let estCouleurs = args.includes("couleur");
     // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
@@ -31,9 +31,9 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
 
     let listeJoueurs = this.listeJoueurs(nombreHeures, estCouleurs);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort();
-    let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\n\n`;
+    let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\r\n\r\n`;
     for (let i = 0; i < nomsJoueurs.length; i++) {
-        let ajout = `${nomsJoueurs[i]} : ${listeJoueurs[nomsJoueurs[i]]}\n\n`;
+        let ajout = `${nomsJoueurs[i]} : ${listeJoueurs[nomsJoueurs[i]]}\r\n\r\n`;
         if (botReply.length + ajout.length > 2000) {
             outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
             botReply = "";
@@ -77,10 +77,12 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM =
                         listeLancers += texte;
                     }
                 }
+                if (listeLancers.length > 1600) break;
 	    	}
             if (listeLancers.length > 0) {
-                let nombreCaracteres = Math.min(listeLancers.length-2, 1997);
-                listeLancers = listeLancers.slice(0,nombreCaracteres) + "\`\`\`";
+                let nombreCaracteres = Math.min(listeLancers.length-2, 1990);
+                listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
+                console.log(listeLancers.length);
                 listeJoueurs[nomJoueur] = listeLancers;
             }
         }

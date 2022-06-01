@@ -15,5 +15,5 @@ exports.num = function(client, message, args, envoyerPM, idMJ, commandBody) {
     botReply += lancer === 1 || lancer === 20 ? " **critique !**" : ".";
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-    outils.logLancer(message.author.username, lancer, `test de ${test}`, envoyerPM, estReussite);
+    outils.logLancer(message, lancer, `test de ${test}`, envoyerPM, estReussite);
 }
