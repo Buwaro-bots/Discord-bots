@@ -23,13 +23,15 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
         return;
     }
 
-    nombreHeures = args.length > 0 && !isNaN(args[0]) ? parseFloat(args[0]) : 4;
+    nombreHeures = args.length > 0 && !isNaN(args[0]) ? parseFloat(args[0]) : 5;
     outils.verifierNaN([nombreHeures]);
     let estCouleurs = args.includes("couleur");
+    let canal = args.includes("canal") ? message.channelId : null;
+
     // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
     nombreHeures = message.author.id === config.admin ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
 
-    let listeJoueurs = this.listeJoueurs(nombreHeures, estCouleurs);
+    let listeJoueurs = this.listeJoueurs(nombreHeures, estCouleurs, canal);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort();
     let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\r\n\r\n`;
     let sautsDeLigne = estCouleurs ? "" : "\r\n\r\n";
@@ -52,7 +54,7 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
 }
 
 // Pour l'instant je ne rajoute pas de fonctionalité pour récupérer les PM.
-exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM = false) {
+exports.listeJoueurs = function(nombreHeures, estCouleurs = false, canal = null, recupererPM = false) {
     let jets = JSON.parse(fs.readFileSync(__dirname + '/../Données/stats.json', 'utf-8'))
     let listeJoueurs = {};
 
@@ -63,7 +65,8 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM =
             let numeroPartie = 1;
             for (roll of value) {
                 if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
-                && (recupererPM || roll.estPM === false)) {
+                && (recupererPM || roll.estPM === false)
+                && (canal === null || roll.canal === canal) ){
                     if (roll.estReussite === null) {
                         let texte = `${roll["lancer"]}`;
                         texte += roll["type"] == "1d100" ? ", " : ` \u001b[0;33m(${roll["type"]})\u001b[0;37m, `;
@@ -100,7 +103,8 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM =
             let listeLancers = [];
             for (roll of value) {
                 if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
-                && (recupererPM || roll.estPM === false)) {
+                && (recupererPM || roll.estPM === false)
+                && (canal === null || roll.canal === canal) ){
                     let etoiles = "";
                     if ( !(roll.estReussite === null) ) {
                         etoiles = roll.estReussite ? "**" : "*";
