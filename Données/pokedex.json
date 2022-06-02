@@ -958,9 +958,14 @@
     {"numero" : "904" , "nom" : "Qwilpik", "tags" : ["Ténèbres", "Poison", "Gen8", "PasDnG", "Nouveau"]},
     {"numero" : "905" , "nom" : "Amovénus", "tags" : ["Fée", "Vol", "Gen8", "PasDnG", "Légendaire", "Nouveau"]},
  
-    {"numero" : "906" , "nom" : "Poussacha", "tags" : ["Plante", "Gen9", "DnG", "PasDnG", "Base", "Starter", "Starter+", "Nouveau"] },
-    {"numero" : "909" , "nom" : "Chochodile", "tags" : ["Feu", "Gen9", "DnG", "PasDnG", "Base", "Starter", "Starter+", "Nouveau"] },
-    {"numero" : "912" , "nom" : "Coiffeton", "tags" : ["Eau", "Gen9", "DnG", "PasDnG", "Base", "Starter", "Starter+", "Nouveau"] },
+    {"numero" : "906" , "nom" : "Poussacha", "tags" : ["Plante", "Gen9", "DnG", "PasDnG", "Base", "Starter", "Starter+", "Nouveau"], "image" : ""},
+    {"numero" : "909" , "nom" : "Chochodile", "tags" : ["Feu", "Gen9", "DnG", "PasDnG", "Base", "Starter", "Starter+", "Nouveau"], "image" : "" },
+    {"numero" : "912" , "nom" : "Coiffeton", "tags" : ["Eau", "Gen9", "DnG", "PasDnG", "Base", "Starter", "Starter+", "Nouveau"], "image" : "" },
+    {"numero" : "9??" , "nom" : "Pohm", "tags" : ["Electrique", "Gen9", "DnG", "PasDnG", "Base", "Nouveau", "Spoiler"], "image" : "" },
+    {"numero" : "9??" , "nom" : "Gourmelet", "tags" : ["Normal", "Gen9", "DnG", "PasDnG", "Base", "Nouveau", "Spoiler"], "image" : "" },
+    {"numero" : "9??" , "nom" : "Olivini", "tags" : ["Normal", "Plante", "Gen9", "DnG", "PasDnG", "Base", "Nouveau", "Spoiler"], "image" : "" },
+    {"numero" : "9??" , "nom" : "Koraidon", "tags" : ["Inconnu", "Gen9", "DnG", "PasDnG", "Légendaire", "Nouveau", "Spoiler"], "probabilite" : 0.4, "image" : "" },
+    {"numero" : "9??" , "nom" : "Miraidon", "tags" : ["Inconnu", "Gen9", "DnG", "PasDnG", "Légendaire", "Nouveau", "Spoiler"], "probabilite" : 0.4, "image" : "" },
     
     {"numero" : "407" , "nom" : "Kranidos", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.10 , "numeroForme" : "/](" ,  "nomForme" : "Agumon" },
     {"numero" : "103" , "nom" : "Osselait", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.10 , "numeroForme" : "o|o" ,  "nomForme" : "Gabumon" },

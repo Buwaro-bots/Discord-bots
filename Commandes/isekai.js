@@ -1,6 +1,5 @@
 const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
-const disable = require('../Données/disable-isekai.json');
 const fs = require('fs');
 let historique = [];
 
@@ -61,9 +60,8 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                 if (pokemonChoisi["tags"].includes("Digimon")) {
                     msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
                 }
-                else {
+                else if ( !(pokemonChoisi["tags"].includes("Spoiler"))) {
                     msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-
                 }
 
                 msg.react("🎲").then(() => msg.react("🖼️"));
@@ -92,7 +90,18 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                     let dernierPokemonNumero = outils.pad(dernierPokemon.numero, 3);
                     if (dernierPokemon.hasOwnProperty("numeroForme")) { dernierPokemonNumero += "-" + dernierPokemon.numeroForme.slice(dernierPokemon.numeroForme.length -1);}
 
-                    let messageEdite = `${msg.content} (https://www.serebii.net/pokedex-swsh/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
+                    let messageEdite = msg.content;
+                    if (dernierPokemon.hasOwnProperty("image")) {
+                        if (dernierPokemon.tags.includes("Spoiler")) {
+                            messageEdite += ` ||${dernierPokemon.image}||`;
+                        }
+                        else {
+                            messageEdite += ` ${dernierPokemon.image}`;
+                        }
+                    }
+                    else {
+                        messageEdite += ` (https://www.serebii.net/pokedex-swsh/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`
+                    }
                     msg.edit(messageEdite);
                 }
             });
