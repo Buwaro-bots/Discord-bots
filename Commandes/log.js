@@ -32,8 +32,10 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
     let listeJoueurs = this.listeJoueurs(nombreHeures, estCouleurs);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort();
     let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\r\n\r\n`;
+    let sautsDeLigne = estCouleurs ? "" : "\r\n\r\n";
+
     for (let i = 0; i < nomsJoueurs.length; i++) {
-        let ajout = `${nomsJoueurs[i]} : ${listeJoueurs[nomsJoueurs[i]]}\r\n\r\n`;
+        let ajout = `${nomsJoueurs[i]} : ${listeJoueurs[nomsJoueurs[i]]}${sautsDeLigne}`;
         if (botReply.length + ajout.length > 2000) {
             outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
             botReply = "";
@@ -58,6 +60,7 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM =
         if (estCouleurs) {
             let nomJoueur = `\`\`\`ansi\r\n\u001b[0;34m${key}\u001b[0;37m`;
             let listeLancers = "";
+            let numeroPartie = 1;
             for (roll of value) {
                 if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
                 && (recupererPM || roll.estPM === false)) {
@@ -77,12 +80,18 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, recupererPM =
                         listeLancers += texte;
                     }
                 }
-                if (listeLancers.length > 1600) break;
+                if (listeLancers.length > 980) {
+                    let nombreCaracteres = Math.min(listeLancers.length-2, 998);
+                    listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
+                    listeJoueurs[nomJoueur] = listeLancers;
+                    numeroPartie += 1;
+                    nomJoueur = `\`\`\`ansi\r\n\u001b[0;34m${key} \u001b[0;36m(partie ${numeroPartie})\u001b[0;37m`;
+                    listeLancers = "";
+                }
 	    	}
             if (listeLancers.length > 0) {
-                let nombreCaracteres = Math.min(listeLancers.length-2, 1990);
+                let nombreCaracteres = Math.min(listeLancers.length-2, 998);
                 listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
-                console.log(listeLancers.length);
                 listeJoueurs[nomJoueur] = listeLancers;
             }
         }

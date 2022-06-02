@@ -249,7 +249,7 @@ else {
 		],
 		"log" : [
 			{
-				args : ["1"],
+				args : ["1", "couleur"],
 				commentaire : "Affichage des logs"
 			},
 		]
