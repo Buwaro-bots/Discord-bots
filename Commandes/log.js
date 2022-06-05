@@ -83,8 +83,8 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, canal = null,
                         listeLancers += texte;
                     }
                 }
-                if (listeLancers.length > 980) {
-                    let nombreCaracteres = Math.min(listeLancers.length-2, 998);
+                if (listeLancers.length > 950) {
+                    let nombreCaracteres = Math.min(listeLancers.length-2, 998 - 20 - key.length);
                     listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
                     listeJoueurs[nomJoueur] = listeLancers;
                     numeroPartie += 1;
