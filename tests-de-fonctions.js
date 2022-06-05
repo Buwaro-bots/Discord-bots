@@ -34,6 +34,10 @@ process.on('uncaughtException', function (exception) {
 
 if (process.argv.length > 2) {
 	let arguments = process.argv.slice(2);
+	if (arguments[0] == "admin") {
+		message = messageAdmin;
+		arguments.shift();
+	}
 	let commande = arguments.shift();
 	try{mesCommandes[commande][commande](null, message, arguments, false, false);}
 	catch(e){
