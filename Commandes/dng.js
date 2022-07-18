@@ -18,12 +18,12 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         strings["DnG-Help"] +
         " \r\n" +
         espaces + "**Commandes**\r\n" +
-        "**;dng table** pour la table des types.\r\n" +
-        "**;dng trait** pour avoir la description complète d'un trait. **;dex *espèce*** permet de vous rappeler les traits que vous avez.\r\n" +
-        " \r\n" +
-        "**;dng *stat*** pour un jet normal, la stat doit normalement être entre 1 et 5.\r\n" +
+        "**;dng *stat*** pour un jet normal, la stat doit normalement être entre 1 et 5. (et **dd** *3* pour le dd, et +1/-1 pour les avantages)\r\n" +
         "**;dng ini *instinct* + *agilité*** pour un jet d'initiative.\r\n" +
-        "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée."
+        "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée." +
+        " \r\n" +
+        "**;dng table** pour la table des types.\r\n" +
+        "**;dng trait** pour avoir la description complète d'un trait. **;dex *espèce*** permet de vous rappeler les traits que vous avez.\r\n"
 
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         return;

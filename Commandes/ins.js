@@ -22,19 +22,11 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
             "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=ins>\r\n" +
             "**;ins** permet de faire un jet normal.\r\n" +
             ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +
-            ";ins **check** permet de savoir à partir de quelle stat le jet réussi. Il est possible de mentionner des colonnes de bonus ou de malus, par exemple **;ins check +3**.\r\n" +
             ";ins **gacha** pour faire un jet de gacha. (wow)\r\n" +
             "\r\n" +
             ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve, si de la mise en forme est utilisé il n'est pas nécéssaire d'échapper les \* avec des \\.\r\n" +
-            ";ins **message** ***lancer*** ***deletethis*** permet de supprimer le message. Note : ne pas mettre de message permet aussi de ne pas afficher le message par défaut.\r\n" +
-            ";ins **message** ***liste*** permet de voir la liste des messages, y compris les messages par défaut.\r\n" +
-            "\r\n" +
             ";ins **tum** affiche la table unique multiple.\r\n"+
-            ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"+
-            "\r\n"+
-            ";ins **cheat** ***lancer*** permet de forcer un jet, seulement utile pour vérifier un message.\r\n" +
-            ";ins **verif** ***stat*** permet de savoir si le jet réussi en précisant la stat, par example **;ins verif 2+**. Il est possible de préciser un bonus ou malus de colonne.\r\n" +
-            ";ins **opposition** :construction: ~~Ca serait vraiment utilisé en vrai ?~~"
+            ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"
             , message, envoyerPM
         )
         return;
