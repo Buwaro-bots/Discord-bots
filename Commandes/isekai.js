@@ -10,6 +10,49 @@ let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "
 
 exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, listePokemonsDejaTires = []) {
 
+    if (args.length > 0 && args[0] === "roll") {
+        args.shift();
+        let nombreLancers = parseInt(args.shift());
+        outils.verifierNaN([nombreLancers]);
+        nombreLancers = nombreLancers > 1 && nombreLancers < 13 ? nombreLancers : 6;
+        let botReply = `${message.author.toString()} : Vos ${nombreLancers} pokémons sont : \r\n`;
+        let listeNomsDejaTires = [];
+        let nombreProblemes = 0;
+
+        while (listeNomsDejaTires.length < nombreLancers) {
+            let pokemonChoisi = this.tiragePokemon(args);
+            // Note : J'empêche de roll la génération 9 jusqu'à sa sortie
+            if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Gen9") )) {
+                listeNomsDejaTires.push(pokemonChoisi.nom);
+                if (pokemonChoisi.tags.includes("Forme")) {
+                    botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}||.\r\n`
+                }
+                else {
+                    botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.\r\n`
+                }
+            }
+            else {
+                nombreProblemes += 1;
+                if (nombreProblemes > 20) throw("Plus de 20 tentatives ratées.");
+            }
+        }
+
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+        .then((msg)=> {
+            let nombreUnderscoresAEnlever = nombreLancers <= 6? 2 : 4;
+            let nombreDeBoucles = nombreLancers <= 6 ? nombreLancers : Math.ceil(nombreLancers / 2);
+            for (let i = 0; i < nombreDeBoucles ; i++) {
+                setTimeout(function() {
+                    for (let j = 0; j < nombreUnderscoresAEnlever; j++) {
+                        botReply = botReply.replace("||", "");
+                    }
+                    msg.edit(botReply);
+                }, 2750 + 1750 * i)
+            }
+        })
+        return;
+    }
+
     let nombreReroll = listePokemonsDejaTires.length;
     let timerSpoiler = 4000 - 800 * Math.sqrt(nombreReroll);
 
