@@ -128,6 +128,53 @@ client.on("messageCreate", (message) => {
                 }
             }
 
+            /* Cette commande permet de lancer une commande toutes les X minutes.
+            On l'arrête si l'utilisateur clique sur l'emote, tape ;tempo stop, ou si l'admin tape ;tempo stop id-utilisateur.*/
+            else if (command === "tempo" && args.length > 0) {
+                if (args[0] === "stop") {
+                    botReply = message.author.toString();
+                    let idAuteur = args.length >=2 && message.author.id === config.admin ? args[1] : message.author.id;
+                    for (const tempo in listeTempo[idAuteur]) {
+                        clearInterval(tempo);
+                        botReply += ` La commande de ce message a été arrêté : ${listeTempo[idAuteur][tempo]}\r\n`;
+                    }
+                    listeTempo[idAuteur] = {};
+                    outils.envoyerMessage(client, botReply, message, envoyerPM);
+                    return;
+                }
+                let timer = parseFloat(args.shift()) * 60 * 1000;
+                let commande = args.shift();
+
+                if (mesCommandes.hasOwnProperty(commande)) {
+                    let dummyMessage = message;
+                    function lancerTempo() {
+                        mesCommandes[commande][commande](client, dummyMessage, args, envoyerPM, idMJ);
+                    }
+                    lancerTempo();
+                    let id = setInterval(lancerTempo, timer);
+                    if (!(message.author.id in listeTempo)) listeTempo[message.author.id] = {};
+                    listeTempo[message.author.id][id] = message.url;
+
+                    message.react("🛑");
+
+                    const collector = message.createReactionCollector({
+                        time: 101 * timer
+                    });
+
+                    collector.on('collect', (reaction, user) => {
+                        if(!user.bot && reaction.emoji.name === "🛑") {
+                            collector.resetTimer({time: 1});
+                        }
+                    });
+                    collector.on('end', collected => {
+                        message.reactions.removeAll();
+                        clearInterval(id);
+                        const index = listeTempo.indexOf(id);
+                        listeTempo.splice(index, 1);
+                    });
+                }
+            }
+
             else if (command === "isekai") {
                 mesCommandes.isekai.isekai(client, message, args, envoyerPM, idMJ, null);
             }
