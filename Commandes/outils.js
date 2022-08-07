@@ -99,7 +99,7 @@ module.exports = {
                 let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
 
                 if (distance < 3) {
-                    console.log(liste[i] + " " + distance);
+                    process.stdout.write(liste[i] + " " + distance + " ; ");
                 }
 
                 if (distance < min) {
@@ -110,7 +110,7 @@ module.exports = {
             else {
                 let distance = levenshtein(entree, elementTableau);
                 if (distance < entree.length / 3) {
-                    console.log(liste[i] + " " + distance);
+                    process.stdout.write(liste[i] + " " + distance + " ; ");
                     if (distance < min) {
                         min = distance;
                         minIndex = i;

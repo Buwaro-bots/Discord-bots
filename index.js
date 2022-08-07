@@ -34,7 +34,7 @@ client.on("messageCreate", (message) => {
     }
 
     // Si le message contient un d et inclus un nombre après le d, on remplace le message par un lancer
-    if (!(message.content.includes(' ')) && message.content.includes('d') && !isNaN(message.content.substring(message.content.indexOf('d') + 1))) {
+    if (!(message.content.includes(' ')) && message.content.includes('d') && message.content.length > message.content.indexOf('d') + 1 && !isNaN(message.content.substring(message.content.indexOf('d') + 1))) {
         message.content = ";roll " +  message.content.substring(1);
     }
 
@@ -226,7 +226,7 @@ client.on("messageCreate", (message) => {
                 }
                 else if (typeLancer <= 65) {
                     nombreLancer = nombreLancer > 80 ? "4" : (nombreLancer > 20 ? "3" : "2");
-                    mesCommandes.dng.dng(client, message, [], envoyerPM, idMJ);
+                    mesCommandes.dng.dng(client, message, [nombreLancer], envoyerPM, idMJ);
                 }
                 else if (typeLancer <= 84) {
                     nombreLancer = nombreLancer > 30 ? "100" : (nombreLancer > 10 ? "2d20" : "4d6 - 3");
@@ -255,6 +255,36 @@ client.on("messageCreate", (message) => {
 
                 outils.envoyerMessage(client, `${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
                 outils.logLancer(message, cartesTirées, "tarot", envoyerPM);
+            }
+
+            else if (command === "ouija") {
+                let texte = "";
+                let nombreDeMots = outils.randomNumber(3) + 2;
+                let consonnes = ["b", "b", "b", "c", "c", "c", "d", "d", "d",
+                "f", "f", "g", "g", "h", "h",  "j", "k", "l", "l" , "l" , "l" , "l" , "l" , "l" , "l",
+                "m", "m", "m", "n", "n", "n", "n", "p", "p", "q", "r", "r", "r", "r",
+                "s", "s", "s", "s", "t", "t", "t", "t", "t", "t",  "v", "v", "w", "x", "z"];
+                let voyelles = ["a", "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "i", "i",
+                "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+                "o", "o", "o", "o", "o", "o", "u", "u", "u", "u", "u",  "y"]
+                for (let i = 0; i < nombreDeMots ; i++) {
+                    let nombreDeLettres = outils.randomNumber(6) + 2;
+                    let serieConsonne = 0;
+                    for (let j = 0; j < nombreDeLettres; j++) {
+                        let tauxConsonne = 0.6 -serieConsonne / 4;
+                        if (Math.random() < tauxConsonne) {
+                            texte+= consonnes[outils.randomNumber(consonnes.length) -1];
+                            serieConsonne = serieConsonne > 0 ? serieConsonne += 1 : 1;
+                        }
+                        else {
+                            texte += voyelles[outils.randomNumber(voyelles.length) -1];
+                            serieConsonne = serieConsonne < 0 ? serieConsonne -= 1 : -1;
+                        }
+                    }
+                    texte += " ";
+                }
+                texte += ".";
+                outils.envoyerMessage(client, texte, message, envoyerPM, idMJ);
             }
 
 
