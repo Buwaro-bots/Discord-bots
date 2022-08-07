@@ -17,6 +17,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         nombreLancers = nombreLancers > 1 && nombreLancers < 13 ? nombreLancers : 6;
         let botReply = `${message.author.toString()} : Vos ${nombreLancers} pokémons sont : \r\n`;
         let listeNomsDejaTires = [];
+        let pokemonsTires = [];
         let nombreProblemes = 0;
 
         while (listeNomsDejaTires.length < nombreLancers) {
@@ -26,9 +27,11 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                 listeNomsDejaTires.push(pokemonChoisi.nom);
                 if (pokemonChoisi.tags.includes("Forme")) {
                     botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}||.\r\n`
+                    pokemonsTires.push(pokemonChoisi.nomForme);
                 }
                 else {
                     botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.\r\n`
+                    pokemonsTires.push(pokemonChoisi.nom);
                 }
             }
             else {
@@ -36,7 +39,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
                 if (nombreProblemes > 20) throw("Plus de 20 tentatives ratées.");
             }
         }
-
+        outils.logLancer(message, pokemonsTires.join(", "), `isekai roll ${nombreLancers}`, envoyerPM);
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
         .then((msg)=> {
             let nombreUnderscoresAEnlever = nombreLancers <= 6? 2 : 4;
@@ -58,7 +61,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 2;
+    let tauxDeNouveau = 1;
     let rollNouveau = outils.randomNumber(100);
     let pokemonChoisi;
 
@@ -191,7 +194,7 @@ exports.tiragePokemon = function(listeTagsDemandes, listePokemonsDejaTires = [])
                     valide = false; // Si le pokémon n'a pas l'un des tags, on ne l'incluera pas dans la liste
                 }
             }
-            if (listePokemonsDejaTires.includes(pokedex[i])) {valide = false;}
+            if (listePokemonsDejaTires.includes(pokedex[i]) ) {valide = false;}
             if (valide) {nouvelleListe.push(pokedex[i]);}
         }
 
@@ -227,8 +230,8 @@ exports.tiragePokemon = function(listeTagsDemandes, listePokemonsDejaTires = [])
         }
     }
 
-    historique.push(pokemonChoisi);
-    if (historique.length > 50) historique.shift();
+    if (listeTagsDemandes.length === 0 && Math.random() < 0.6) historique.push(pokemonChoisi);
+    if (historique.length > 40) historique.shift();
 
     return pokemonChoisi;
 };
