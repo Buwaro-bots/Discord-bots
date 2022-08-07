@@ -5,7 +5,7 @@ const config = require('../config.json');
 
 exports.ins = function(client, message, args, envoyerPM, idMJ) {
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
-
+    let serverID = message.guildId in paramJoueurs.ins.lancersSpeciaux ? message.guildId : "aucun";
     // Plusieurs commandes demandent de rentrer un lancer, cette fonction vérifie s'il est valide.
     function verifierRegexLancer(lancer) {
         let regex = new RegExp('[1-6]{3}');
@@ -49,15 +49,33 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
     }
 
     if (args[0] === "message") { // Commande permettant à quelqu'un de rajouter un message personalisé
+        if (serverID === "aucun") {
+            if (args[2] in paramJoueurs.ins.lancersSpeciaux) {
+                serverID = args[2];
+                args.splice(2,1);
+            }
+            else {
+                outils.envoyerMessage(client, "Vous essayez de rajouter un message, soit par mp, soit sur un serveur qui n'a pas de messages personalisés." +
+                " Dans cette situation, utilisez cette commande sur le bon serveur, soit rajoutez l'id du serveur entre le lancer et le message." + 
+                " Comme **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**.", message);
+                return;
+            }
+        }
+        
         if (args[1] === "liste") {
             let botReply = "";
-            for (const lancer in paramJoueurs.ins.lancersSpeciaux) {
-                if (paramJoueurs.ins.lancersSpeciaux[lancer].hasOwnProperty(message.author.id)) {
-                    botReply += `${lancer} : ${paramJoueurs.ins.lancersSpeciaux[lancer][message.author.id]}\r\n`;
+            if (serverID in paramJoueurs.ins.lancersSpeciaux && serverID !== "aucun") {
+                for (const lancer in paramJoueurs.ins.lancersSpeciaux[serverID]) {
+                    if (paramJoueurs.ins.lancersSpeciaux[serverID][lancer].hasOwnProperty(message.author.id)) {
+                        botReply += `${lancer} : ${paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id]}\r\n`;
+                    }
+                    else if (paramJoueurs.ins.lancersSpeciaux[serverID][lancer].hasOwnProperty("autre")) {
+                        botReply += `*${lancer}* : ${paramJoueurs.ins.lancersSpeciaux[serverID][lancer]["autre"]}\r\n`;
+                    }
                 }
-                else if (paramJoueurs.ins.lancersSpeciaux[lancer].hasOwnProperty("autre")) {
-                    botReply += `*${lancer}* : ${paramJoueurs.ins.lancersSpeciaux[lancer]["autre"]}\r\n`;
-                }
+            }
+            else {
+                botReply = "Ce serveur n'a pas de message personalisé.";
             }
             outils.envoyerMessage(client, botReply, message, true, idMJ);
             return;
@@ -68,20 +86,20 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
         let lancer = verifierRegexLancer(args[1]);
 
         if (args[2] === "deletethis") {
-            delete paramJoueurs.ins.lancersSpeciaux[lancer][message.author.id];
+            delete paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id];
             let botReply = `${message.author.toString()} : Votre message pour le lancer ${lancer} a été supprimé.`;	
             outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         }
         else {
-            if (!(lancer in paramJoueurs.ins.lancersSpeciaux)) { // Si le lancer n'existait pas dans la base, on le rajoute
-                paramJoueurs.ins.lancersSpeciaux[lancer] = {};
+            if (!(lancer in paramJoueurs.ins.lancersSpeciaux[serverID])) { // Si le lancer n'existait pas dans la base, on le rajoute
+                paramJoueurs.ins.lancersSpeciaux[serverID][lancer] = {};
             }
 
             phrase = " "; // Très mauvaise manière de récupérer la phrase qui a été découpée avant, à revoir
             for (let i= 2; i < args.length; i++) {
                 phrase += args[i] + " ";
             }
-            paramJoueurs.ins.lancersSpeciaux[lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
+            paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
             outils.envoyerMessage(client, botReply, message);
@@ -113,6 +131,8 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
                 msg.edit(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
             }, 4000)
         });
+
+        outils.logLancer(message, `[${lancer}]`, "INS gacha", envoyerPM);
         return;
     }
 
@@ -130,13 +150,13 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
     let botReply = `${message.author.toString()} a ${verbe} [${dices[0]}${dices[1]}] + [${dices[2]}].`;
 
 
-    if (dicesSum in paramJoueurs.ins.lancersSpeciaux) {
-        if (message.author.id in paramJoueurs.ins.lancersSpeciaux[dicesSum]) {
-            botReply += paramJoueurs.ins.lancersSpeciaux[dicesSum][message.author.id];
+    if (dicesSum in paramJoueurs.ins.lancersSpeciaux[serverID]) {
+        if (message.author.id in paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum]) {
+            botReply += paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum][message.author.id];
             lancerSpecial = true; // Si le lancer est "spécial", c'est à dire qu'il a un message perso, on n'a pas besoin de préciser si c'est une réussite ou pas.
         }
-        else if ("autre" in paramJoueurs.ins.lancersSpeciaux[dicesSum]) {
-            botReply += paramJoueurs.ins.lancersSpeciaux[dicesSum]["autre"];
+        else if ("autre" in paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum]) {
+            botReply += paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum]["autre"];
         }
     }
 

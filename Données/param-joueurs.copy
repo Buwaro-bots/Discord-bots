@@ -1,16 +1,27 @@
 {
     "ins": {
         "lancersSpeciaux": {
-            "111": {
-                "autre": " :angel:"
+            "aucun": {},
+            "id serveur 1": {
+                "111": {
+                    "autre": " :angel:"
+                }
+                "666": {
+                    "autre": " :smiling_imp:"
+                }
             },
-            "666": {
-                "autre": " :smiling_imp:"
+            "id serveur 2": {
+                "111": {
+                   "autre": " :angel:"
+                }
+                "666": {
+                    "autre": " :smiling_imp:"
+                }
             }
         },
         "listeAutoVerifications": [
         ]
-    },
+    }
 
     "dng" : {
         "listeAutoVerifications": [

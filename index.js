@@ -8,6 +8,8 @@ const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.DIRECT_MESSAGE_REACTIONS], partials: ["CHANNEL"]});
 
+let listeTempo = {};
+
 process.on('uncaughtException', function (err) {
     console.error(err);
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
@@ -96,6 +98,10 @@ client.on("messageCreate", (message) => {
                     mesCommandes.outils.envoyerMessage(client, botReply , message, envoyerPM);
                 }
                 return;
+            }
+
+            else if (command === "id") {
+                outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message)
             }
 
             else if (command === "everyone" && args.length > 0) {
