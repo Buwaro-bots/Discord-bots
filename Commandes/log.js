@@ -83,6 +83,7 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, canal = null,
         // Je vérifie si le joueur avec un if au lieu de modifier le tableau pour éviter un accident si jamais un jour j'essaye de sauvegarder dedans
         if (joueurUnique === "" || key === joueurUnique) {
             if (estCouleurs) {
+                // Si l'utilisateur est le mj, on le mets d'une couleur différente, mettre une couleur différente permets aussi de le mettre en bas dans l'ordre alphabétique.
                 let nomJoueur = key == mj ? `\`\`\`ansi\r\n\u001b[0;36m${key}\u001b[0;37m` :  `\`\`\`ansi\r\n\u001b[0;34m${key}\u001b[0;37m`;
                 let listeLancers = "";
                 let numeroPartie = 1;

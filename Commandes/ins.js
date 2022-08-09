@@ -5,7 +5,12 @@ const config = require('../config.json');
 
 exports.ins = function(client, message, args, envoyerPM, idMJ) {
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
+
+    /* Etant donné que j'ai eu deux jdr différents dans deux serveurs différents, il a été considére comme plus pratique de regarder dans quel serveur
+    a lieu le lancer au lieu de faire un système de personnages. Par simplicité, le fichier .json a un serveur "aucun" qui contient les messages par défaut
+    pour ne pas avoir à vérifier si le message a un serveur déjà existant ou pas. */
     let serverID = message.guildId in paramJoueurs.ins.lancersSpeciaux ? message.guildId : "aucun";
+
     // Plusieurs commandes demandent de rentrer un lancer, cette fonction vérifie s'il est valide.
     function verifierRegexLancer(lancer) {
         let regex = new RegExp('[1-6]{3}');

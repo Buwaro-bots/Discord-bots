@@ -104,8 +104,16 @@ client.on("messageCreate", (message) => {
                 outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message)
             }
 
+            /* Cette commande regarde le premier paramètre donné et regarde si une commande avec ce nom existe, si oui, le bot rajoute une emote qui permet
+            à d'autres utilisateurs de faire la commande demandée. */
             else if (command === "everyone" && args.length > 0) {
-                let commande = args.shift();
+                let commande = outils.normalisationString(args.shift());
+
+                // Comme DnG a sa propre commande pour les rolls collectifs, on considère que l'utilisateur demandait ça.
+                if (commande === "dng" && args.length === 0) {
+                    mesCommandes.dng.dng(client, message, [], envoyerPM, idMJ);
+                    return;
+                }
                 if (mesCommandes.hasOwnProperty(commande)) {
                     message.react("🎲");
                     let dummyMessage = message;
@@ -285,6 +293,21 @@ client.on("messageCreate", (message) => {
                 }
                 texte += ".";
                 outils.envoyerMessage(client, texte, message, envoyerPM, idMJ);
+            }
+
+            else if (command === "8ball") {
+                botReply = message.author.toString();
+                lancer = outils.randomNumber(20);
+                if (lancer <= 8) {
+                    botReply += " Oui.";
+                }
+                else if (lancer < 15) {
+                    botReply += " Non.";
+                }
+                else {
+                    botReply += " Peut-être."
+                }
+                outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
             }
 
 
