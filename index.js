@@ -13,7 +13,7 @@ let listeTempo = {};
 process.on('uncaughtException', function (err) {
     console.error(err);
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
-    });
+});
 
 let prefix = ";"; // Set the prefix
 console.log("Ready!");
@@ -21,7 +21,9 @@ console.log("Ready!");
 client.on("messageCreate", (message) => {
     if (!message.content.startsWith(prefix) || message.author.bot) return; // On ne fait rien si le message n'a pas le préfixe ou si l'auteur est un bot.
     
-    process.stdout.write(`${message.author.username}#${message.author.discriminator} ${message.content} => `);
+    dateHeure = new Date();
+    let heure = outils.pad(dateHeure.getHours()) + ':' + outils.pad(dateHeure.getMinutes()) + ':' + outils.pad(dateHeure.getSeconds());
+    process.stdout.write(`\x1b[92m${heure}  \x1b[96m${message.author.username}#${message.author.discriminator} \x1b[94m${message.content} \x1b[90m=> \x1b[97m`);
     let envoyerPM = false; // Cette variable indique si la réponse doit être envoyée par mp.
     let idMJ = null;
     let nbBouclesMax = 1;
@@ -69,16 +71,16 @@ client.on("messageCreate", (message) => {
                 mesCommandes.outils.envoyerMessage(client, "https://github.com/Buwaro-bots/Discord-bots", message);
             }
 
-            if (command === "patchnotes") {
+            if (command === "patchnotes" || command === "changelog") { // C'est plus un changelog que des patch notes.
                 mesCommandes.outils.envoyerMessage(client, "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=patch>\r\nGithub : https://github.com/Buwaro-bots/Discord-bots/commits/main", message);
             }
 
             if (command === "help" || command === "aide" || command === "commande" || command === "commandes") {
                 if (args.length > 0 && args[0] === "dng") {
-                    mesCommandes.dng.dng(client, message, ["help"], envoyerPM, idMJ);
+                    mesCommandes.dng.dng(client, message, ["help"], envoyerPM);
                 }
                 else if (args.length > 0 && args[0] === "ins") {
-                    mesCommandes.ins.ins(client, message, ["help"], envoyerPM, idMJ);
+                    mesCommandes.ins.ins(client, message, ["help"], envoyerPM);
                 }
                 else {
                     let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=roll>\r\n" +
@@ -297,11 +299,11 @@ client.on("messageCreate", (message) => {
 
             else if (command === "8ball") {
                 botReply = message.author.toString();
-                lancer = outils.randomNumber(20);
-                if (lancer <= 8) {
+                lancer = outils.randomNumber(100);
+                if (lancer <= 40) {
                     botReply += " Oui.";
                 }
-                else if (lancer < 15) {
+                else if (lancer < 75) {
                     botReply += " Non.";
                 }
                 else {

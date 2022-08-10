@@ -11,17 +11,17 @@ module.exports = {
         return Math.floor(Math.random() * maximum) + 1;
     },
 
-    pad: function(nombre, longueur) {
+    pad: function(nombre, longueur = 2) {
         return ("0".repeat(longueur) + nombre).slice(-longueur);
     },
 
     // Cette fonction vérifie un tableau de nombre pour être sûr que ça ne renvoie pas NaN. Un tableau.
     verifierNaN: function(array) {
         for(let i = 0; i < array.length; i++)
-        if (isNaN(array[i])) {
-        throw 'nan error';
-        }
-    },
+            if (isNaN(array[i])) {
+                throw 'nan error';
+            }
+        },
 
     sleep: function(ms) {
         return new Promise((resolve) => {
@@ -32,7 +32,9 @@ module.exports = {
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
     envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
         if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
-        console.log(botReply.substring(0, 100));
+  
+        this.loggerMessage(botReply, message);
+
         if (envoyerPM) {
             if (idMJ != null) {
                 client.users.cache.get(idMJ).send(botReply);
@@ -45,6 +47,47 @@ module.exports = {
         }
     },
 
+    // Cette fonction a été faite juste pour mettre des couleurs dans le console.log du message de l'utilisateur et la réponse. Sa longueur fait que je l'ai séparé de envoyerMessage.
+    loggerMessage: function(botReply, message) {
+        let copieBotReply = "";
+        const longueur = Math.min(botReply.length, 120);
+        let cacaterePrecentNumerique = false;
+        let estGras = false;
+        for (let i = 0; i < longueur; i++) {
+            if (isNaN(botReply[i])) {
+                if (cacaterePrecentNumerique) {
+                    cacaterePrecentNumerique = false;
+                    copieBotReply += "\x1b[0m";
+                }
+            }
+            else {
+                if (!cacaterePrecentNumerique) {
+                    cacaterePrecentNumerique = true;
+                    copieBotReply += "\x1b[33m";
+                }
+            }
+            if (i+1 < longueur && botReply[i] === "*" && botReply[i+1] === "*") {
+                if (estGras) {
+                    copieBotReply += "\x1b[24m";
+                    estGras = false;
+                }
+                else {
+                    copieBotReply += "\x1b[4m";
+                    estGras = true;
+                }
+                i += 1;
+            }
+            else {
+                copieBotReply += botReply[i];
+            }
+        }
+        // Si la réponse commence par un ping, je le remplace par le nom de l'utilisateur.
+        if (copieBotReply.startsWith("<@")) {
+            copieBotReply = `\x1b[96m${message.author.username}\x1b[0m${copieBotReply.substring(copieBotReply.indexOf(">")+1)}\x1b[0m`
+        }
+        console.log(copieBotReply);
+    },
+
     verifierSiMJ: function(args, envoyerPM) {
         longueur = args.length;
         if (longueur > 0 && args[longueur -1].startsWith('<@')) {
@@ -53,9 +96,9 @@ module.exports = {
             if (idMJ.startsWith("!")) { // Les pings sur téléphone visiblement ne mettent pas de ! donc il faut les enlever à part ?
                 idMJ = idMJ.slice(1);
             }
-            return [args, true, idMJ];
+            return [args, true, idMJ]; // S'il y a un ping, le message sera forcément envoyé par mp à l'utilisateur
         }
-        return [args, envoyerPM, null];
+        return [args, envoyerPM, null]; // S'il n'y a pas de ping, on ne touche pas à envoyerPM parce que la fonctionne ne sait pas si l'utilisateur avait demandé un mp ou pas.
     },
 
     logLancer: function(message, lancer, typeLancer, estPM = false, estReussite = null) {
@@ -65,13 +108,8 @@ module.exports = {
             statsLancers[auteur] = [];
         }
         
-        // variable with one leading zero if only one digit
-        function pad(n) {
-            return n < 10 ? '0' + n : n;
-        }
-
         dateHeure = new Date();
-        dateHeure = pad(dateHeure.getDate()) + '/' + pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + pad(dateHeure.getHours()) + ':' + pad(dateHeure.getMinutes()) + ':' + pad(dateHeure.getSeconds());
+        dateHeure = this.pad(dateHeure.getDate()) + '/' + this.pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + this.pad(dateHeure.getHours()) + ':' + this.pad(dateHeure.getMinutes()) + ':' + this.pad(dateHeure.getSeconds());
 
         statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM, "estReussite": estReussite, "canal": canal});
     
