@@ -19,24 +19,31 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         let listeNomsDejaTires = [];
         let pokemonsTires = [];
         let nombreProblemes = 0;
+        let probabiliteLegendaire = (outils.randomNumber(111) + 14) / 100;
+        process.stdout.write(`\x1b[90m[${probabiliteLegendaire}] \x1b[0m`);
 
         while (listeNomsDejaTires.length < nombreLancers) {
-            let pokemonChoisi = this.tiragePokemon(args);
-            // Note : J'empêche de roll la génération 9 jusqu'à sa sortie
-            if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Gen9") )) {
-                listeNomsDejaTires.push(pokemonChoisi.nom);
-                if (pokemonChoisi.tags.includes("Forme")) {
-                    botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}||.\r\n`
-                    pokemonsTires.push(pokemonChoisi.nomForme);
+            let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ? this.tiragePokemon(args.concat("Légendaire")) : this.tiragePokemon(args);
+            if (!(pokemonChoisi.tags.includes("Légendaire")) || Math.random() < probabiliteLegendaire) {
+                // Note : J'empêche de roll la génération 9 jusqu'à sa sortie
+                if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Gen9") )) {
+                    listeNomsDejaTires.push(pokemonChoisi.nom);
+                    if (pokemonChoisi.tags.includes("Forme")) {
+                        botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}||.\r\n`
+                        pokemonsTires.push(pokemonChoisi.nomForme);
+                    }
+                    else {
+                        botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.\r\n`
+                        pokemonsTires.push(pokemonChoisi.nom);
+                    }
                 }
                 else {
-                    botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.\r\n`
-                    pokemonsTires.push(pokemonChoisi.nom);
+                    nombreProblemes += 1;
+                    if (nombreProblemes > 20) throw("Plus de 20 tentatives ratées.");
                 }
             }
             else {
-                nombreProblemes += 1;
-                if (nombreProblemes > 20) throw("Plus de 20 tentatives ratées.");
+                process.stdout.write(`\x1b[90m[${pokemonChoisi.nom}]\x1b[0m`);
             }
         }
         outils.logLancer(message, pokemonsTires.join(", "), `isekai roll ${nombreLancers}`, envoyerPM);
@@ -75,7 +82,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         pokemonChoisi = this.tiragePokemon(args, listePokemonsDejaTires);
     }
 
-    let rollShiny = outils.randomNumber(100 * 1.5 ** nombreReroll);
+    let rollShiny = outils.randomNumber(64 * 1.5 ** nombreReroll);
     let estShiny = "";
     let suffixe = "";
 
@@ -95,7 +102,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
         suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
     }
-    process.stdout.write(`${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => `);
+    process.stdout.write(`\x1b[90m${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => \x1b[0m`);
     outils.logLancer(message, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
     listePokemonsDejaTires.push(pokemonChoisi);
 
@@ -226,7 +233,7 @@ exports.tiragePokemon = function(listeTagsDemandes, listePokemonsDejaTires = [])
             pokemonChoisi = nouveauPokemon;
         }    
         else {
-            process.stdout.write(`[${nouveauPokemon.hasOwnProperty("nomForme") ? nouveauPokemon.nomForme : nouveauPokemon.nom }]`);
+            process.stdout.write(`\x1b[90m[${nouveauPokemon.hasOwnProperty("nomForme") ? nouveauPokemon.nomForme : nouveauPokemon.nom }]\x1b[0m`);
         }
     }
 
