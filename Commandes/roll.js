@@ -3,7 +3,8 @@ const config = require('../config.json');
 const fs = require('fs');
 const { verifierNaN } = require("./outils.js");
 
-exports.roll = function(client, message, args, envoyerPM, idMJ) {
+module.exports = {
+    roll: function(client, message, args, envoyerPM, idMJ) {
     if (args[0] === "setup") {
         config.lancerParDefault = args[1];
         let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
@@ -33,7 +34,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ) {
 
     else {
         let commandeLancer = args.join(" ");
-        let [reponseCommandes, listeLancers, reponseLancers, reponseSomme] = this.commandeComplexe(commandeLancer);
+        let [reponseCommandes, listeLancers, reponseLancers, reponseSomme] = module.exports.commandeComplexe(commandeLancer);
 
         let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
         if (botReply.length > 2000) throw ("Réponse trop longue");
@@ -41,7 +42,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ) {
         outils.logLancer(message, `${reponseLancers}= ${reponseSomme}` , reponseCommandes, envoyerPM);
         return;
     }
-};
+},
 
 /**
  * @param {string} commandeLancer 
@@ -51,7 +52,7 @@ exports.roll = function(client, message, args, envoyerPM, idMJ) {
  * 
  * Exemple : 1d20+1d10+1 renvoit "1d20 + 1d10 + 1" ; [8, 6] ; "[8] + [6] + 1" ; 15
  */
-exports.commandeComplexe = function(commandeLancer) {
+    commandeComplexe: function(commandeLancer) {
     let listeCommandes = []; // [commande, bool estLancer, [lancers], somme]
     let listeOperateurs = ["+","-","*","/","(",")",">","<"];
 
@@ -109,4 +110,5 @@ exports.commandeComplexe = function(commandeLancer) {
     if (Math.abs(reponseSomme) > 9000000000000000) throw("Nombre trop grand");
 
     return [reponseCommandes, listeLancers, reponseLancers, reponseSomme];    
-};
+    }
+}

@@ -1,5 +1,6 @@
+const outils = require("./Commandes/outils.js");
 const requireDir = require('require-dir');
-const mesCommandes = requireDir('./Commandes');
+const mesCommandes = requireDir('./Commandes'); 
 const config = require('./config.json');
 const ancienLancerParDefaut = config.lancerParDefault;
 const fs = require('fs');
@@ -39,10 +40,28 @@ if (process.argv.length > 2) {
 		arguments.shift();
 	}
 	let commande = arguments.shift();
-	try{mesCommandes[commande][commande](null, message, arguments, false, false);}
-	catch(e){
-		if (!(e.toString().includes("(reading 'then')"))) console.log(e);
+	if (mesCommandes.hasOwnProperty(commande)) {
+		try{mesCommandes[commande][commande](null, message, arguments, false, false);}
+		catch(e){
+			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
+		}
 	}
+	else if (mesCommandes.meta.hasOwnProperty(commande)) {
+		try{mesCommandes.meta[commande](null, message, arguments, false, false);}
+		catch(e){
+			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
+		}
+	}
+	else if (mesCommandes.autres.hasOwnProperty(commande)) {
+		try{mesCommandes.autres[commande](null, message, arguments, false, false);}
+		catch(e){
+			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
+		}
+	}
+	else {
+		console.log("\u001b[0;31mCette fonction n'existe pas ou n'a pas été trouvée.\u001b[0;0m");
+	}
+
 }
 else {
 	let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/./Données/param-joueurs.json', 'utf-8'));

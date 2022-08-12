@@ -23,7 +23,7 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         process.stdout.write(`\x1b[90m[${probabiliteLegendaire}] \x1b[0m`);
 
         while (listeNomsDejaTires.length < nombreLancers) {
-            let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ? this.tiragePokemon(args.concat("Légendaire")) : this.tiragePokemon(args);
+            let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ? module.exports.tiragePokemon(args.concat("Légendaire")) : module.exports.tiragePokemon(args);
             if (!(pokemonChoisi.tags.includes("Légendaire")) || Math.random() < probabiliteLegendaire) {
                 // Note : J'empêche de roll la génération 9 jusqu'à sa sortie
                 if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Gen9") )) {
@@ -73,13 +73,13 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
     let pokemonChoisi;
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
-        pokemonChoisi = this.tiragePokemon(["Nouveau"], listePokemonsDejaTires);
+        pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], listePokemonsDejaTires);
     }
     else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 3) || nombreReroll > 15 )  {
-        pokemonChoisi = this.tiragePokemon(["Digimon"], listePokemonsDejaTires);
+        pokemonChoisi = module.exports.tiragePokemon(["Digimon"], listePokemonsDejaTires);
     }
     else {
-        pokemonChoisi = this.tiragePokemon(args, listePokemonsDejaTires);
+        pokemonChoisi = module.exports.tiragePokemon(args, listePokemonsDejaTires);
     }
 
     let rollShiny = outils.randomNumber(64 * 1.5 ** nombreReroll);

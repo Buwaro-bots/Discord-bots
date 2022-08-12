@@ -39,7 +39,7 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
     // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
     nombreHeures = message.author.id === config.admin ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
 
-    let listeJoueurs = this.listeJoueurs(nombreHeures, estCouleurs, canal, mj, joueurUnique);
+    let listeJoueurs = module.exports.listeJoueurs(nombreHeures, estCouleurs, canal, mj, joueurUnique);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'})); // Tri sans faire attention à la casse
     let botReply = `Liste des lancers des ${nombreHeures} dernières heures :\r\n\r\n`;
     let sautsDeLigne = estCouleurs ? "" : "\r\n\r\n";

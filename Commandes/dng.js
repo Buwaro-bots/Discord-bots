@@ -196,7 +196,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
                 if (listeReactions.hasOwnProperty(reaction.emoji.name)) {
                     collector.resetTimer({time: 400 * 1000});
                     dummyMessage.author = user;
-                    this.dng(client, dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
+                    module.exports.dng(client, dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
                     reaction.users.remove(user);
                 }
             }
@@ -237,7 +237,7 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
     let message_reussite;
     let estReussite = null;
     if (paramJoueurs.dng.listeAutoVerifications.includes(message.author.id)) {
-        [message_reussite, estReussite] = this.verificationReussite(meilleurLancer, lancerCritique, args);
+        [message_reussite, estReussite] = module.exports.verificationReussite(meilleurLancer, lancerCritique, args);
         botReply += message_reussite;
     }
 

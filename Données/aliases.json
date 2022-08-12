@@ -16,8 +16,8 @@
 
     {
         "nom": "repeat",
-        "alias": "repeat",
-        "commande" : "nbBouclesMax = parseInt(args.shift()) ; command = args.shift().toLowerCase();"
+        "alias": "repeter",
+        "commande" : ""
     },
 
     {
@@ -64,8 +64,8 @@
 
     {
         "nom": "epee",
-        "alias": "ins",
-        "commande" : "nbBouclesMax = 3;"
+        "alias": "repeter",
+        "commande" : "args.unshift('ins'); args.unshift('3');"
     },
 
     {
@@ -95,5 +95,10 @@
         "nom" : "equipe",
         "alias" : "isekai",
         "commande" : "args.unshift('6'); args.unshift('roll');"
+    },
+    {
+        "nom" : "8ball",
+        "alias" : "ball_8",
+        "commande" : ""
     }
 ]

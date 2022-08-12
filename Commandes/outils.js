@@ -3,6 +3,8 @@ const fs = require('fs');
 const levenshtein = require('js-levenshtein');
 
 module.exports = {
+    outils:function(){throw("Cette fonction n'est pas censé être appelée.");},
+
     randomNumber: function(maximum) {
         if (maximum < 2) {
             throw 'dé inférieur à 2';
@@ -33,7 +35,7 @@ module.exports = {
     envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
         if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
   
-        this.loggerMessage(botReply, message);
+        module.exports.loggerMessage(botReply, message);
 
         if (envoyerPM) {
             if (idMJ != null) {
@@ -109,7 +111,7 @@ module.exports = {
         }
         
         dateHeure = new Date();
-        dateHeure = this.pad(dateHeure.getDate()) + '/' + this.pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + this.pad(dateHeure.getHours()) + ':' + this.pad(dateHeure.getMinutes()) + ':' + this.pad(dateHeure.getSeconds());
+        dateHeure = module.exports.pad(dateHeure.getDate()) + '/' + module.exports.pad(dateHeure.getMonth() + 1) + '/' + dateHeure.getFullYear() + ' ' + module.exports.pad(dateHeure.getHours()) + ':' + module.exports.pad(dateHeure.getMinutes()) + ':' + module.exports.pad(dateHeure.getSeconds());
 
         statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM, "estReussite": estReussite, "canal": canal});
     
@@ -130,9 +132,9 @@ module.exports = {
         }
         let min = 1000;
         let minIndex = 0;
-        entree = this.normalisationString(entree);
+        entree = module.exports.normalisationString(entree);
         for (let i = 0; i < liste.length; i++) {
-            let elementTableau = this.normalisationString(liste[i]);
+            let elementTableau = module.exports.normalisationString(liste[i]);
             if (force === "faible") {
                 let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
 
