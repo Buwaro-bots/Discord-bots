@@ -1,19 +1,4 @@
 [
-    {   "nom" : "hiddenroll",
-        "alias" : "roll",
-        "commande" : "envoyerPM = true;"
-    },
-
-    {   "nom" : "hiddenins",
-        "alias" : "ins",
-        "commande" : "envoyerPM = true;"
-    },
-
-    {   "nom" : "hiddendng",
-        "alias" : "dng",
-        "commande" : "envoyerPM = true;"
-    },
-
     {
         "nom": "repeat",
         "alias": "repeter",
@@ -27,78 +12,43 @@
     },
 
     {
-        "nom" : "num1",
-        "alias" : "num",
-        "commande" : "args.unshift('1');"
-    },
- 
-    {
-        "nom" : "num2",
-        "alias" : "num",
-        "commande" : "args.unshift('2');"
-    },
- 
-    {
-        "nom" : "num3",
-        "alias" : "num",
-        "commande" : "args.unshift('3');"
-    },
- 
-    {
-        "nom" : "num4",
-        "alias" : "num",
-        "commande" : "args.unshift('4');"
-    },
- 
-    {
-        "nom" : "num5",
-        "alias" : "num",
-        "commande" : "args.unshift('5');"
-    },
-
-    {
-        "nom" : "num6",
-        "alias" : "num",
-        "commande" : "args.unshift('6');"
-    },
-
-    {
         "nom": "epee",
         "alias": "repeter",
-        "commande" : "args.unshift('ins'); args.unshift('3');"
+        "unshift" : ["ins","3"]
     },
 
     {
         "nom" : "gacha",
         "alias" : "ins",
-        "commande" : "args.unshift('gacha');"
+        "unshift" : ["gacha"]
     },
 
     {
         "nom" : "pc",
         "alias" : "dng",
-        "commande" : "args.unshift('pc');"
+        "unshift" : ["pc"]
     },
 
     {
         "nom" : "dex",
         "alias" : "dng",
-        "commande" : "args.unshift('pokemon');"
+        "unshift" : ["pokemon"]
     },
 
     {
         "nom" : "pokemon",
         "alias" : "dng",
-        "commande" : "args.unshift('pokemon');"
+        "unshift" : ["pokemon"]
     },
+
     {
         "nom" : "equipe",
         "alias" : "isekai",
-        "commande" : "args.unshift('6'); args.unshift('roll');"
+        "unshift" : ["6", "roll"]
     },
+    
     {
         "nom" : "8ball",
-        "alias" : "ball_8",
-        "commande" : ""
+        "alias" : "ball_8"
     }
 ]

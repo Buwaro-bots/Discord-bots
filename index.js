@@ -14,7 +14,7 @@ process.on('uncaughtException', function (err) {
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
 });
 
-let prefix = ";"; // Set the prefix
+let prefix = ":"; // Set the prefix
 console.log("Ready!");
 
 client.on("messageCreate", (message) => {
@@ -37,7 +37,6 @@ client.on("messageCreate", (message) => {
         message.content = ";roll " +  message.content.substring(1);
     }
 
-
     /* Note pour moi même :
     commandBody : string qui représente le message tel qu'il est entré moins le préfix.
     args        : tableau qui contient tout les paramètres après la commande
@@ -49,11 +48,15 @@ client.on("messageCreate", (message) => {
     try {
         [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM); // Avoir un ping au milieu d'un message peut poser problème, donc on l'enlève ici. (Note le mettre en dessous du foreach a causé un bug une fois.)
 
-        // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. La commande eval sert à changer une autre variable si nécéssaire.
+        // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. Il peut rajouter des paramètres si l'alias était un raccourci vers une commande plus longue.
         aliases.forEach(alias => {
             if (command === alias["nom"]) {
                 command = alias["alias"];
-                eval(alias["commande"]); 
+                if (alias.hasOwnProperty("unshift")) {
+                    for (let i = 0; i < alias.unshift.length; i++) {
+                        args.unshift(alias.unshift[i]);
+                    }
+                }
                 return;
             }
         })
