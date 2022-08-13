@@ -14,7 +14,7 @@
     {
         "nom": "epee",
         "alias": "repeter",
-        "unshift" : ["ins","3"]
+        "unshift" : ["3", "ins"]
     },
 
     {
@@ -44,11 +44,17 @@
     {
         "nom" : "equipe",
         "alias" : "isekai",
-        "unshift" : ["6", "roll"]
+        "unshift" : ["roll", "6"]
     },
     
     {
         "nom" : "8ball",
         "alias" : "ball_8"
+    },
+
+    {
+        "nom" : "menubestof",
+        "alias" : "combiner",
+        "unshift" : ["isekai", ";", "isekai", "roll", "6"]
     }
 ]

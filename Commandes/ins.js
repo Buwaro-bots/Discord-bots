@@ -3,7 +3,8 @@ const INSdata = require('../Données/ins.json');
 const fs = require('fs');
 const config = require('../config.json');
 
-exports.ins = function(client, message, args, envoyerPM, idMJ) {
+module.exports = {
+    ins : function(client, message, args, envoyerPM, idMJ) {
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
 
     /* Etant donné que j'ai eu deux jdr différents dans deux serveurs différents, il a été considére comme plus pratique de regarder dans quel serveur
@@ -214,4 +215,5 @@ exports.ins = function(client, message, args, envoyerPM, idMJ) {
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 
     outils.logLancer(message, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, "INS", envoyerPM);
+    }
 }

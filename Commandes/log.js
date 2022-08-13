@@ -3,7 +3,8 @@ const outils = require("./outils.js");
 const config = require('../config.json');
 const binomialProbability = require('binomial-probability')
 
-exports.log = function(client, message, args, envoyerPM, idMJ) {
+module.exports = {
+    log : function(client, message, args, envoyerPM, idMJ) {
     // Si l'argument est effacer et que l'utilisateur est l'admin, on effectue une copie de sauvegarde en mettant la date du jour, puis on efface les logs
     if (args[0] === "effacer" && message.author.id === config.admin) {
 
@@ -59,10 +60,10 @@ exports.log = function(client, message, args, envoyerPM, idMJ) {
     }
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     console.log("\x1b[0;37m");
-}
+    },
 
-// Pour l'instant je ne rajoute pas de fonctionalité pour récupérer les PM.
-exports.listeJoueurs = function(nombreHeures, estCouleurs = false, canal = null, mj = "", joueurUnique = "",recupererPM = false) {
+    // Pour l'instant je ne rajoute pas de fonctionalité pour récupérer les PM.
+    listeJoueurs : function(nombreHeures, estCouleurs = false, canal = null, mj = "", joueurUnique = "",recupererPM = false) {
     let jets = JSON.parse(fs.readFileSync(__dirname + '/../Données/stats.json', 'utf-8'))
     let listeJoueurs = {};
     let nombreD100Lancers = 0;
@@ -207,4 +208,5 @@ exports.listeJoueurs = function(nombreHeures, estCouleurs = false, canal = null,
         listeJoueurs[nomJoueur] = listeLancers;
     }
     return listeJoueurs;
+    }
 }

@@ -8,7 +8,8 @@ let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "
 "Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
 "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon"]
 
-exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll = null, listePokemonsDejaTires = []) {
+module.exports = {
+    isekai : function(client, message, args, envoyerPM, idMJ, messageReroll = null, listePokemonsDejaTires = []) {
 
     if (args.length > 0 && args[0] === "roll") {
         args.shift();
@@ -179,9 +180,9 @@ exports.isekai = function(client, message, args, envoyerPM, idMJ, messageReroll 
         });
     }
     return pokemonChoisi;
-};
+},
 
-exports.tiragePokemon = function(listeTagsDemandes, listePokemonsDejaTires = []) {
+    tiragePokemon : function(listeTagsDemandes, listePokemonsDejaTires = []) {
 
     let pokemonChoisi = null;
     let listePokemon = pokedex;
@@ -241,4 +242,5 @@ exports.tiragePokemon = function(listeTagsDemandes, listePokemonsDejaTires = [])
     if (historique.length > 40) historique.shift();
 
     return pokemonChoisi;
-};
+    }
+}

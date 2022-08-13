@@ -6,8 +6,8 @@ const isekai = require('./isekai.js');
 let strings = require('../Données/textes-privés.json');
 const fs = require('fs');
 
-
-exports.dng = function(client, message, args, envoyerPM, idMJ) {
+module.exports = {
+    dng : function(client, message, args, envoyerPM, idMJ) {
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
@@ -241,18 +241,15 @@ exports.dng = function(client, message, args, envoyerPM, idMJ) {
         botReply += message_reussite;
     }
 
-    
+
     let affichageLancerDemande = "dng " + args.toString().replace(",", " ");
 
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     outils.logLancer(message, `[${lancerCaracteristique}] [${lancerCritique}]`, affichageLancerDemande, envoyerPM, estReussite);
+    },
 
-
-}
-
-
-exports.verificationReussite = function(lancerCaracteristique, lancerCritique, args) {
+    verificationReussite : function(lancerCaracteristique, lancerCritique, args) {
     let dd = 3;
     let avantage = 0;
     let avantage_mis = false;
@@ -286,5 +283,5 @@ exports.verificationReussite = function(lancerCaracteristique, lancerCritique, a
     message_reussite += lancerCritique >= 19 ? " **critique** !" : ".";
 
     return [message_reussite, estReussite];
-    
+    }    
 }

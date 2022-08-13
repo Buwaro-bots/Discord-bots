@@ -35,7 +35,7 @@ module.exports = {
         if (nombreBoucles > 10 && message.author.id !== config.admin ) {
             nombreBoucles = 5; // Pour eviter les abus, on limite le nombre de boucles à 5, le nombre de messages qui peut-être envoyé toutes les 5 secondes.
         }
-        let commande = outils.normalisationString(args.shift());
+        let commande = args.shift();
         let fonctionCommande = module.exports.recherchercommande(commande);
         for (let i = 0; i < nombreBoucles; i++) {
             fonctionCommande(client, message, args, envoyerPM, idMJ);
@@ -148,6 +148,19 @@ module.exports = {
         }
         else {
             mesCommandes.isekai.isekai(client, message, ["DnG"], envoyerPM, idMJ);
+        }
+    },
+
+    combiner: function(client, message, args, envoyerPM, idMJ) {
+        while (args.length > 0) {
+            let commandeEnCours = args.shift();
+            let argsEnCours = [];
+            while (args.length > 0 && args[0] !== ";") {
+                argsEnCours.push(args.shift())
+            }
+            args.shift();
+            let fonctionCommande = module.exports.recherchercommande(commandeEnCours);
+            fonctionCommande(client, message, argsEnCours, envoyerPM, idMJ);
         }
     }
 }

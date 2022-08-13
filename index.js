@@ -5,7 +5,6 @@ const outils = require("./Commandes/outils.js");
 const requireDir = require('require-dir');
 const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes commandes du dossier commande.
 delete mesCommandes.outils;
-
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.DIRECT_MESSAGE_REACTIONS], partials: ["CHANNEL"]});
 
@@ -14,7 +13,7 @@ process.on('uncaughtException', function (err) {
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
 });
 
-let prefix = ":"; // Set the prefix
+let prefix = ";"; // Set the prefix
 console.log("Ready!");
 
 client.on("messageCreate", (message) => {
@@ -53,7 +52,7 @@ client.on("messageCreate", (message) => {
             if (command === alias["nom"]) {
                 command = alias["alias"];
                 if (alias.hasOwnProperty("unshift")) {
-                    for (let i = 0; i < alias.unshift.length; i++) {
+                    for (let i = alias.unshift.length -1 ; i >= 0; i--) {
                         args.unshift(alias.unshift[i]);
                     }
                 }

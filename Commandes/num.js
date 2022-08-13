@@ -1,7 +1,8 @@
 const outils = require("./outils.js");
 const fs = require('fs');
 
-exports.num = function(client, message, args, envoyerPM, idMJ, commandBody) {
+module.exports = {
+    num : function(client, message, args, envoyerPM, idMJ, commandBody) {
 
     args = args.length === 0 ? [3] : args;
     let test = args[0];
@@ -16,4 +17,5 @@ exports.num = function(client, message, args, envoyerPM, idMJ, commandBody) {
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     outils.logLancer(message, lancer, `test de ${test}`, envoyerPM, estReussite);
+    }
 }
