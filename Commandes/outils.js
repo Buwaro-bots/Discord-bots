@@ -189,5 +189,22 @@ module.exports = {
         fs.writeFileSync('./Données/param-joueurs.json', writer);
 
         return botReply;
+    },
+
+    /**
+     * @description Cette fonction recherche un paramètre dans ceux du message pour renvoyer la valeur suivante. Utile pour des commandes du genre ;test vitesse 10.
+     * @param {array} args @param {string} parametreRecherché @param {any} valeurParDefaut
+     * @returns {Array} [valeurParDefaut (Si la paramètre est trouvé, renvoit la valeur suivante, sinon la valeur par défaut, sinon ""),
+     *                  args (Renvoit les arguments, moins les deux paramètres utilisés si elles existaient.)]
+     */
+    rechercheDoubleParametre : function(args, parametreRecherché, valeurParDefaut = "") {
+        for (let i = 0 ; i < args.length -1 ; i++) {
+            if (args[i] === parametreRecherché) {
+                valeurParDefaut = args[i+1];
+                args.splice(i,2);
+                break;
+            }
+        }
+        return [valeurParDefaut, args]
     }
 }

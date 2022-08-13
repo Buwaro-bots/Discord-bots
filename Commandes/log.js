@@ -26,16 +26,8 @@ module.exports = {
     outils.verifierNaN([nombreHeures]);
     let estCouleurs = args.includes("couleur");
     let canal = args.includes("canal") ? message.channelId : null;
-    let mj = "";
-    let joueurUnique = "";
-    for (let i = 0 ; i + 1 < args.length; i++) {
-        if (args[i] === "mj") {
-            mj = args[i+1];
-        }
-        if (args[i] === "joueur") {
-            joueurUnique = args[i+1];
-        }
-    }
+    let [mj] = outils.rechercheDoubleParametre(args, "mj");
+    let [joueurUnique] = outils.rechercheDoubleParametre(args, "joueur");
 
     // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
     nombreHeures = message.author.id === config.admin ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
