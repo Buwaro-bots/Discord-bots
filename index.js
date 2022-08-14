@@ -13,7 +13,7 @@ process.on('uncaughtException', function (err) {
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
 });
 
-let prefix = ";"; // Set the prefix
+let prefix = config.prefix; // Set the prefix
 console.log("Ready!");
 
 client.on("messageCreate", (message) => {

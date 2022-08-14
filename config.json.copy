@@ -1,6 +1,7 @@
 {
     "botToken" : "aaa",
-    "admin" : "mon id"
-    "canalLogs" : "id d'un canal de log"
-    "lancerParDefault": "100 ou 20 ou 2d20 ou 5d12 * 4 - 20"
+    "admin" : "id de l'utilisateur, il faut activer le mod dev de discord et cliquer droit sur son profil",
+    "prefix" : "caractère à mettre avant le nom de la commande",
+    "canalLogs" : "id d'un canal de log, null si non utilisé",
+    "lancerParDefault": "roll fait si l'utilisateur fait juste ;roll, 100 ou 20 ou 2d20 ou 5d12 * 4 - 20"
 }

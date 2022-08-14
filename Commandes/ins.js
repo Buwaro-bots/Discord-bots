@@ -109,7 +109,7 @@ module.exports = {
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
             outils.envoyerMessage(client, botReply, message);
-            if (client !== null) client.channels.cache.get(config.canalLogs).send(botReply);
+            if (client !== null && config.canalLogs !== null) client.channels.cache.get(config.canalLogs).send(botReply);
         }
 
         let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
