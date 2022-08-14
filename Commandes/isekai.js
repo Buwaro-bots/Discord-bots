@@ -21,8 +21,16 @@ module.exports = {
         let pokemonsTires = [];
         let nombreProblemes = 0;
         let probabiliteLegendaire = (outils.randomNumber(111) + 14) / 100;
+        let timerSpoiler = 2500; 
+        [timerSpoiler, args] = outils.rechercheDoubleParametre(args, "timer", timerSpoiler);
+        timerSpoiler = parseInt(timerSpoiler);
+        let longueurSaut = nombreLancers <= 6? 1 : 2;
+        outils.verifierNaN([timerSpoiler]);
+        [longueurSaut, args] = outils.rechercheDoubleParametre(args, "saut", longueurSaut);
+        outils.verifierNaN([longueurSaut]);
+        longueurSaut = longueurSaut < 1 ? 1 : parseInt(longueurSaut);
+        let nombreDeBoucles = Math.ceil(nombreLancers / longueurSaut);
         process.stdout.write(`\x1b[90m[${probabiliteLegendaire}] \x1b[0m`);
-
         while (listeNomsDejaTires.length < nombreLancers) {
             let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ? module.exports.tiragePokemon(args.concat("Légendaire")) : module.exports.tiragePokemon(args);
             if (!(pokemonChoisi.tags.includes("Légendaire")) || Math.random() < probabiliteLegendaire) {
@@ -50,22 +58,22 @@ module.exports = {
         outils.logLancer(message, pokemonsTires.join(", "), `isekai roll ${nombreLancers}`, envoyerPM);
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
         .then((msg)=> {
-            let nombreUnderscoresAEnlever = nombreLancers <= 6? 2 : 4;
-            let nombreDeBoucles = nombreLancers <= 6 ? nombreLancers : Math.ceil(nombreLancers / 2);
             for (let i = 0; i < nombreDeBoucles ; i++) {
                 setTimeout(function() {
-                    for (let j = 0; j < nombreUnderscoresAEnlever; j++) {
+                    for (let j = 0; j < longueurSaut * 2; j++) {
                         botReply = botReply.replace("||", "");
                     }
                     msg.edit(botReply);
-                }, 2750 + 1750 * i)
+                }, timerSpoiler + timerSpoiler * 0.6 * i)
             }
         })
         return;
     }
 
     let nombreReroll = listePokemonsDejaTires.length;
-    let timerSpoiler = 4000 - 800 * Math.sqrt(nombreReroll);
+    let timerSpoiler = 4000; 
+    [timerSpoiler, args] = outils.rechercheDoubleParametre(args, "timer", timerSpoiler);
+    outils.verifierNaN([timerSpoiler]);
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
@@ -106,7 +114,7 @@ module.exports = {
     process.stdout.write(`\x1b[90m${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => \x1b[0m`);
     outils.logLancer(message, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
     listePokemonsDejaTires.push(pokemonChoisi);
-
+    
     if (messageReroll === null) {
         outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message, envoyerPM, idMJ)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
@@ -117,8 +125,7 @@ module.exports = {
                 else if ( !(pokemonChoisi["tags"].includes("Spoiler"))) {
                     msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
                 }
-
-                msg.react("🎲").then(() => msg.react("🖼️"));
+                if (!(args.includes("starter+"))) {msg.react("🎲").then(() => msg.react("🖼️"))};
             }, timerSpoiler)
             const collector = msg.createReactionCollector({
                 time: 40 * 1000
@@ -127,14 +134,15 @@ module.exports = {
                 if(user.id === message.author.id && reaction.emoji.name === "🎲") {
                     collector.resetTimer({time: 40 * 1000});
                     nombreReroll += 1;
-                    let dernierPokemon = module.exports.isekai(client, message, args, envoyerPM, idMJ, msg, listePokemonsDejaTires);
+                    timerSpoiler = timerSpoiler / 1.25 + 100;
+                    let dernierPokemon = module.exports.isekai(client, message, args.concat(["timer", timerSpoiler]), envoyerPM, idMJ, msg, listePokemonsDejaTires);
                     if ( !(dernierPokemon.tags.includes("Digimon")) ) {
                         setTimeout(function() {
                             reaction.users.remove(user);
-                        }, 4200 - 800 * Math.sqrt(nombreReroll));
+                        }, timerSpoiler);
                     }
                     else {
-                        collector.resetTimer({time: 4200 - 800 * Math.sqrt(nombreReroll)});
+                        collector.resetTimer({time: timerSpoiler + 200});
                     }
                 }
                 else if (user.id === message.author.id && reaction.emoji.name === "🖼️") {

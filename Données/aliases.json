@@ -55,6 +55,24 @@
     {
         "nom" : "menubestof",
         "alias" : "combiner",
-        "unshift" : ["isekai", ";", "isekai", "roll", "6"]
+        "unshift" : ["isekai", "timer", "2500", ";", "isekai", "roll", "6", "timer", "3500", "saut", "2"]
+    },
+
+    {
+        "nom" : "menumaxibestof",
+        "alias" : "combiner",
+        "unshift" : ["isekai", "timer", "2000", ";", "isekai", "roll", "12", "timer", "2500", "saut", "4"]
+    },
+
+    {
+        "nom" : "happymeal",
+        "alias" : "combiner",
+        "unshift" : ["isekai", "roll", "6", "dng", "final", "timer", "2000", ";", "isekai", "starter+", "timer", "9000"]
+    },
+
+    {
+        "nom" : "nuggets",
+        "alias" : "isekai",
+        "unshift" : ["roll", "6", "vol"]
     }
 ]
