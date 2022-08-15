@@ -2,6 +2,8 @@ const outils = require("./outils.js");
 const INSdata = require('../Données/ins.json');
 const fs = require('fs');
 const config = require('../config.json');
+const { ins: aide } = require("./aide.js");
+
 
 module.exports = {
     ins : function(client, message, args, envoyerPM, idMJ) {
@@ -24,17 +26,7 @@ module.exports = {
     }
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
-        outils.envoyerMessage(client, 
-            "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=ins>\r\n" +
-            "**;ins** permet de faire un jet normal.\r\n" +
-            ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +
-            ";ins **gacha** pour faire un jet de gacha. (wow)\r\n" +
-            "\r\n" +
-            ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve, si de la mise en forme est utilisé il n'est pas nécéssaire d'échapper les \* avec des \\.\r\n" +
-            ";ins **tum** affiche la table unique multiple.\r\n"+
-            ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n"
-            , message, envoyerPM
-        )
+        aide(client, message, args, envoyerPM, idMJ);
         return;
     }
 

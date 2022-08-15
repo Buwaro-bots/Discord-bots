@@ -1,9 +1,10 @@
 let dexDng = require('../Données/dex-dng.json');
 const { verifierNaN } = require("./outils.js");
+const { dng: aide } = require("./aide.js");
+
 const outils = require("./outils.js");
 const roll = require('./roll.js');
 const isekai = require('./isekai.js');
-let strings = require('../Données/textes-privés.json');
 const fs = require('fs');
 
 module.exports = {
@@ -11,21 +12,7 @@ module.exports = {
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
-        let espaces = "                ";
-        let botReply = "." + // Nécéssaire pour que discord n'enlève pas les espaces.
-        espaces + "**Liens utiles**\r\n" +
-        "**Mode d'emploi du bot** : <https://buwaro-bots.github.io/Discord-bots/?mode=dng>\r\n" +
-        strings["DnG-Help"] +
-        " \r\n" +
-        espaces + "**Commandes**\r\n" +
-        "**;dng *stat*** pour un jet normal, la stat doit normalement être entre 1 et 5. (et **dd** *3* pour le dd, et +1/-1 pour les avantages)\r\n" +
-        "**;dng ini *instinct* + *agilité*** pour un jet d'initiative.\r\n" +
-        "**;dng pc *stat* *+modificateur*** pour un jet de puissance cachée." +
-        " \r\n" +
-        "**;dng table** pour la table des types.\r\n" +
-        "**;dng trait** pour avoir la description complète d'un trait. **;dex *espèce*** permet de vous rappeler les traits que vous avez.\r\n"
-
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        aide(client, message, args, envoyerPM, idMJ);
         return;
     }
     if (args[0] === "table" || args[0] === "types" || args[0] === "type") {

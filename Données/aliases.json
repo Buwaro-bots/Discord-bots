@@ -12,6 +12,11 @@
     },
 
     {
+        "nom" : "help",
+        "alias" : "aide"
+    },
+
+    {
         "nom": "epee",
         "alias": "repeter",
         "unshift" : ["3", "ins"]
