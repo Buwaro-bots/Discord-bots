@@ -3,7 +3,14 @@ const config = require('../config.json');
 
 module.exports = {
     id: function(client, message, args, envoyerPM, idMJ) {
-        envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ);
+    },
+
+    fermer: function(client, message, args, envoyerPM, idMJ) {
+        if (message.author.id === config.admin) {
+            console.log("ok");
+            client.destroy();
+        }
     },
 
     ramoloss: function(client, message, args, envoyerPM, idMJ) {

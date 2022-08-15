@@ -1,10 +1,8 @@
 const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
 const aliases = require('./Données/aliases.json'); // Ce fichier contient les noms alternatifs des commandes
 const outils = require("./Commandes/outils.js");
+const {recherchercommande} = require('./Commandes/meta.js')
 
-const requireDir = require('require-dir');
-const mesCommandes = requireDir('./Commandes'); // Ces deux lignes importent mes commandes du dossier commande.
-delete mesCommandes.outils;
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.DIRECT_MESSAGE_REACTIONS], partials: ["CHANNEL"]});
 
@@ -41,44 +39,28 @@ client.on("messageCreate", (message) => {
     args        : tableau qui contient tout les paramètres après la commande
     command     : string qui est la commande après le préfix
     */
-    let commandBody = message.content.slice(prefix.length); // Cette partie sert à séparer la commande des arguments.
+    let commandBody = message.content.slice(prefix.length);
     let args = commandBody.split(/ +/); // Regular expression pour empêcher les double espaces de faire planter.
     let command = outils.normalisationString(args.shift());
-    try {
-        [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM); // Avoir un ping au milieu d'un message peut poser problème, donc on l'enlève ici. (Note le mettre en dessous du foreach a causé un bug une fois.)
+    [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM); // Avoir un ping au milieu d'un message peut poser problème, donc on l'enlève ici. (Note le mettre en dessous du foreach a causé un bug une fois.)
 
-        // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. Il peut rajouter des paramètres si l'alias était un raccourci vers une commande plus longue.
-        aliases.forEach(alias => {
-            if (command === alias["nom"]) {
-                command = alias["alias"];
-                if (alias.hasOwnProperty("unshift")) {
-                    for (let i = alias.unshift.length -1 ; i >= 0; i--) {
-                        args.unshift(alias.unshift[i]);
-                    }
+    // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. Il peut rajouter des paramètres si l'alias était un raccourci vers une commande plus longue.
+    aliases.forEach(alias => {
+        if (command === alias["nom"]) {
+            command = alias["alias"];
+            if (alias.hasOwnProperty("unshift")) { // Le tableau est lu à l'envers pour qu'il soit plus lisible par un humain.
+                for (let i = alias.unshift.length -1 ; i >= 0; i--) {
+                    args.unshift(alias.unshift[i]);
                 }
             }
             return;
         }
     })
 
-        else if (mesCommandes.hasOwnProperty(command)) {
-            mesCommandes[command][command](client, message, args, envoyerPM, idMJ);
-        }
-
-        else if (command === "fermer" && message.author.id === config.admin) {
-            console.log("ok");
-            client.destroy();
-        }
-
-        else if (mesCommandes.autres.hasOwnProperty(command)) {
-            mesCommandes.autres[command](client, message, args, envoyerPM, idMJ);
-        }
-        
-        else {
-            args.unshift(command);
-            mesCommandes.meta.meta(client, message, args, envoyerPM, idMJ);
-        }
-
+    try {
+        const fonction = recherchercommande(command);
+        fonction(client, message, args, envoyerPM, idMJ);
+        return;
     }
 
     catch(err) {
