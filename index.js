@@ -20,9 +20,9 @@ client.on("messageCreate", (message) => {
     dateHeure = new Date();
     let heure = outils.pad(dateHeure.getHours()) + ':' + outils.pad(dateHeure.getMinutes()) + ':' + outils.pad(dateHeure.getSeconds());
     process.stdout.write(`\x1b[92m${heure}  \x1b[96m${message.author.username}#${message.author.discriminator} \x1b[94m${message.content} \x1b[90m=> \x1b[97m`);
+
     let envoyerPM = false; // Cette variable indique si la réponse doit être envoyée par mp.
     let idMJ = null;
-
     // Si l'utilisateur utilise deux fois le préfix, on considère qu'il veut recevoir la réponse par mp
     if (message.content.startsWith(prefix + prefix)) {
         envoyerPM = true;

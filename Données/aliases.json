@@ -1,14 +1,12 @@
 [
     {
         "nom": "repeat",
-        "alias": "repeter",
-        "commande" : ""
+        "alias": "repeter"
     },
 
     {
         "nom" : "r",
-        "alias" : "roll",
-        "commande" : ""
+        "alias" : "roll"
     },
 
     {
@@ -79,5 +77,17 @@
         "nom" : "nuggets",
         "alias" : "isekai",
         "unshift" : ["roll", "6", "vol"]
+    },
+
+    {
+        "nom" : "salade",
+        "alias" : "combiner",
+        "unshift" : ["isekai", "timer", "2500", "plante", ";", "isekai", "roll", "6", "timer", "3500", "saut", "2", "plante"]
+    },
+
+    {
+        "nom" : "soda",
+        "alias" : "combiner",
+        "unshift" : ["isekai", "timer", "2500", "eau", ";", "isekai", "roll", "6", "timer", "3500", "saut", "2", "eau"]
     }
 ]

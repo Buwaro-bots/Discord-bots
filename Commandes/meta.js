@@ -1,6 +1,6 @@
 const outils = require("./outils.js");
 const requireDir = require('require-dir');
-const mesCommandes = requireDir('../Commandes'); 
+let mesCommandes = requireDir('../Commandes');
 const config = require('../config.json');
 
 let listeTempo = {};
@@ -162,5 +162,13 @@ module.exports = {
             let fonctionCommande = module.exports.recherchercommande(commandeEnCours);
             fonctionCommande(client, message, argsEnCours, envoyerPM, idMJ);
         }
+    },
+
+    reload: function(client, message, args, envoyerPM, idMJ) {
+        if (message.author.id === config.admin) {
+            mesCommandes = requireDir('../Commandes', { noCache: true });
+            message.react('👍');
+        }
     }
+
 }
