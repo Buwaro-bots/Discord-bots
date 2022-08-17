@@ -1,6 +1,5 @@
 const outils = require("./Commandes/outils.js");
-const requireDir = require('require-dir');
-const mesCommandes = requireDir('./Commandes'); 
+const {recherchercommande} = require('./Commandes/meta.js')
 const config = require('./config.json');
 const ancienLancerParDefaut = config.lancerParDefault;
 const fs = require('fs');
@@ -40,28 +39,13 @@ if (process.argv.length > 2) {
 		arguments.shift();
 	}
 	let commande = arguments.shift();
-	if (mesCommandes.hasOwnProperty(commande)) {
-		try{mesCommandes[commande][commande](null, message, arguments, false, false);}
+	try{
+		const fonction = recherchercommande(commande);
+        fonction(null, message, arguments, false, false);
+	}
 		catch(e){
 			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
 		}
-	}
-	else if (mesCommandes.meta.hasOwnProperty(commande)) {
-		try{mesCommandes.meta[commande](null, message, arguments, false, false);}
-		catch(e){
-			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
-		}
-	}
-	else if (mesCommandes.autres.hasOwnProperty(commande)) {
-		try{mesCommandes.autres[commande](null, message, arguments, false, false);}
-		catch(e){
-			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
-		}
-	}
-	else {
-		console.log("\u001b[0;31mCette fonction n'existe pas ou n'a pas été trouvée.\u001b[0;0m");
-	}
-
 }
 else {
 	let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/./Données/param-joueurs.json', 'utf-8'));
@@ -77,6 +61,7 @@ else {
 	fs.writeFileSync('./Données/param-joueurs.json', writer);
 
 	const listeCommandes = { 
+		// Commades du dossier commandes.
 		"dng" :   [
 			{
 				args : ["3"],
@@ -144,7 +129,7 @@ else {
 			},
 			{
 				args : ["pc", "21"],
-				commentaire : "Erreur avec une pc de 21"
+				commentaire : "Renvoit une erreur avec une pc de 21"
 			},
 			{
 				args : ["pokemon", "Kaiminus"],
@@ -232,6 +217,14 @@ else {
 				commentaire : "Isekai avec un pokémon eau sol"
 			},
 			{
+				args : ["roll", "6"],
+				commentaire : "Roll d'une équipe de 6 pokémons"
+			},
+			{
+				args : ["roll", "3", "sol"],
+				commentaire : "Roll d'une équipe de 3 pokémons sol"
+			},
+			{
 				args : ["aaaaaaaa"],
 				commentaire : "Isekai qui renvoit une erreur"
 			},
@@ -270,24 +263,120 @@ else {
 				commentaire : "Remets le lancer à son état initial"
 			},
 		],
+		"num" : [
+			{
+				args : ["3"],
+				commentaire : "Un roll de numenera simple"
+			},
+		],
+		// Commades du fichier autres.js
+		"id" : [
+			{
+				args : [],
+				commentaire : "Affiche l'id du serveur, ici 1"
+			},
+		],
+		"tarot" : [
+			{
+				args : [],
+				commentaire : "Tire une carte de tarot"
+			},
+			{
+				args : [1],
+				commentaire : "Tire une carte de tarot"
+			},
+			{
+				args : [5],
+				commentaire : "Tire cinq cartes de tarot"
+			},
+			{
+				args : [-1],
+				commentaire : "Tire une carte de tarot parce que le nombre n'est pas valide"
+			},
+		],
+		"ouija" : [
+			{
+				args : [],
+				commentaire : "Commande ouija"
+			},
+		],
+		"ball_8" : [
+			{
+				args : [],
+				commentaire : "8 ball"
+			},
+		],
+		"horoscope" : [
+			{
+				args : [],
+				commentaire : "Tire un animal"
+			},
+			{
+				args : ["hybride"],
+				commentaire : "Tire deux animaux"
+			},
+			{
+				args : ["hybride", "3"],
+				commentaire : "Tire trois animaux"
+			},
+			
+		],
+		"repeter" : [
+			{
+				args : ["3", "ins"],
+				commentaire : "Fait trois rolls de ins"
+			},
+			{
+				args : ["30", "ins"],
+				commentaire : "Fait cinqs rolls de ins, la commande dit 30 mais il y a la limitation"
+			},
+		],
+		"tempo" : [
+			{
+				args : ["0.1", "ins"],
+				commentaire : "Repete un roll de ins toutes les 10 secondes"
+			},
+		],
+		"combiner" : [
+			{
+				args : ["roll", "20", ";", "horoscope", ";", "repeter", "10", "troll"],
+				commentaire : "Lance un d20; puis un horoscope, puis 10 jets randoms (ou moins parce que la commande plante avec un isekai"
+			},
+		],
 		"log" : [
 			{
-				args : ["1", "couleur"],
+				args : ["couleur", "canal"],
 				commentaire : "Affichage des logs"
 			},
 		]
 	}
+
+	let nombreDErreurs = 0;
+
 	for (let commande in listeCommandes) {
 		console.log('\x1b[31m%s\x1b[0m', `     ${commande}`);
 		for (let i = 0; i < listeCommandes[commande].length; i++) {
 			let args = listeCommandes[commande][i].args;
-			try{mesCommandes[commande][commande](null, message, args, false, false);}
+			try {
+				const fonction = recherchercommande(commande);
+        		fonction(null, message, args, false, false);
+			}
 			catch(e){
-				if (!(e.toString().includes("(reading 'then')")) && !(e.toString().includes("(reading 'channels')")) ) console.log(e);
+				if (!(e.toString().includes("(reading 'then')")) && !(e.toString().includes("(reading 'channels')")) && !(e.toString().includes("message.react"))){
+						if (listeCommandes[commande][i].commentaire.includes("erreur")) {
+							console.log(`*\u001b[0;33m${e}\u001b[0;0m*`);
+						}
+						else {
+							nombreDErreurs += 1;
+							console.log(`\u001b[0;35m${e}\u001b[0;0m`);
+						}
+					}
 			}
 			console.log('\x1b[36m%s\x1b[0m', "=> " + listeCommandes[commande][i].commentaire + "\r\n");
 		}
 	}
+
+	console.log(`Nombre d'erreurs : ${nombreDErreurs}\r\nFermer les tempos avec ctrl+c`);
 }
 
 let statsLancers = require('./Données/stats.json');
