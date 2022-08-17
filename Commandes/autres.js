@@ -1,5 +1,6 @@
 const outils = require("./outils.js");
 const config = require('../config.json');
+const horoscope = require("../Données/horoscope.json");
 
 module.exports = {
     id: function(client, message, args, envoyerPM, idMJ) {
@@ -30,6 +31,7 @@ module.exports = {
         
         outils.verifierNaN(args);
         nombreCartes = args.length > 0 ? args[0] : 1;
+        nombreCartes = nombreCartes > 0 ? nombreCartes : 1;
         phraseCartes = nombreCartes > 1 ? "les cartes" : "la carte";
 
         cartesTirées = tarot.sort(() => Math.random() - 0.5);
@@ -127,5 +129,12 @@ module.exports = {
             boucleEnCours += 1;
         }
         outils.envoyerMessage(client, `${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM, idMJ);
+    },
+
+    renommer: function(client, message, args, envoyerPM, idMJ) {
+        const voiceChannelID = message.member.voice.channelId;
+        if (voiceChannelID !== null && message.author.id === config.admin) {
+            client.channels.fetch(voiceChannelID)
+                .then(channel => channel.setName(args[0]));}
     }
 }

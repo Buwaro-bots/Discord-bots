@@ -155,10 +155,10 @@ module.exports = {
                     let messageEdite = msg.content;
                     if (dernierPokemon.hasOwnProperty("image")) {
                         if (dernierPokemon.tags.includes("Spoiler")) {
-                            messageEdite += ` ||${dernierPokemon.image}||`;
+                            messageEdite += ` ||<${dernierPokemon.image}>||`;
                         }
                         else {
-                            messageEdite += ` ${dernierPokemon.image}`;
+                            messageEdite += ` <${dernierPokemon.image}>`;
                         }
                     }
                     else {
