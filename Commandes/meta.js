@@ -1,3 +1,4 @@
+const fs = require('fs');
 const outils = require("./outils.js");
 const requireDir = require('require-dir');
 let mesCommandes = requireDir('../Commandes');
@@ -166,7 +167,11 @@ module.exports = {
 
     reload: function(client, message, args, envoyerPM, idMJ) {
         if (message.author.id === config.admin) {
+            historiqueIsekai = mesCommandes.isekai.getHistorique();
             mesCommandes = requireDir('../Commandes', { noCache: true });
+            mesCommandes.isekai.setHistorique(historiqueIsekai);
+            global.aliases = JSON.parse(fs.readFileSync(__dirname + '/../Données/aliases.json', 'utf-8'));
+
             message.react('👍');
         }
     }

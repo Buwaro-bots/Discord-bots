@@ -250,5 +250,13 @@ module.exports = {
     if (historique.length > 40) historique.shift();
 
     return pokemonChoisi;
+    },
+
+    setHistorique : function(nouvelHistorique) {
+        historique = nouvelHistorique;
+    },
+
+    getHistorique : function() {
+        return historique;
     }
 }
