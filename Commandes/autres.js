@@ -7,13 +7,6 @@ module.exports = {
         outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ);
     },
 
-    fermer: function(client, message, args, envoyerPM, idMJ) {
-        if (message.author.id === config.admin) {
-            console.log("ok");
-            client.destroy();
-        }
-    },
-
     ramoloss: function(client, message, args, envoyerPM, idMJ) {
         async function speak() {
             temps = 5*60*1000 + mesCommandes.outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
