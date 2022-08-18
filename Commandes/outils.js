@@ -206,5 +206,11 @@ module.exports = {
             }
         }
         return [valeurParDefaut, args]
+    },
+
+    genererAliases : function() {
+        aliasBases = JSON.parse(fs.readFileSync('./Données/aliases.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
+        aliasPerso = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
+        return aliasBases.concat(aliasPerso);
     }
 }

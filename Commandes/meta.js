@@ -7,7 +7,7 @@ const config = require('../config.json');
 let listeTempo = {};
 
 module.exports = {
-    recherchercommande: function(commande) {
+    recherchercommande: function(commande, renvoyerErreur = true) {
         commande = outils.normalisationString(commande);
         if (mesCommandes.hasOwnProperty(commande)) {
             return mesCommandes[commande][commande];
@@ -19,7 +19,12 @@ module.exports = {
             return module.exports[commande];
         }
         else {
-            throw("Commande invalide.");
+            if (renvoyerErreur) {
+                throw("Commande invalide.");
+            }
+            else {
+                return null;
+            }
         }
     },
 
@@ -170,7 +175,7 @@ module.exports = {
             historiqueIsekai = mesCommandes.isekai.getHistorique();
             mesCommandes = requireDir('../Commandes', { noCache: true });
             mesCommandes.isekai.setHistorique(historiqueIsekai);
-            global.aliases = JSON.parse(fs.readFileSync(__dirname + '/../Données/aliases.json', 'utf-8'));
+            global.aliases = outils.genererAliases();
 
             message.react('👍');
         }
@@ -201,4 +206,43 @@ module.exports = {
         }
     },
 
+    alias: function(client, message, args, envoyerPM, idMJ) {
+        let listeAliasPersos = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8'));
+        if (args.length > 2 && args[0] == "effacer" && message.author.id === config.admin) {
+            for (let i = 0; i < listeAliasPersos.length; i++) {
+                if (listeAliasPersos[i].nom === args[1]) {
+                    listeAliasPersos.splice(i, 1);
+                    botReply = `${message.author.toString()} La commande ${args[1]} a bien été enregistrée.`;
+                    outils.envoyerMessage(client, botReply, message, envoyerPM);
+                    break;
+                }
+            }
+        }
+        else if (args.length > 2 && module.exports.recherchercommande(args[0], false) === null) {
+            module.exports.recherchercommande(args[1]) // On utiliser ça pour vérifier que la première commande existe.
+            let nom = args.shift();
+            let alias = args.shift();
+            let unshift = args;
+            let createur = `${message.author.username}#${message.author.discriminator}`;
+            let createurId = message.author.id;
+
+            listeAliasPersos.push({
+                "nom": nom,
+                "alias": alias,
+                "unshift" : unshift,
+                "createur": createur,
+                "createurId" : createurId
+            })
+            botReply = `${message.author.toString()} La commande ${nom} a bien été enregistrée.`;
+            outils.envoyerMessage(client, botReply, message, envoyerPM);
+        }
+        else {
+            throw("Commande alias mal utilisée.")
+        }
+        let writer = JSON.stringify(listeAliasPersos, null, 4); // On sauvegarde le fichier.
+        fs.writeFileSync('./Données/aliases-perso.json', writer);
+        global.aliases = outils.genererAliases();
+    },
+
 }
+

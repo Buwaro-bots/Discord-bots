@@ -1,7 +1,7 @@
 const fs = require('fs');
 const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
-      global.aliases = JSON.parse(fs.readFileSync(__dirname + '/./Données/aliases.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
 const outils = require("./Commandes/outils.js");
+global.aliases = outils.genererAliases();
 const {recherchercommande} = require('./Commandes/meta.js')
 
 const { Client, Intents } = require('discord.js');
