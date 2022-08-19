@@ -3,6 +3,7 @@ const config = require('./config.json'); // Ce fichier contient le token de conn
 const outils = require("./Commandes/outils.js");
 global.aliases = outils.genererAliases();
 const {recherchercommande} = require('./Commandes/meta.js')
+const {renvoyerFonction} = require('./Commandes/meta.js')
 
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.DIRECT_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES], partials: ["CHANNEL"]});
@@ -98,7 +99,7 @@ dummyMessageAdmin.author.toString = function () {return "admin";};
 
 var stdin = process.stdin;
 
-console.log("Pour lancer des commandes ici, c'est l pour les logs.");
+console.log("Pour lancer des commandes ici, c'est l pour les logs, h pour l'historique isekai.");
 
 // https://stackoverflow.com/a/12506613
 stdin.setRawMode( true ); // without this, we would only get streams once enter is pressed
@@ -113,5 +114,14 @@ stdin.on( 'data', function( key ){ // on any data into stdin
     if (key === "l") {
         let fonction = recherchercommande("log");
         fonction(null, dummyMessageAdmin, ["couleur"], false, null);
+    }
+    else if (key === "h") {
+        let fonction = renvoyerFonction("isekai", "getHistorique");
+        let historique = fonction();
+        let tableau = [];
+        for (let i = 0; i < historique.length; i++) {
+            tableau.push(historique[i]["nom"]);
+        }
+        console.log(tableau);
     }
 });

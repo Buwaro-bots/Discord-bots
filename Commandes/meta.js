@@ -28,6 +28,15 @@ module.exports = {
         }
     },
 
+    renvoyerFonction: function(fichier, commande) {
+        if (fichier === "meta") {
+            return module.exports[commande];
+        }
+        else {
+            return mesCommandes[fichier][commande];
+        }
+    },
+
     meta: function(client, message, args, envoyerPM, idMJ) {
         let commande = outils.normalisationString(args.shift());
         if (module.exports.hasOwnProperty(commande)) {
