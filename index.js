@@ -71,3 +71,46 @@ client.on("messageCreate", (message) => {
 });
  
 client.login(config.botToken);
+
+// https://stackoverflow.com/questions/14031763/doing-a-cleanup-action-just-before-node-js-exits
+process.stdin.resume();//so the program will not close instantly
+
+function exitHandler() {
+    const fonction = recherchercommande("fermer");
+    fonction(client, null);
+}
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind());
+
+const dummyMessageAdmin = {
+	channelId: '1',
+	guildId: '1',
+	id: '1',
+	createdTimestamp: Date.now(),
+	content: '',
+	author: {
+	  id: config.admin,
+	  username: 'admin',
+	  discriminator: 'admin',
+	}
+}
+dummyMessageAdmin.author.toString = function () {return "admin";};
+
+var stdin = process.stdin;
+
+console.log("Pour lancer des commandes ici, c'est l pour les logs.");
+
+// https://stackoverflow.com/a/12506613
+stdin.setRawMode( true ); // without this, we would only get streams once enter is pressed
+stdin.resume(); // resume stdin in the parent process (node app won't quit all by itself unless an error or process.exit() happens)
+stdin.setEncoding( 'utf8' ); // i don't want binary, do you?
+stdin.on( 'data', function( key ){ // on any data into stdin
+    if ( key === '\u0003' ) {   // ctrl-c ( end of text )
+        process.exit();
+    }
+    // process.stdout.write( key );   // write the key to stdout all normal like
+    if (key === "l") {
+        let fonction = recherchercommande("log");
+        fonction(null, dummyMessageAdmin, ["couleur"], false, null);
+    }
+});
