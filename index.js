@@ -106,7 +106,8 @@ stdin.resume(); // resume stdin in the parent process (node app won't quit all b
 stdin.setEncoding( 'utf8' ); // i don't want binary, do you?
 stdin.on( 'data', function( key ){ // on any data into stdin
     if ( key === '\u0003' ) {   // ctrl-c ( end of text )
-        process.exit();
+        const fonction = recherchercommande("fermer");
+        fonction(client, null);
     }
     // process.stdout.write( key );   // write the key to stdout all normal like
     if (key === "l") {
