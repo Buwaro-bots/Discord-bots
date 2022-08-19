@@ -182,27 +182,33 @@ module.exports = {
     },
 
     fermer: function(client, message, args, envoyerPM, idMJ) {
-        if (message.author.id === config.admin) {
+        if (message === null || message.author.id === config.admin) {
             console.log("ok");
             historiqueIsekai = mesCommandes.isekai.getHistorique();
             let writer = JSON.stringify(historiqueIsekai, null, 4); // On sauvegarde le fichier.
-            fs.writeFile('./Données/temp.json', writer, function(err, result) {
+            fs.writeFileSync('./Données/temp.json', writer, function(err, result) {
                 if(err) console.log('error', err);
               });
             client.destroy();
+            process.exit();
         }
     },
 
     initialiser: function(client, message, args, envoyerPM, idMJ) {
-        if (message.author.id === config.admin) {
+        if (client === null || message.author.id === config.admin) {
             console.log("ok");
-            historiqueIsekai = JSON.parse(fs.readFileSync('./Données/temp.json', 'utf-8'));
-            mesCommandes.isekai.setHistorique(historiqueIsekai);
-            console.log(historiqueIsekai[0]);
-            fs.unlink('./Données/temp.json', (err) => {
-                if (err) throw err;
-                console.log("L'historique a bien été archivé et le fichier supprimé.");
-              });
+            fichier = "./Données/temp.json"
+            fs.access(fichier, fs.constants.F_OK, (manque) => {
+                if (!manque) {
+                    historiqueIsekai = JSON.parse(fs.readFileSync('./Données/temp.json', 'utf-8'));
+                    mesCommandes.isekai.setHistorique(historiqueIsekai);
+                    console.log(historiqueIsekai[0]);
+                    fs.unlink('./Données/temp.json', (err) => {
+                        if (err) throw err;
+                        console.log("L'historique a bien été archivé et le fichier supprimé.");
+                    });
+                }
+            });
         }
     },
 
@@ -246,3 +252,4 @@ module.exports = {
 
 }
 
+module.exports.initialiser(null);
