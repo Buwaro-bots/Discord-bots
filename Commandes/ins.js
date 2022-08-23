@@ -158,7 +158,19 @@ module.exports = {
         }
     }
 
-    if (args[0] === "check" || args[0] === "verif" || paramJoueurs.ins.listeAutoVerifications.includes(message.author.id) && lancerSpecial === false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
+    let typeLancer = "INS";
+    if (args[0] == "opposition") {
+        let i = 0;
+        while (dicesSum > INSdata.tum[i]["lancer"]) {
+            i += 1;
+        }
+        let relative = INSdata.tum[i]["relative"];
+        relative = relative > 0 ? `+${relative}` : relative;
+        botReply += ` Réussite à partir d'une différence de stat de ${relative}.`;
+        typeLancer = "INS (opposition)";
+    }
+
+    else if (args[0] === "check" || args[0] === "verif" || paramJoueurs.ins.listeAutoVerifications.includes(message.author.id) && lancerSpecial === false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat
         let minimumStat = -2 ;
         let nomMinimumStat = "" ;
         let maximumRoll = 110;
@@ -206,6 +218,6 @@ module.exports = {
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
 
-    outils.logLancer(message, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, "INS", envoyerPM);
+    outils.logLancer(message, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, typeLancer, envoyerPM);
     }
 }

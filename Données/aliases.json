@@ -42,6 +42,12 @@
         "alias" : "isekai",
         "unshift" : ["roll", "6"]
     },
+
+    {
+        "nom" : "opposition",
+        "alias" : "ins",
+        "unshift" : ["opposition"]
+    },
     
     {
         "nom" : "8ball",

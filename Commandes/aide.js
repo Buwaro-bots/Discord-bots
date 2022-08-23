@@ -55,6 +55,7 @@ module.exports = {
     ins: function(client, message, args, envoyerPM, idMJ) {
         let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=ins>\r\n" +
         "**;ins** permet de faire un jet normal.\r\n" +
+        ";ins **opposition** pour indiquer la différence de stat nécéssaire pour battre un autre perso.\r\n" +
         ";ins **autocheck** permet d'activer automatiquement la vérification des rolls. (ou de le désactiver en réutilisant cette commande).\r\n" +
         ";ins **gacha** pour faire un jet de gacha. (wow)\r\n" +
         "\r\n" +

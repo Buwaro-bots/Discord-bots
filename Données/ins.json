@@ -3,92 +3,110 @@
         {
             "stat": -2,
             "lancer": 116,
-            "nomStat": "-2"
+            "nomStat": "-2",
+            "relative": -4
         },
         {
             "stat": -1.5,
             "lancer": 126,
-            "nomStat": "-1+"
+            "nomStat": "-1+",
+            "relative": -3.5
         },
         {
             "stat": -1,
             "lancer": 136,
-            "nomStat": "-1"
+            "nomStat": "-1",
+            "relative": -3
         },
         {
             "stat": -0.5,
             "lancer": 156,
-            "nomStat": "-0+"
+            "nomStat": "-0+",
+            "relative": -2.5
         },
         {
             "stat": 0,
             "lancer": 216,
-            "nomStat": "0"
+            "nomStat": "0",
+            "relative": -2
         },
         {
             "stat": 0.5,
             "lancer": 236,
-            "nomStat": "0+"
+            "nomStat": "0+",
+            "relative": -1.5
         },
         {
             "stat": 1,
             "lancer": 266,
-            "nomStat": "1"
+            "nomStat": "1",
+            "relative": -1
         },
         {
             "stat": 1.5,
             "lancer": 336,
-            "nomStat": "1+"
+            "nomStat": "1+",
+            "relative": -0.5
         },
         {
             "stat": 2,
             "lancer": 366,
-            "nomStat": "2"
+            "nomStat": "2",
+            "relative": 0
         },
         {
             "stat": 2.5,
             "lancer": 436,
-            "nomStat": "2+"
+            "nomStat": "2+",
+            "relative": 0.5
         },
         {
             "stat": 3,
             "lancer": 466,
-            "nomStat": "3"
+            "nomStat": "3",
+            "relative": 1
         },
         {
             "stat": 3.5,
             "lancer": 536,
-            "nomStat": "3+"
+            "nomStat": "3+",
+            "relative": 1.5
         },
         {
             "stat": 4,
             "lancer": 556,
-            "nomStat": "4"
+            "nomStat": "4",
+            "relative": 2
         },
         {
             "stat": 4.5,
             "lancer": 616,
-            "nomStat": "4+"
+            "nomStat": "4+",
+            "relative": 2.5
         },
         {
             "stat": 5,
             "lancer": 636,
-            "nomStat": "5"
+            "nomStat": "5",
+            "relative": 3
         },
         {
             "stat": 5.5,
             "lancer": 646,
-            "nomStat": "5+"
+            "nomStat": "5+",
+            "relative": 3.5
         },
         {
             "stat": 6,
             "lancer": 656,
-            "nomStat": "6"
+            "nomStat": "6",
+            "relative": 4
         },
         {
             "stat": 6.5,
             "lancer": 666,
-            "nomStat": "6+"
+            "nomStat": "6+",
+            "relative": 4.5
         },
         {
             "stat": 7,
