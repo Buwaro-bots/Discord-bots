@@ -52,8 +52,10 @@ module.exports = {
         }
         let commande = args.shift();
         let fonctionCommande = module.exports.recherchercommande(commande);
+        if (outils.normalisationString(commande) === "repeter") throw ("Blocage d'utiliser repeter sur repeter.")
         for (let i = 0; i < nombreBoucles; i++) {
-            fonctionCommande(client, message, args, envoyerPM, idMJ);
+            copyArgs = args.slice(0); // Nécéssaire pour les commandes qui modifient les paramètres. https://stackoverflow.com/a/6612410
+            fonctionCommande(client, message, copyArgs, envoyerPM, idMJ);
         }
         
     },
@@ -167,6 +169,7 @@ module.exports = {
     },
 
     combiner: function(client, message, args, envoyerPM, idMJ) {
+        // TODO : Refuser si deux fois répéter sauf si admin
         while (args.length > 0) {
             let commandeEnCours = args.shift();
             let argsEnCours = [];
@@ -192,7 +195,6 @@ module.exports = {
 
     fermer: function(client, message, args, envoyerPM, idMJ) {
         if (message === null || message.author.id === config.admin) {
-            console.log("ok");
             historiqueIsekai = mesCommandes.isekai.getHistorique();
             let writer = JSON.stringify(historiqueIsekai, null, 4); // On sauvegarde le fichier.
             fs.writeFileSync('./Données/temp.json', writer, function(err, result) {
@@ -205,7 +207,6 @@ module.exports = {
 
     initialiser: function(client, message, args, envoyerPM, idMJ) {
         if (client === null || message.author.id === config.admin) {
-            console.log("ok");
             fichier = "./Données/temp.json"
             fs.access(fichier, fs.constants.F_OK, (manque) => {
                 if (!manque) {
@@ -223,11 +224,11 @@ module.exports = {
 
     alias: function(client, message, args, envoyerPM, idMJ) {
         let listeAliasPersos = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8'));
-        if (args.length > 2 && args[0] == "effacer" && message.author.id === config.admin) {
+        if (args.length >= 2 && args[0] == "effacer" && message.author.id === config.admin) {
             for (let i = 0; i < listeAliasPersos.length; i++) {
                 if (listeAliasPersos[i].nom === args[1]) {
                     listeAliasPersos.splice(i, 1);
-                    botReply = `${message.author.toString()} La commande ${args[1]} a bien été enregistrée.`;
+                    botReply = `${message.author.toString()} La commande ${args[1]} a bien été effacée.`;
                     outils.envoyerMessage(client, botReply, message, envoyerPM);
                     break;
                 }
