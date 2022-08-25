@@ -66,6 +66,7 @@ module.exports = {
     let nombreINSLancers = 0;
     let INSLancers = { 1 : [0,0], 2 : [0,0], 3 : [0,0], 4 : [0,0], 5 : [0,0], 6 : [0,0]};
     let INSLancersChiffres = { 1 : 0, 2 : 0, 3 : 0, 4 : 0, 5 : 0, 6 : 0};
+    let INSMedianes = {};
     mj = mj === "" ? "": outils.rattrapageFauteOrthographe(jets, mj);
     joueurUnique = joueurUnique === "" ? "": outils.rattrapageFauteOrthographe(jets, joueurUnique);
 
@@ -77,6 +78,7 @@ module.exports = {
                 let nomJoueur = key == mj ? `\`\`\`ansi\r\n\u001b[0;36m${key}\u001b[0;37m` :  `\`\`\`ansi\r\n\u001b[0;34m${key}\u001b[0;37m`;
                 let listeLancers = "";
                 let numeroPartie = 1;
+                let calculMediane = [];
                 for (roll of value) {
                     if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
                     && (recupererPM || roll.estPM === false)
@@ -97,7 +99,7 @@ module.exports = {
                             listeLancers += texte;
                         }
 
-                        if (key !== mj) {
+                        if (true /*key !== mj*/) {
                             if (roll["type"] == "1d100") {
                                 nombreD100Lancers += 1;
                                 nombreD100ReussitesCrit += roll["lancer"] < 6 ? 1 : 0;
@@ -115,7 +117,7 @@ module.exports = {
                                     if (parseInt(lancer[1]) > 18) DNGLancers["crit"] += 1;
                                 }
                             }
-                            else if (roll["type"].includes("INS") && !(roll["lancer"].includes("gacha"))) {
+                            else if (roll["type"].includes("INS") && !(roll["type"].includes("gacha"))) {
                                 let lancer = roll["lancer"];
                                 let premierDe = parseInt(lancer[1])
                                 nombreINSLancers += 1;
@@ -125,6 +127,8 @@ module.exports = {
                                 INSLancersChiffres[parseInt(lancer[1])] += 1;
                                 INSLancersChiffres[parseInt(lancer[2])] += 1;
                                 INSLancersChiffres[parseInt(lancer[6])] += 1;
+
+                                calculMediane.push((parseInt(lancer[1])) * 6 + parseInt(lancer[2]));
                             }
                         }
                     }
@@ -140,11 +144,22 @@ module.exports = {
                         nomJoueur = `\`\`\`ansi\r\n\u001b[0;34m${key} \u001b[0;36m(partie ${numeroPartie})\u001b[0;37m`;
                     }
                 }
-            if (listeLancers.length > 0) {
-                let nombreCaracteres = Math.min(listeLancers.length-2, 998);
-                listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
-                listeJoueurs[nomJoueur] = listeLancers;
-            }}
+                if (listeLancers.length > 0) {
+                    let nombreCaracteres = Math.min(listeLancers.length-2, 998);
+                    listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
+                    listeJoueurs[nomJoueur] = listeLancers;
+                }
+
+                calculMediane = calculMediane.sort(function(a,b){return a-b;});
+                if (calculMediane.length > 4) {
+                    if (calculMediane.length % 2 == 0) {
+                        INSMedianes[key] = Math.floor((calculMediane[calculMediane.length/2 -1] + calculMediane[calculMediane.length/2]) / 2);
+                    }
+                    else {
+                        INSMedianes[key] = calculMediane[Math.round(calculMediane.length / 2) -1]
+                    }
+                }
+            }
             
             else {
                 let nomJoueur = `${key}`;
@@ -168,7 +183,7 @@ module.exports = {
             }
         }
 	}
-    let mentionDuMJ = mj === "" ? "" : "(sans le mj)";
+    let mentionDuMJ = ""; // mj === "" ? "" : "(sans le mj)";
     let nomJoueur = `\`\`\`ansi\r\n\u001b[1;32mStatistiques ${mentionDuMJ}\u001b[0;37m`
     let listeLancers = "";
     if (nombreD100Lancers > 7) {
@@ -193,6 +208,13 @@ module.exports = {
         if (INSLancers[4][0] > 0) listeLancers += `\u001b[0;33mLancers de 4x : ${INSLancers[4][0]} ${INSLancers[4][1] > 0 ? "dont " + INSLancers[4][1] + " '444'" : ""} [${INSLancersChiffres[4]}]\r\n`
         if (INSLancers[5][0] > 0) listeLancers += `\u001b[0;35mLancers de 5x : ${INSLancers[5][0]}  [${INSLancersChiffres[5]}]\r\n`
         if (INSLancers[6][0] > 0) listeLancers += `\u001b[0;31mLancers de 6x : ${INSLancers[6][0]} ${INSLancers[6][1] > 0 ? "dont " + INSLancers[6][1] + " '666'" : ""} [${INSLancersChiffres[6]}]\r\n`
+        listeLancers += "\u001b[0;0mMedianes : "
+        keysSorted = Object.keys(INSMedianes).sort(function(a,b){return INSMedianes[a]-INSMedianes[b]})
+        for (let i = 0; i < keysSorted.length; i++) {
+            let mediane = Math.floor(INSMedianes[keysSorted[i]] / 6) * 10 + INSMedianes[keysSorted[i]] % 6;
+            if (mediane % 10 == 0) mediane -= 4;
+            listeLancers+= `${keysSorted[i]} (${mediane}) `;
+        }
     }
 
     if (listeLancers.length > 0) {
