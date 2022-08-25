@@ -14,17 +14,6 @@ module.exports = {
     pour ne pas avoir à vérifier si le message a un serveur déjà existant ou pas. */
     let serverID = message.guildId in paramJoueurs.ins.lancersSpeciaux ? message.guildId : "aucun";
 
-    // Plusieurs commandes demandent de rentrer un lancer, cette fonction vérifie s'il est valide.
-    function verifierRegexLancer(lancer) {
-        let regex = new RegExp('[1-6]{3}');
-        if (regex.test(lancer)) {
-            return lancer.substring(0,3);
-        }
-        else {
-            throw(`Le lancer n'est pas valide.`);
-        }
-    }
-
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
         aide(client, message, args, envoyerPM, idMJ);
         return;
@@ -80,8 +69,7 @@ module.exports = {
         }
 
         // Il faut que le premier paramètre après message soit le lancer, après l'utilisateur écrit le message, si c'est delete this, on supprime le message existant à la place.
-
-        let lancer = verifierRegexLancer(args[1]);
+        let lancer = outils.verifierRegex(args[1], ['[1-6]{3}', '[1-6]{2}x'], 3);
 
         if (args[2] === "deletethis") {
             delete paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id];
@@ -134,20 +122,25 @@ module.exports = {
         return;
     }
 
+    let typeLancer = "INS";
     let dices = [outils.randomNumber(6), outils.randomNumber(6), outils.randomNumber(6)];
     let lancerSpecial = false;
     let verbe = "lancé";
 
-    if (args[0] === "cheat" && args.length >= 1) {
-        dices = verifierRegexLancer(args[1]).split('');
+    if (args.includes("cheat")) {
+        let désTrichés;
+        [désTrichés, args] = outils.rechercheDoubleParametre(args, "cheat");
+        dices = outils.verifierRegex(désTrichés, ['[1-6]{3}'], 3).split('');
         dices = [parseInt(dices[0]), parseInt(dices[1]), parseInt(dices[2])];
         verbe = "triché avec";
+        typeLancer += " cheat"
     }
     let dicesSum = dices[0]*100 + dices[1]*10 + dices[2]; // Nécéssaire parce qu'on ne peut pas comparer des tableaux directement.
 
     let botReply = `${message.author.toString()} a ${verbe} [${dices[0]}${dices[1]}] + [${dices[2]}].`;
 
 
+    let lancerX = `${dices[0]}${dices[1]}x`;
     if (dicesSum in paramJoueurs.ins.lancersSpeciaux[serverID]) {
         if (message.author.id in paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum]) {
             botReply += paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum][message.author.id];
@@ -157,8 +150,11 @@ module.exports = {
             botReply += paramJoueurs.ins.lancersSpeciaux[serverID][dicesSum]["autre"];
         }
     }
+    else if (lancerX in paramJoueurs.ins.lancersSpeciaux[serverID] && message.author.id in paramJoueurs.ins.lancersSpeciaux[serverID][lancerX]) {
+        botReply += paramJoueurs.ins.lancersSpeciaux[serverID][lancerX][message.author.id];
+        lancerSpecial = true;
+    }
 
-    let typeLancer = "INS";
     if (args[0] == "opposition") {
         let i = 0;
         while (dicesSum > INSdata.tum[i]["lancer"]) {
@@ -167,7 +163,7 @@ module.exports = {
         let relative = INSdata.tum[i]["relative"];
         relative = relative > 0 ? `+${relative}` : relative;
         botReply += ` Réussite à partir d'une différence de stat de ${relative}.`;
-        typeLancer = "INS (opposition)";
+        typeLancer += " (opposition)";
     }
 
     else if (args[0] === "check" || args[0] === "verif" || paramJoueurs.ins.listeAutoVerifications.includes(message.author.id) && lancerSpecial === false) { // Check dit à partir de quelle stat le jet réussi, Verif dit si un jet est réussi en fonction de la stat

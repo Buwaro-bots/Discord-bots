@@ -212,5 +212,22 @@ module.exports = {
         aliasBases = JSON.parse(fs.readFileSync('./Données/aliases.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
         aliasPerso = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
         return aliasBases.concat(aliasPerso);
+    },
+
+    /**
+     * @description Cette fonction prend une entrée, un tableau de regexp (et eventuellement une longueur maximale),
+     * et renvoit soit l'entrée si le regexp est validé, soit une erreur.
+     */
+    verifierRegex : function(entrée, listeRegex, longueur = 0) {
+        if (longueur > 0) {
+            entrée = entrée.substring(0,longueur);
+        }
+        for (let i = 0; i < listeRegex.length; i++) {
+            let regex = new RegExp(listeRegex[i]);
+            if (regex.test(entrée)) {
+                return entrée;
+            }
+        }
+        throw(`L'entré n'est pas validée par le regex.`);
     }
 }
