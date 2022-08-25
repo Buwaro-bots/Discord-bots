@@ -205,15 +205,15 @@ else {
 
 		"isekai" : [ 
 			{
-				args : [],
+				args : ["simple"],
 				commentaire : "Isekai simple"
 			},
 			{
-				args : ["Feu"],
+				args : ["simple", "Feu"],
 				commentaire : "Isekai avec un pokémon feu"
 			},
 			{
-				args : ["Eau", "Sol"],
+				args : ["simple", "Eau", "Sol"],
 				commentaire : "Isekai avec un pokémon eau sol"
 			},
 			{

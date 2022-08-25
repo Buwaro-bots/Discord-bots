@@ -75,6 +75,12 @@ module.exports = {
     [timerSpoiler, args] = outils.rechercheDoubleParametre(args, "timer", timerSpoiler);
     outils.verifierNaN([timerSpoiler]);
 
+    let modeSimple = false;
+    if (args[0] === "simple") {
+        modeSimple = true;
+        args.shift();
+    }
+
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
     let tauxDeNouveau = 1;
@@ -115,7 +121,12 @@ module.exports = {
     outils.logLancer(message, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
     listePokemonsDejaTires.push(pokemonChoisi);
     
-    if (messageReroll === null) {
+    if (modeSimple) {
+        botReply = `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`;
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+    }
+
+    else if (messageReroll === null) {
         outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message, envoyerPM, idMJ)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function() {
