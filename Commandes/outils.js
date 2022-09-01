@@ -211,7 +211,7 @@ module.exports = {
     genererAliases : function() {
         aliasBases = JSON.parse(fs.readFileSync('./Données/aliases.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
         aliasPerso = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8')); // Ce fichier contient les noms alternatifs des commandes
-        return aliasBases.concat(aliasPerso);
+        return [aliasBases.concat(aliasPerso.global), aliasPerso];
     },
 
     /**

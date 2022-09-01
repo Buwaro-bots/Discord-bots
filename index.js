@@ -1,7 +1,7 @@
 const fs = require('fs');
 const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
 const outils = require("./Commandes/outils.js");
-global.aliases = outils.genererAliases();
+[global.aliases, global.aliasesPerso] = outils.genererAliases();
 const {recherchercommande} = require('./Commandes/meta.js')
 const {renvoyerFonction} = require('./Commandes/meta.js')
 
@@ -46,14 +46,24 @@ client.on("messageCreate", (message) => {
     let command = outils.normalisationString(args.shift());
     [args, envoyerPM, idMJ] = outils.verifierSiMJ(args, envoyerPM); // Avoir un ping au milieu d'un message peut poser problème, donc on l'enlève ici. (Note le mettre en dessous du foreach a causé un bug une fois.)
 
+    let aliasUtilisateurs;
+    if (aliasesPerso.hasOwnProperty(message.author.id)) {
+        aliasUtilisateurs = aliasesPerso[message.author.id].concat(aliases);
+    }
+    else {
+        aliasUtilisateurs = aliases;
+    }
     // Gestion des alias, c'est à dire des commandes qui ont plusieurs noms. Il peut rajouter des paramètres si l'alias était un raccourci vers une commande plus longue.
-    aliases.forEach(alias => {
+    aliasUtilisateurs.forEach(alias => {
         if (command === alias["nom"]) {
             command = alias["alias"];
             if (alias.hasOwnProperty("unshift")) { // Le tableau est lu à l'envers pour qu'il soit plus lisible par un humain.
                 for (let i = alias.unshift.length -1 ; i >= 0; i--) {
                     args.unshift(alias.unshift[i]);
                 }
+            }
+            if (alias.hasOwnProperty("perso") && alias.perso === true) {
+                message.react("🔒")
             }
             return;
         }

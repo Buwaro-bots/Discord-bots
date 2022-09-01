@@ -188,7 +188,8 @@ module.exports = {
             historiqueIsekai = mesCommandes.isekai.getHistorique();
             mesCommandes = requireDir('../Commandes', { noCache: true });
             mesCommandes.isekai.setHistorique(historiqueIsekai);
-            global.aliases = outils.genererAliases();
+            [global.aliases, global.aliasesPerso] = outils.genererAliases();
+
 
             message.react('👍');
         }
@@ -225,10 +226,31 @@ module.exports = {
 
     alias: function(client, message, args, envoyerPM, idMJ) {
         let listeAliasPersos = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8'));
-        if (args.length >= 2 && args[0] == "effacer" && message.author.id === config.admin) {
-            for (let i = 0; i < listeAliasPersos.length; i++) {
-                if (listeAliasPersos[i].nom === args[1]) {
-                    listeAliasPersos.splice(i, 1);
+        let listeAliasGlobal = listeAliasPersos.global;
+        if (args.length > 2 && args[0] == "perso" && module.exports.recherchercommande(args[0], false) === null) {
+            if (!(listeAliasPersos.hasOwnProperty(message.author.id))) {
+                listeAliasPersos[message.author.id] = [];
+            }
+            args.shift();
+            module.exports.recherchercommande(args[1]) // On utiliser ça pour vérifier que la première commande existe.
+            let nom = args.shift();
+            let alias = args.shift();
+            let unshift = args;
+
+            listeAliasPersos[message.author.id].unshift({
+                "nom": nom,
+                "alias": alias,
+                "unshift": unshift,
+                "perso": true
+            })
+            botReply = `${message.author.toString()} La commande ${nom} a bien été enregistrée.`;
+            outils.envoyerMessage(client, botReply, message, envoyerPM);
+        }
+
+        else if (args.length >= 2 && args[0] == "effacer" && message.author.id === config.admin) {
+            for (let i = 0; i < listeAliasGlobal.length; i++) {
+                if (listeAliasGlobal[i].nom === args[1]) {
+                    listeAliasGlobal.splice(i, 1);
                     botReply = `${message.author.toString()} La commande ${args[1]} a bien été effacée.`;
                     outils.envoyerMessage(client, botReply, message, envoyerPM);
                     break;
@@ -243,7 +265,7 @@ module.exports = {
             let createur = `${message.author.username}#${message.author.discriminator}`;
             let createurId = message.author.id;
 
-            listeAliasPersos.push({
+            listeAliasGlobal.push({
                 "nom": nom,
                 "alias": alias,
                 "unshift" : unshift,
@@ -258,7 +280,7 @@ module.exports = {
         }
         let writer = JSON.stringify(listeAliasPersos, null, 4); // On sauvegarde le fichier.
         fs.writeFileSync('./Données/aliases-perso.json', writer);
-        global.aliases = outils.genererAliases();
+        [global.aliases, global.aliasesPerso] = outils.genererAliases();
     },
 
 }
