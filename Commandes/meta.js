@@ -169,14 +169,15 @@ module.exports = {
     },
 
     combiner: function(client, message, args, envoyerPM, idMJ) {
+        let argsGlobal = [...args];
         // TODO : Refuser si deux fois répéter sauf si admin
-        while (args.length > 0) {
-            let commandeEnCours = args.shift();
+        while (argsGlobal.length > 0) {
+            let commandeEnCours = argsGlobal.shift();
             let argsEnCours = [];
-            while (args.length > 0 && args[0] !== ";") {
-                argsEnCours.push(args.shift())
+            while (argsGlobal.length > 0 && argsGlobal[0] !== ";") {
+                argsEnCours.push(argsGlobal.shift())
             }
-            args.shift();
+            argsGlobal.shift();
             let fonctionCommande = module.exports.recherchercommande(commandeEnCours);
             fonctionCommande(client, message, argsEnCours, envoyerPM, idMJ);
         }
