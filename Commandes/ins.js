@@ -187,7 +187,14 @@ module.exports = {
         nomMinimumStat = INSdata.tum[i]["nomStat"];
 
         if (args[0] === "check" || paramJoueurs.ins.listeAutoVerifications.includes(message.author.id)) { // Si la commande est stat, on rajoute dans le message à quel stat le jet réussi. Sinon la commande est vérif, on cherche la stat demandée et on la compare avec la stat minimum pour réussir
-            if (minimumStat <= 0 ) {
+            if (dicesSum >= 112 && dicesSum <= 116) {
+                botReply += ` Réussite systématique.`;
+                if (minimumStat > 0) botReply += ` (ou avec une stat d'au minimum ${nomMinimumStat})`;
+            }
+            else if (dicesSum >= 661 && dicesSum <= 665) {
+                botReply += ` Echec systématique. (ou réussite avec une stat d'au minimum ${nomMinimumStat})`;
+            }
+            else if (minimumStat <= 0 ) {
                 botReply += ` Réussite quelque soit la stat.`;    
             }
             else {

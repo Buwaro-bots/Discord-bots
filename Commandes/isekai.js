@@ -83,7 +83,7 @@ module.exports = {
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 1;
+    let tauxDeNouveau = 0;
     let rollNouveau = outils.randomNumber(100);
     let pokemonChoisi;
 
@@ -131,7 +131,7 @@ module.exports = {
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             setTimeout(function() {
                 if (pokemonChoisi["tags"].includes("Digimon")) {
-                    msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                    msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}. (https://digimon.fandom.com/wiki/${pokemonNomForme})`);
                 }
                 else if ( !(pokemonChoisi["tags"].includes("Spoiler"))) {
                     msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
@@ -189,7 +189,7 @@ module.exports = {
         .then((msg)=> { 
             setTimeout(function() {
                 if (pokemonChoisi["tags"].includes("Digimon")) {
-                    msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
+                    msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.  (https://digimon.fandom.com/wiki/${pokemonNomForme})`);
                 }
                 else {
                     msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);

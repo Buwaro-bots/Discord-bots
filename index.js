@@ -109,7 +109,7 @@ dummyMessageAdmin.author.toString = function () {return "admin";};
 
 var stdin = process.stdin;
 
-console.log("Pour lancer des commandes ici, c'est l pour les logs, h pour l'historique isekai.");
+console.log("Pour lancer des commandes ici, c'est l pour les logs (l pour 5 heures, L pour 24 heures), h pour l'historique isekai.");
 
 // https://stackoverflow.com/a/12506613
 stdin.setRawMode( true ); // without this, we would only get streams once enter is pressed
@@ -124,6 +124,10 @@ stdin.on( 'data', function( key ){ // on any data into stdin
     if (key === "l") {
         let fonction = recherchercommande("log");
         fonction(null, dummyMessageAdmin, ["couleur"], false, null);
+    }
+    else if (key === "L") {
+        let fonction = recherchercommande("log");
+        fonction(null, dummyMessageAdmin, ["24", "couleur"], false, null);
     }
     else if (key === "h") {
         let fonction = renvoyerFonction("isekai", "getHistorique");
