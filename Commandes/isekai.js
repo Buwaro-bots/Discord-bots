@@ -32,18 +32,20 @@ module.exports = {
         let nombreDeBoucles = Math.ceil(nombreLancers / longueurSaut);
         process.stdout.write(`\x1b[90m[${probabiliteLegendaire}] \x1b[0m`);
         while (listeNomsDejaTires.length < nombreLancers) {
-            let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ? module.exports.tiragePokemon(args.concat("Légendaire")) : module.exports.tiragePokemon(args);
+            let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ?
+            module.exports.tiragePokemon(args.concat("Légendaire"), [], message.author.id) : module.exports.tiragePokemon(args, [], message.author.id);
+            let estShiny = outils.randomNumber(400) == 1 ? " **shiny**" : ""
             if (!(pokemonChoisi.tags.includes("Légendaire")) || Math.random() < probabiliteLegendaire) {
                 // Note : J'empêche de roll la génération 9 jusqu'à sa sortie
                 if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Gen9") )) {
                     listeNomsDejaTires.push(pokemonChoisi.nom);
                     if (pokemonChoisi.tags.includes("Forme")) {
-                        botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}||.\r\n`
-                        pokemonsTires.push(pokemonChoisi.nomForme);
+                        botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}${estShiny}||.\r\n`
+                        pokemonsTires.push(pokemonChoisi.nomForme + estShiny);
                     }
                     else {
-                        botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}||.\r\n`
-                        pokemonsTires.push(pokemonChoisi.nom);
+                        botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numero} qui est ||${pokemonChoisi.nom}${estShiny}||.\r\n`
+                        pokemonsTires.push(pokemonChoisi.nom + estShiny);
                     }
                 }
                 else {
