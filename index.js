@@ -132,9 +132,13 @@ stdin.on( 'data', function( key ){ // on any data into stdin
     else if (key === "h") {
         let fonction = renvoyerFonction("isekai", "getHistorique");
         let historique = fonction();
-        let tableau = [];
-        for (let i = 0; i < historique.length; i++) {
-            tableau.push(historique[i]["nom"]);
+        let tableau = {};
+        for (let [utilisateur, historiquePerso] of Object.entries(historique)) {
+            liste = []
+            for (let i = 0; i < historiquePerso.length; i++) {
+                liste.push(historiquePerso[i]["nom"]);
+            }
+            tableau[utilisateur] = liste;
         }
         console.log(tableau);
     }

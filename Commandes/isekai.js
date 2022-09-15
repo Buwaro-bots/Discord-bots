@@ -1,7 +1,7 @@
 const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
 const fs = require('fs');
-let historique = [];
+let historique = {"collectif" : []};
 
 // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
 let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
@@ -90,13 +90,13 @@ module.exports = {
     let pokemonChoisi;
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
-        pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], listePokemonsDejaTires);
+        pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], listePokemonsDejaTires, message.author.id);
     }
     else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 3) || nombreReroll > 15 )  {
-        pokemonChoisi = module.exports.tiragePokemon(["Digimon"], listePokemonsDejaTires);
+        pokemonChoisi = module.exports.tiragePokemon(["Digimon"], listePokemonsDejaTires, message.author.id);
     }
     else {
-        pokemonChoisi = module.exports.tiragePokemon(args, listePokemonsDejaTires);
+        pokemonChoisi = module.exports.tiragePokemon(args, listePokemonsDejaTires, message.author.id);
     }
 
     let rollShiny = outils.randomNumber(64 * 1.5 ** nombreReroll);
@@ -203,7 +203,7 @@ module.exports = {
     return pokemonChoisi;
 },
 
-    tiragePokemon : function(listeTagsDemandes, listePokemonsDejaTires = []) {
+    tiragePokemon : function(listeTagsDemandes, listePokemonsDejaTires = [], idAuteur = "0") {
 
     let pokemonChoisi = null;
     let listePokemon = pokedex;
@@ -236,7 +236,8 @@ module.exports = {
     }
     else {
         let nouvelleListe = [];
-        let pokemonsARetirer = listePokemonsDejaTires.concat(historique);
+        let pokemonsARetirer = listePokemonsDejaTires.concat(historique.collectif);
+        if (historique.hasOwnProperty(idAuteur)) pokemonsARetirer = pokemonsARetirer.concat(historique.idAuteur);
         for (let i = 0; i < pokedex.length; i++) {
             if ( !(pokemonsARetirer.includes(pokedex[i]))) {
                 nouvelleListe.push(pokedex[i]);
@@ -259,8 +260,13 @@ module.exports = {
         }
     }
 
-    if (listeTagsDemandes.length === 0 && Math.random() < 0.6) historique.push(pokemonChoisi);
-    if (historique.length > 40) historique.shift();
+    if (listeTagsDemandes.length === 0 && Math.random() < 0.6) historique.collectif.push(pokemonChoisi);
+    if (historique.collectif.length > 40) historique.collectif.shift();
+    if (idAuteur !== "0") {
+        if (!(historique.hasOwnProperty(idAuteur))) historique[idAuteur] = [];
+        historique[idAuteur].push(pokemonChoisi);
+        if (historique[idAuteur].length > 25) historique[idAuteur].shift();
+    }
 
     return pokemonChoisi;
     },
@@ -271,5 +277,46 @@ module.exports = {
 
     getHistorique : function() {
         return historique;
+    },
+
+    initialiserHistorique : function() {
+        fichier = "./Données/tempIsekai.json"
+        fs.access(fichier, fs.constants.F_OK, (manque) => {
+            if (!manque) {
+                let pokedexComplet = {};
+                for (let i = 0; i < pokedex.length; i++) {
+                    if (pokedex[i].hasOwnProperty("numeroForme")) {
+                        pokedexComplet[pokedex[i].numeroForme] = pokedex[i]
+                    }
+                    else {
+                        pokedexComplet[pokedex[i].numero] = pokedex[i]
+                    }
+                }
+
+                let jsonIsekai = JSON.parse(fs.readFileSync('./Données/tempIsekai.json', 'utf-8'));
+                let historiqueIsekai = {};
+
+                for (let [utilisateur, historiquePerso] of Object.entries(jsonIsekai)) {
+                    nouvelHistorique = []
+                    for (let i = 0; i < historiquePerso.length; i++) {
+                        if (historiquePerso[i].hasOwnProperty("numeroForme")) {
+                            nouvelHistorique.push(pokedexComplet[historiquePerso[i].numeroForme]);
+                        }
+                        else {
+                            nouvelHistorique.push(pokedexComplet[historiquePerso[i].numero]);
+                        }
+                    }
+                    historiqueIsekai[utilisateur] = nouvelHistorique;
+                }
+
+                module.exports.setHistorique(historiqueIsekai);
+                fs.unlink('./Données/tempIsekai.json', (err) => {
+                    if (err) throw err;
+                    console.log("L'historique a bien été archivé et le fichier supprimé.");
+                });
+            }
+        });
     }
 }
+
+module.exports.initialiserHistorique();
