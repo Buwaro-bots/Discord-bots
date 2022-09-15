@@ -1,6 +1,7 @@
 const outils = require("./outils.js");
 const config = require('../config.json');
 const horoscope = require("../Données/horoscope.json");
+const {exec} = require('child_process');
 
 module.exports = {
     id: function(client, message, args, envoyerPM, idMJ) {
@@ -129,5 +130,21 @@ module.exports = {
         if (voiceChannelID !== null && message.author.id === config.admin) {
             client.channels.fetch(voiceChannelID)
                 .then(channel => channel.setName(args[0]));}
+    },
+
+    bot: function(client, message, args, envoyerPM, idMJ) {
+        if (message.author.id === config.admin) {
+            if (config.autresBots.hasOwnProperty(args[0])) {
+                exec(`start cmd /c ${config.autresBots[args[0]].fichier}`, (err, stdout, stderr) => {
+                    if (err) {
+                      console.error(err);
+                      return;
+                     }
+                     console.log(stdout);
+                    }
+                   );
+                outils.envoyerMessage(client, config.autresBots[args[0]].message, message, envoyerPM, idMJ);
+            }
+        }
     }
 }
