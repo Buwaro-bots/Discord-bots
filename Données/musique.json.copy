@@ -1,0 +1,30 @@
+{
+    "intro" : {
+        "nom" : "intro",
+        "probabilité_present" : 0,
+        "probabilité_absent" : 0,
+        "serveurs" : [],
+        "liste" :  [
+            "C:/adresse.mp3",
+            "C:/adresse.mp3"
+        ]
+    },
+    "1" : {
+        "nom" : "abc",
+        "probabilité_present" : 1,
+        "probabilité_absent" : 0.1,
+        "serveurs" : [],
+        "liste" :  [
+            "C:/adresse.mp3"
+        ]
+    },
+    "2" : {
+        "nom" : "def",
+        "probabilité_present" : 1,
+        "probabilité_absent" : 0.1,
+        "serveurs" : [],
+        "liste" :  [
+            "C:/adresse.mp3"
+        ]
+    }
+}

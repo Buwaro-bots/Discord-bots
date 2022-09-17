@@ -51,43 +51,48 @@ module.exports = {
 
     // Cette fonction a été faite juste pour mettre des couleurs dans le console.log du message de l'utilisateur et la réponse. Sa longueur fait que je l'ai séparé de envoyerMessage.
     loggerMessage: function(botReply, message) {
-        let copieBotReply = "";
-        const longueur = Math.min(botReply.length, 120);
-        let cacaterePrecentNumerique = false;
-        let estGras = false;
-        for (let i = 0; i < longueur; i++) {
-            if (isNaN(botReply[i])) {
-                if (cacaterePrecentNumerique) {
-                    cacaterePrecentNumerique = false;
-                    copieBotReply += "\x1b[0m";
-                }
-            }
-            else {
-                if (!cacaterePrecentNumerique) {
-                    cacaterePrecentNumerique = true;
-                    copieBotReply += "\x1b[33m";
-                }
-            }
-            if (i+1 < longueur && botReply[i] === "*" && botReply[i+1] === "*") {
-                if (estGras) {
-                    copieBotReply += "\x1b[24m";
-                    estGras = false;
+        if (botReply.includes("```ansi")) {
+            console.log(botReply + "\x1b[0m");
+        }
+        else {
+            let copieBotReply = "";
+            const longueur = Math.min(botReply.length, 120);
+            let cacaterePrecentNumerique = false;
+            let estGras = false;
+            for (let i = 0; i < longueur; i++) {
+                if (isNaN(botReply[i])) {
+                    if (cacaterePrecentNumerique) {
+                        cacaterePrecentNumerique = false;
+                        copieBotReply += "\x1b[0m";
+                    }
                 }
                 else {
-                    copieBotReply += "\x1b[4m";
-                    estGras = true;
+                    if (!cacaterePrecentNumerique) {
+                        cacaterePrecentNumerique = true;
+                        copieBotReply += "\x1b[33m";
+                    }
                 }
-                i += 1;
+                if (i+1 < longueur && botReply[i] === "*" && botReply[i+1] === "*") {
+                    if (estGras) {
+                        copieBotReply += "\x1b[24m";
+                        estGras = false;
+                    }
+                    else {
+                        copieBotReply += "\x1b[4m";
+                        estGras = true;
+                    }
+                    i += 1;
+                }
+                else {
+                    copieBotReply += botReply[i];
+                }
             }
-            else {
-                copieBotReply += botReply[i];
+            // Si la réponse commence par un ping, je le remplace par le nom de l'utilisateur.
+            if (copieBotReply.startsWith("<@")) {
+                copieBotReply = `\x1b[96m${message.author.username}\x1b[0m${copieBotReply.substring(copieBotReply.indexOf(">")+1)}\x1b[0m`
             }
+            console.log(copieBotReply);
         }
-        // Si la réponse commence par un ping, je le remplace par le nom de l'utilisateur.
-        if (copieBotReply.startsWith("<@")) {
-            copieBotReply = `\x1b[96m${message.author.username}\x1b[0m${copieBotReply.substring(copieBotReply.indexOf(">")+1)}\x1b[0m`
-        }
-        console.log(copieBotReply);
     },
 
     verifierSiMJ: function(args, envoyerPM) {
