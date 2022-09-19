@@ -21,8 +21,11 @@ module.exports = {
             messageEnCours.edit(botReply);
             }
 
-            const connection = getVoiceConnection(message.guild.id)
-            // serveur.player.stop(true); // test
+            const connection = getVoiceConnection(message.guild.id);
+            const subscription = serveur.subscription;
+            serveur.estStop = true;
+            serveur.player.stop(true); // test
+            subscription.unsubscribe();
             connection.destroy();
             delete listeServeurs[message.guildId];
             return;
@@ -46,6 +49,13 @@ module.exports = {
             serveur.enPause = !(serveur.enPause);
             return;
         }
+        else if (args[0] === "test") {
+            let listeidServeurs = Object.keys(listeServeurs);
+            for (let i = 0; i < listeidServeurs.length; i++){
+                console.log(listeServeurs[listeidServeurs[i]].player.subscribers);
+            }
+            return;
+        }
         
         const player = createAudioPlayer(); 
         
@@ -54,16 +64,19 @@ module.exports = {
             canal : message.member.voice.channel.id,
             enPause : false,
             estSkip : false,
+            estStop : false,
             listeChansons : JSON.parse(JSON.stringify(listeChansons)),
             message : null,
+            subscription : null
         };
         listeServeurs[message.guildId] = serveur;
 
-        joinVoiceChannel({
+        const subscription = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
             adapterCreator: message.guild.voiceAdapterCreator
         }).subscribe(player)
+        serveur.subscription = subscription;
         //message.guild.me.voice.setRequestToSpeak(true);
         let numeroIntro = outils.randomNumber(serveur.listeChansons.intro.liste.length)-1;
         let resource = createAudioResource(serveur.listeChansons.intro.liste[numeroIntro]);
@@ -76,15 +89,70 @@ module.exports = {
             console.error(error);
         });
         
-        listeChansonsEnCours = [];
+        let listeChansonsEnCours = [];
         let messageEnCours = null;
         let botReply;
         let premièreOSTListe;
-        player.on(AudioPlayerStatus.Idle, () => {
-            if (listeChansonsEnCours.length === 0) {
-                if (messageEnCours !== null) {
+        player.addListener("stateChange", (oldOne, newOne) => {
+            if (serveur.estStop) {
+                return;
+            }
+            if (newOne.status == "idle") {
+                if (listeChansonsEnCours.length === 0) {
+                    if (messageEnCours !== null) {
+                        botReply = messageEnCours.content;
+                        botReply = botReply.replace("\u001b[0;35m            Liste en cours", "\u001b[0;30m            Liste terminée");
+                        if (serveur.estSkip) {
+                            botReply = botReply.replace("\u001b[1;35m", "\u001b[0;30m");
+                            serveur.estSkip = false;
+                        }
+                        else {
+                            botReply = botReply.replace("\u001b[1;35m", "\u001b[0;33m");
+                        }
+                        messageEnCours.edit(botReply);
+                    }
+                    botReply = "```ansi\r\n\u001b[0;35m            Liste en cours\r\n";
+                    premièreOSTListe = true;
+                    let liste = message.guild.members.cache.filter(member => member.voice.channel);
+                    let listeUtilisateursConnectés = Array.from(liste.keys());
+                    while (listeChansonsEnCours.length < 10){
+                        for (let i = 1; i < listeUtilisateursGlobale.length; i++) {
+                            let utilisateurEnCours = serveur.listeChansons[listeUtilisateursGlobale[i]];
+                            
+                            if ( (listeUtilisateursConnectés.includes(listeUtilisateursGlobale[i]) && Math.random() < utilisateurEnCours.probabilité_present)
+                            || Math.random() < utilisateurEnCours.probabilité_absent) {
+                                if (utilisateurEnCours.liste.length === 0) {
+                                    console.log(utilisateurEnCours.nom);
+                                    utilisateurEnCours.liste = JSON.parse(JSON.stringify(listeChansons[listeUtilisateursGlobale[i]].liste));
+                                }
+                                let chansonARajouter = "";
+                                if (utilisateurEnCours.liste.length === 1) {
+                                    chansonARajouter = utilisateurEnCours.liste[0];
+                                }
+                                else {
+                                    let numeroChansonARajouter = outils.randomNumber(utilisateurEnCours.liste.length) - 1;
+                                    chansonARajouter = utilisateurEnCours.liste[numeroChansonARajouter];
+                                }
+                                botReply += `\u001b[0;34m${utilisateurEnCours.nom}${"           ".slice(utilisateurEnCours.nom.length)} \u001b[0;36m${chansonARajouter.replace(/^.*[\\\/]/, '').slice(0,-4)}\r\n`;
+                                listeChansonsEnCours.push(chansonARajouter);
+                                for (let j = 1; j < listeUtilisateursGlobale.length; j++) {
+                                    if (serveur.listeChansons[listeUtilisateursGlobale[j]].liste.includes(chansonARajouter)) {
+                                        serveur.listeChansons[listeUtilisateursGlobale[j]].liste.splice(serveur.listeChansons[listeUtilisateursGlobale[j]].liste.indexOf(chansonARajouter), 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    botReply += "\u001b[0m```";
+                    botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
+                    outils.envoyerMessage(client, botReply, message)
+                    .then((msg)=> {
+                        messageEnCours = msg;
+                        serveur.message = msg;
+                    });
+                }
+                if (!premièreOSTListe) {
                     botReply = messageEnCours.content;
-                    botReply = botReply.replace("\u001b[0;35m            Liste en cours", "\u001b[0;30m            Liste terminée");
                     if (serveur.estSkip) {
                         botReply = botReply.replace("\u001b[1;35m", "\u001b[0;30m");
                         serveur.estSkip = false;
@@ -92,64 +160,14 @@ module.exports = {
                     else {
                         botReply = botReply.replace("\u001b[1;35m", "\u001b[0;33m");
                     }
+                    botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
                     messageEnCours.edit(botReply);
                 }
-                botReply = "```ansi\r\n\u001b[0;35m            Liste en cours\r\n";
-                premièreOSTListe = true;
-                let liste = message.guild.members.cache.filter(member => member.voice.channel);
-                let listeUtilisateursConnectés = Array.from(liste.keys());
-                while (listeChansonsEnCours.length < 10){
-                    for (let i = 1; i < listeUtilisateursGlobale.length; i++) {
-                        let utilisateurEnCours = serveur.listeChansons[listeUtilisateursGlobale[i]];
-                        
-                        if ( (listeUtilisateursConnectés.includes(listeUtilisateursGlobale[i]) && Math.random() < utilisateurEnCours.probabilité_present)
-                        || Math.random() < utilisateurEnCours.probabilité_absent) {
-                            if (utilisateurEnCours.liste.length === 0) {
-                                console.log(utilisateurEnCours.nom);
-                                utilisateurEnCours.liste = JSON.parse(JSON.stringify(listeChansons[listeUtilisateursGlobale[i]].liste));
-                            }
-                            let chansonARajouter = "";
-                            if (utilisateurEnCours.liste.length === 1) {
-                                chansonARajouter = utilisateurEnCours.liste[0];
-                            }
-                            else {
-                                let numeroChansonARajouter = outils.randomNumber(utilisateurEnCours.liste.length) - 1;
-                                chansonARajouter = utilisateurEnCours.liste[numeroChansonARajouter];
-                            }
-                            botReply += `\u001b[0;34m${utilisateurEnCours.nom}${"           ".slice(utilisateurEnCours.nom.length)} \u001b[0;36m${chansonARajouter.replace(/^.*[\\\/]/, '').slice(0,-4)}\r\n`;
-                            listeChansonsEnCours.push(chansonARajouter);
-                            for (let j = 1; j < listeUtilisateursGlobale.length; j++) {
-                                if (serveur.listeChansons[listeUtilisateursGlobale[j]].liste.includes(chansonARajouter)) {
-                                    serveur.listeChansons[listeUtilisateursGlobale[j]].liste.splice(serveur.listeChansons[listeUtilisateursGlobale[j]].liste.indexOf(chansonARajouter), 1);
-                                }
-                            }
-                        }
-                    }
-                }
-                botReply += "\u001b[0m```";
-                botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
-                outils.envoyerMessage(client, botReply, message)
-                .then((msg)=> {
-                    messageEnCours = msg;
-                    serveur.message = msg;
-                });
+                premièreOSTListe = false;
+                let chansonAJouer = listeChansonsEnCours.shift();
+                resource = createAudioResource(chansonAJouer);
+                player.play(resource);
             }
-            if (!premièreOSTListe) {
-                botReply = messageEnCours.content;
-                if (serveur.estSkip) {
-                    botReply = botReply.replace("\u001b[1;35m", "\u001b[0;30m");
-                    serveur.estSkip = false;
-                }
-                else {
-                    botReply = botReply.replace("\u001b[1;35m", "\u001b[0;33m");
-                }
-                botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
-                messageEnCours.edit(botReply);
-            }
-            premièreOSTListe = false;
-            let chansonAJouer = listeChansonsEnCours.shift();
-            resource = createAudioResource(chansonAJouer);
-            player.play(resource);
         });
     },
 
