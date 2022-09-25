@@ -9,6 +9,16 @@
             "C:/adresse.mp3"
         ]
     },
+    "outtro": {
+        "nom": "outtro",
+        "probabilité_present": 0,
+        "probabilité_absent": 0,
+        "serveurs": [],
+        "liste": [
+            "C:/adresse.mp3",
+            "C:/adresse.mp3"
+        ]
+    },
     "1" : {
         "nom" : "abc",
         "probabilité_present" : 1,

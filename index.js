@@ -1,3 +1,11 @@
+global.serveurProd = true;
+
+if (process.argv.length > 2) {
+    if (process.argv.includes("dev")) {
+        global.serveurProd = false;
+    }
+}
+
 const fs = require('fs');
 const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
 const outils = require("./Commandes/outils.js");
@@ -13,7 +21,7 @@ process.on('uncaughtException', function (err) {
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
 });
 
-let prefix = config.prefix; // Set the prefix
+let prefix = global.serveurProd ? config.prefix : "§";
 console.log("Ready!");
 
 client.on("messageCreate", (message) => {

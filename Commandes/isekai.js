@@ -280,42 +280,44 @@ module.exports = {
     },
 
     initialiserHistorique : function() {
-        fichier = "./Données/tempIsekai.json"
-        fs.access(fichier, fs.constants.F_OK, (manque) => {
-            if (!manque) {
-                let pokedexComplet = {};
-                for (let i = 0; i < pokedex.length; i++) {
-                    if (pokedex[i].hasOwnProperty("numeroForme")) {
-                        pokedexComplet[pokedex[i].numeroForme] = pokedex[i]
-                    }
-                    else {
-                        pokedexComplet[pokedex[i].numero] = pokedex[i]
-                    }
-                }
-
-                let jsonIsekai = JSON.parse(fs.readFileSync('./Données/tempIsekai.json', 'utf-8'));
-                let historiqueIsekai = {};
-
-                for (let [utilisateur, historiquePerso] of Object.entries(jsonIsekai)) {
-                    nouvelHistorique = []
-                    for (let i = 0; i < historiquePerso.length; i++) {
-                        if (historiquePerso[i].hasOwnProperty("numeroForme")) {
-                            nouvelHistorique.push(pokedexComplet[historiquePerso[i].numeroForme]);
+        if (global.serveurProd) {
+            fichier = "./Données/tempIsekai.json"
+            fs.access(fichier, fs.constants.F_OK, (manque) => {
+                if (!manque) {
+                    let pokedexComplet = {};
+                    for (let i = 0; i < pokedex.length; i++) {
+                        if (pokedex[i].hasOwnProperty("numeroForme")) {
+                            pokedexComplet[pokedex[i].numeroForme] = pokedex[i]
                         }
                         else {
-                            nouvelHistorique.push(pokedexComplet[historiquePerso[i].numero]);
+                            pokedexComplet[pokedex[i].numero] = pokedex[i]
                         }
                     }
-                    historiqueIsekai[utilisateur] = nouvelHistorique;
-                }
 
-                module.exports.setHistorique(historiqueIsekai);
-                fs.unlink('./Données/tempIsekai.json', (err) => {
-                    if (err) throw err;
-                    console.log("L'historique a bien été archivé et le fichier supprimé.");
-                });
-            }
-        });
+                    let jsonIsekai = JSON.parse(fs.readFileSync('./Données/tempIsekai.json', 'utf-8'));
+                    let historiqueIsekai = {};
+
+                    for (let [utilisateur, historiquePerso] of Object.entries(jsonIsekai)) {
+                        nouvelHistorique = []
+                        for (let i = 0; i < historiquePerso.length; i++) {
+                            if (historiquePerso[i].hasOwnProperty("numeroForme")) {
+                                nouvelHistorique.push(pokedexComplet[historiquePerso[i].numeroForme]);
+                            }
+                            else {
+                                nouvelHistorique.push(pokedexComplet[historiquePerso[i].numero]);
+                            }
+                        }
+                        historiqueIsekai[utilisateur] = nouvelHistorique;
+                    }
+
+                    module.exports.setHistorique(historiqueIsekai);
+                    fs.unlink('./Données/tempIsekai.json', (err) => {
+                        if (err) throw err;
+                        console.log("L'historique a bien été archivé et le fichier supprimé.");
+                    });
+                }
+            });
+        }
     }
 }
 

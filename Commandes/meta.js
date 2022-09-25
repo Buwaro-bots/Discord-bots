@@ -131,7 +131,7 @@ module.exports = {
         });
 
         collector.on('collect', (reaction, user) => {
-            if(!user.bot && reaction.emoji.name === "🛑") {
+            if(!user.bot && reaction.emoji.name === "🛑" && (user.id === message.author.id || user.id === config.admin)) {
                 collector.resetTimer({time: 1});
             }
         });
@@ -185,11 +185,25 @@ module.exports = {
 
     fermer: function(client, message, args, envoyerPM, idMJ) {
         if (message === null || message.author.id === config.admin) {
-            historiqueIsekai = mesCommandes.isekai.getHistorique();
-            let writer = JSON.stringify(historiqueIsekai, null, 4); // On sauvegarde le fichier.
-            fs.writeFileSync('./Données/tempIsekai.json', writer, function(err, result) {
-                if(err) console.log('error', err);
-              });
+            if (global.serveurProd) {
+                let historiqueIsekai = mesCommandes.isekai.getHistorique();
+                let writer = JSON.stringify(historiqueIsekai, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./Données/tempIsekai.json', writer, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+                fs.writeFileSync('./Données/tempIsekaiArchive.json', writer, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+
+                historiqueMusique = mesCommandes.musique.getHistorique();
+                writer = JSON.stringify(historiqueMusique, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./Données/tempMusique.json', writer, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+                fs.writeFileSync('./Données/tempMusiqueArchive.json', writer, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+            }
             client.destroy();
             process.exit();
         }
@@ -230,7 +244,7 @@ module.exports = {
         }
         else if (args.length > 2 && module.exports.recherchercommande(args[0], false) === null) {
             module.exports.recherchercommande(args[1]) // On utiliser ça pour vérifier que la première commande existe.
-            let nom = args.shift();
+            let nom = outils.normalisationString(args.shift());
             let alias = args.shift();
             let unshift = args;
             let createur = `${message.author.username}#${message.author.discriminator}`;
@@ -247,6 +261,9 @@ module.exports = {
             outils.envoyerMessage(client, botReply, message, envoyerPM);
         }
         else {
+            botReply = `${message.author.toString()} Pour utiliser cette commande, il faut taper ;alias
+            {votre nom pour la commande} {le nom de la commande} {au moins un autre paramètre}. Par exemple, ;alias dédé roll 2d6.`
+            outils.envoyerMessage(client, botReply, message, envoyerPM);
             throw("Commande alias mal utilisée.")
         }
         let writer = JSON.stringify(listeAliasPersos, null, 4); // On sauvegarde le fichier.
