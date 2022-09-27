@@ -30,6 +30,7 @@ module.exports = {
                     }
                 }
             }
+            console.log("Verification faite.")
             return;
         }
 
@@ -73,17 +74,26 @@ module.exports = {
             serveur.enPause = !(serveur.enPause);
             return;
         }
-        else if (args[0] === "test") {
-            let listeidServeurs = Object.keys(listeServeurs);
+        else if (args[0] === "liste") {
+            let listeidServeurs = [message.guildId];
+            if (args.length > 1 && args[1] === "totale") {
+                listeidServeurs = Object.keys(listeServeurs);
+            }
             for (let i = 0; i < listeidServeurs.length; i++){
                 console.log(`Serveur n° ${listeidServeurs[i]}`);
+                let botReply = "Liste des utilisateurs sur ce serveur :\r\n";
                 for (let j = 0; j < listeUtilisateursGlobale.length; j++) {
                     let utilisateurEnCours = listeServeurs[listeidServeurs[i]].listeChansons[listeUtilisateursGlobale[j]];
                     console.log(`${utilisateurEnCours.nom} : ${utilisateurEnCours.liste.length} / ${listeChansons[listeUtilisateursGlobale[j]].liste.length}`);
+                    if (listeChansons[listeUtilisateursGlobale[j]].liste.length > 0) {
+                        botReply += `${utilisateurEnCours.nom} : ${utilisateurEnCours.liste.length} / ${listeChansons[listeUtilisateursGlobale[j]].liste.length}\r\n`;
+                    }
+                }
+                if (listeidServeurs[i] === message.guildId) {
+                    outils.envoyerMessage(client, botReply, message, envoyerPM);
                 }
                 console.log(listeServeurs[listeidServeurs[i]]);
             }
-            message.react('👍');
             return;
         }
         else if (args[0] === "reset" && message.author.id === config.admin) {
@@ -101,9 +111,10 @@ module.exports = {
                     utilisateurEnCours.probabilité_present = utilisateurModifications.probabilité_present;
                     utilisateurEnCours.probabilité_absent = utilisateurModifications.probabilité_absent;
                     utilisateurEnCours.serveurs = utilisateurModifications.serveurs;
-                    for (let i = 0; i < utilisateurModifications.liste.length; i++) {
-                        utilisateurEnCours.liste.push(utilisateurModifications.liste[i]);
+                    for (let i = 0; i < utilisateurModifications.rajouts.length; i++) {
+                        utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
                     }
+                    utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
                 }
 
                 let utilisateurEnCours = listeChansons[idUtilisateur];
@@ -111,10 +122,11 @@ module.exports = {
                 utilisateurEnCours.probabilité_present = utilisateurModifications.probabilité_present;
                 utilisateurEnCours.probabilité_absent = utilisateurModifications.probabilité_absent;
                 utilisateurEnCours.serveurs = utilisateurModifications.serveurs;
-                for (let i = 0; i < utilisateurModifications.liste.length; i++) {
-                    utilisateurEnCours.liste.push(utilisateurModifications.liste[i]);
+                for (let i = 0; i < utilisateurModifications.rajouts.length; i++) {
+                    utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
                 }
-                utilisateurModifications.liste = [];
+                utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
+                utilisateurModifications.rajouts = [];
             }
             let writer = JSON.stringify(musiquesARajouter, null, 4); // On sauvegarde le fichier.
             fs.writeFileSync('./Données/musique-a-rajouter.json', writer);
