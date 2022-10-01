@@ -133,7 +133,7 @@ module.exports = {
                         }
                     }
 
-                    if (listeLancers.length > 920) {
+                    if (listeLancers.length > 920) { // Ca bugue à partir de 1000 caractères *sans saut de ligne*, pour l'instant je laisse la limite à 1000 le temps que je revois cette partie du code.
                         nomJoueur = `\`\`\`ansi\r\n\u001b[0;34m${key} \u001b[0;36m(partie ${numeroPartie})\u001b[0;37m`;
                         // nomJoueur = key == mj ? `\`\`\`ansi\r\n\u001b[0;36m${key} \u001b[0;34m(partie ${numeroPartie})\u001b[0;37m` : `\`\`\`ansi\r\n\u001b[0;34m${key} \u001b[0;36m(partie ${numeroPartie})\u001b[0;37m`;
                         numeroPartie += 1;

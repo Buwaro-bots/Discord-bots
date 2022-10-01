@@ -10,9 +10,9 @@ module.exports = {
 
     ramoloss: function(client, message, args, envoyerPM, idMJ) {
         async function speak() {
-            temps = 5*60*1000 + mesCommandes.outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
+            temps = 5*60*1000 + outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
             console.log(temps/1000)
-            await mesCommandes.outils.sleep(temps); 
+            await outils.sleep(temps); 
             message.channel.send(`${message.author.toString()}`);
             message.channel.send("https://tenor.com/view/confusedslow-gif-22074333")
         }

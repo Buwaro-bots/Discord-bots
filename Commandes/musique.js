@@ -8,6 +8,7 @@ let listeChansons = require("./../données/musique.json");
 let listeUtilisateursGlobale = Object.keys(listeChansons);
 let indexIntro = listeUtilisateursGlobale.indexOf("intro"); listeUtilisateursGlobale.splice(indexIntro, 1);
 let indexOuttro = listeUtilisateursGlobale.indexOf("outtro"); listeUtilisateursGlobale.splice(indexOuttro, 1);
+let listeAdresses = {};
 
 module.exports = {
     musique: function(client, message, args, envoyerPM, idMJ) {
@@ -135,6 +136,27 @@ module.exports = {
             message.react('👍');
             return;
         }
+
+        else if (args[0] === "rajouter") {
+            module.exports.verifierSiUtilisateurConnecté(message);
+            args.shift();
+            let serveur = listeServeurs[message.guildId];
+            if (serveur.estStop === -1 && serveur.message.content.length < 1850) {
+                let proposition = args.join(" ");
+                if (proposition in listeAdresses) {
+                    if (!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || message.author.id === config.admin) {
+                    serveur.listeChansonsEnCours.push(listeAdresses[proposition]);
+                    let messageEnCours = serveur.message
+                    let botReply = messageEnCours.content;
+                    let rajoutMessage = `\u001b[0;34m${message.author.username}${"           ".slice(message.author.username.length)}\u001b[0;36m ${proposition}\r\n\u001b[0m\`\`\``
+                    botReply = botReply.replace("\u001b[0m```", rajoutMessage);
+                    messageEnCours.edit(botReply);
+                    message.react("👍")
+                    }
+                }
+            }
+            return;
+        }
         
         let serveur;
         if (listeServeurs.hasOwnProperty(message.guildId)) {
@@ -169,6 +191,7 @@ module.exports = {
         serveur.subscription = subscription;
         //message.guild.me.voice.setRequestToSpeak(true);
         let numeroIntro = outils.randomNumber(listeChansons.intro.liste.length)-1;
+        console.log(listeChansons.intro.liste[numeroIntro]);
         let resource = createAudioResource(listeChansons.intro.liste[numeroIntro]);
         
         player.play(resource)
@@ -280,7 +303,7 @@ module.exports = {
 
 
     verifierSiUtilisateurConnecté: function(message) {
-        if (message.member.voice.channel.id !== listeServeurs[message.guildId].canal) {
+        if (message.member.voice.channel.id !== listeServeurs[message.guildId].canal && message.author.id !== config.admin) {
             throw("Utilisateur non connecté au canal audio.")
         }
     },
@@ -301,20 +324,39 @@ module.exports = {
     },
 
     initialiserHistorique : function() {
-        if (global.serveurProd) {
-            fichier = "./Données/tempMusique.json"
-            fs.access(fichier, fs.constants.F_OK, (manque) => {
-                if (!manque) {
-                    let jsonHistorique = JSON.parse(fs.readFileSync('./Données/tempMusique.json', 'utf-8'));
-                    module.exports.setHistorique(jsonHistorique);
-                    fs.unlink('./Données/tempMusique.json', (err) => {
-                        if (err) throw err;
-                        console.log("L'historique a bien été archivé et le fichier supprimé.");
-                    });
+        fichier = "./Données/tempMusique.json"
+        fs.access(fichier, fs.constants.F_OK, (manque) => {
+            if (!manque) {
+                let jsonHistorique = JSON.parse(fs.readFileSync('./Données/tempMusique.json', 'utf-8'));
+                module.exports.setHistorique(jsonHistorique);
+                fs.unlink('./Données/tempMusique.json', (err) => {
+                    if (err) throw err;
+                    console.log("L'historique a bien été archivé et le fichier supprimé.");
+                });
+            }
+        });
+    },
+
+    initialiserAdresses : function(listeAdresses) {
+        for (let i = 0; i < listeUtilisateursGlobale.length; i++) {
+            let listeChansonsUtilisateur = listeChansons[listeUtilisateursGlobale[i]].liste;
+            for (let j = 0; j < listeChansonsUtilisateur.length; j++) {
+                let adresseChanson = listeChansonsUtilisateur[j];
+                let nomChanson = adresseChanson.replace(/^.*[\\\/]/, '').slice(0,-4);
+                nomChanson = nomChanson.replaceAll("_", " ");
+                nomChanson = nomChanson.replaceAll("  ", " ");
+                if (nomChanson in listeAdresses) {
+                    console.log(`${chanson} se trouve potentiellement en double.`);
                 }
-            });
+                else {
+                    listeAdresses[nomChanson] = adresseChanson;
+                }
+            }
         }
     }
 }
 
-module.exports.initialiserHistorique();
+if (global.serveurProd) {
+    module.exports.initialiserHistorique();
+    module.exports.initialiserAdresses(listeAdresses);
+}

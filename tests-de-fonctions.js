@@ -1,3 +1,4 @@
+global.serveurProd = false;
 const outils = require("./Commandes/outils.js");
 const {recherchercommande} = require('./Commandes/meta.js')
 const config = require('./config.json');
