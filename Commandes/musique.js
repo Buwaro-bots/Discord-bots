@@ -36,7 +36,7 @@ module.exports = {
         }
 
         // Penser à mettre une vérification que le serveur a un lecteur en cours / est dans l'historique pour toutes ces commandes.
-        if (args[0] === "stop") {
+        else if (args[0] === "stop") {
             module.exports.verifierSiUtilisateurConnecté(message);
             let serveur = listeServeurs[message.guildId];
             let messageEnCours = serveur.message
@@ -50,7 +50,28 @@ module.exports = {
             const connection = getVoiceConnection(message.guild.id);
             const subscription = serveur.subscription;
             serveur.estStop += 1;
-            serveur.player.stop(true); // test
+            serveur.player.stop(); // test
+            //subscription.unsubscribe();
+            //connection.destroy();
+            //delete listeServeurs[message.guildId];
+            return;
+        }
+        else if (args[0] === "reset") {
+            module.exports.verifierSiUtilisateurConnecté(message);
+            let serveur = listeServeurs[message.guildId];
+            let messageEnCours = serveur.message
+            if (messageEnCours !== null) {
+                let botReply = messageEnCours.content.replaceAll("\u001b[0;36m", "\u001b[0;30m");
+                botReply = botReply.replace("\u001b[1;35m", "\u001b[0;30m");
+                botReply = botReply.replace("\u001b[0;35m            Liste en cours", "\u001b[0;30m            Liste interrompue");
+                messageEnCours.edit(botReply);
+                serveur.message = null;
+            }
+
+            while (serveur.listeChansonsEnCours.length > 0){
+                serveur.listeChansonsEnCours.shift();
+            }
+            serveur.player.stop(); // test
             //subscription.unsubscribe();
             //connection.destroy();
             //delete listeServeurs[message.guildId];
@@ -145,13 +166,13 @@ module.exports = {
                 let proposition = args.join(" ");
                 if (proposition in listeAdresses) {
                     if (!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || message.author.id === config.admin) {
-                    serveur.listeChansonsEnCours.push(listeAdresses[proposition]);
-                    let messageEnCours = serveur.message
-                    let botReply = messageEnCours.content;
-                    let rajoutMessage = `\u001b[0;34m${message.author.username}${"           ".slice(message.author.username.length)}\u001b[0;36m ${proposition}\r\n\u001b[0m\`\`\``
-                    botReply = botReply.replace("\u001b[0m```", rajoutMessage);
-                    messageEnCours.edit(botReply);
-                    message.react("👍")
+                        serveur.listeChansonsEnCours.push(listeAdresses[proposition]);
+                        let messageEnCours = serveur.message
+                        let botReply = messageEnCours.content;
+                        let rajoutMessage = `\u001b[0;34m${message.author.username}${"           ".slice(message.author.username.length)}\u001b[0;36m ${proposition}\r\n\u001b[0m\`\`\``
+                        botReply = botReply.replace("\u001b[0m```", rajoutMessage);
+                        messageEnCours.edit(botReply);
+                        message.react("👍")
                     }
                 }
             }
@@ -159,6 +180,10 @@ module.exports = {
         }
         
         let serveur;
+        let listeChansonsEnCours = [];
+        let botReply;
+        let premièreOSTListe = true;
+
         if (listeServeurs.hasOwnProperty(message.guildId)) {
             serveur = listeServeurs[message.guildId];
             if (serveur.estStop < 2) {
@@ -166,10 +191,28 @@ module.exports = {
                 return;
             }
             serveur.estStop = -1;
+            listeChansonsEnCours = serveur.listeChansonsEnCours;
+            if (listeChansonsEnCours.length > 0) {
+                botReply = "```ansi\r\n\u001b[0;35m            Liste en cours (reprise de la playlist précedente)\r\n";
+                for (let i = 0; i < listeChansonsEnCours.length; i++){
+                    let nomChansonARajouter = listeChansonsEnCours[i].replace(/^.*[\\\/]/, '').slice(0,-4);
+                    nomChansonARajouter = nomChansonARajouter.replaceAll("_", " ");
+                    nomChansonARajouter = nomChansonARajouter.replaceAll("  ", " ");
+                    botReply += `\u001b[0;34mReprise    \u001b[0;36m ${nomChansonARajouter}\r\n`;
+                }
+                botReply += "\u001b[0m```";
+                botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
+                outils.envoyerMessage(client, botReply, message)
+                .then((msg)=> {
+                    serveur.message = msg;
+                });
+            }
         }
         else {
             serveur = {
-                listeChansons : JSON.parse(JSON.stringify(listeChansons))
+                listeChansons : JSON.parse(JSON.stringify(listeChansons)),
+                listeChansonsEnCours : [],
+                message : null,
             };
             delete serveur.listeChansons.intro;
             delete serveur.listeChansons.outtro;
@@ -181,7 +224,6 @@ module.exports = {
         serveur.enPause = false;
         serveur.estSkip = false;
         serveur.estStop = -1; // -1 En cours de lecture. 0 L'outtro doit jouer. +1 L'outtro est en train de jouer. +2 Le bot est arrêté.
-        serveur.message = null;
 
         const subscription = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
@@ -202,11 +244,7 @@ module.exports = {
             console.error(error);
         });
         
-        let listeChansonsEnCours = [];
-        serveur.listeChansonsEnCours = listeChansonsEnCours;
-        let messageEnCours = null;
-        let botReply;
-        let premièreOSTListe;
+
         player.addListener("stateChange", (oldOne, newOne) => {
             if (newOne.status == "idle") {
                 if (serveur.estStop >= 1) {
@@ -225,7 +263,8 @@ module.exports = {
                 }
                 else {
                     if (listeChansonsEnCours.length === 0) {
-                        if (messageEnCours !== null) {
+                        if (serveur.message !== null) {
+                            let messageEnCours = serveur.message;
                             botReply = messageEnCours.content;
                             botReply = botReply.replace("\u001b[0;35m            Liste en cours", "\u001b[0;30m            Liste terminée");
                             if (serveur.estSkip) {
@@ -276,11 +315,11 @@ module.exports = {
                         botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
                         outils.envoyerMessage(client, botReply, message)
                         .then((msg)=> {
-                            messageEnCours = msg;
                             serveur.message = msg;
                         });
                     }
                     if (!premièreOSTListe) {
+                        let messageEnCours = serveur.message;
                         botReply = messageEnCours.content;
                         if (serveur.estSkip) {
                             botReply = botReply.replace("\u001b[1;35m", "\u001b[0;30m");
@@ -317,7 +356,8 @@ module.exports = {
         let listeIDServeurs = Object.keys(listeServeurs);
         for (let i = 0; i < listeIDServeurs.length; i++) {
             listeTempServeurs[listeIDServeurs[i]] = {
-                listeChansons : listeServeurs[listeIDServeurs[i]].listeChansons
+                listeChansons : listeServeurs[listeIDServeurs[i]].listeChansons,
+                listeChansonsEnCours : listeServeurs[listeIDServeurs[i]].listeChansonsEnCours,
             }
         }
         return listeTempServeurs;
@@ -346,7 +386,7 @@ module.exports = {
                 nomChanson = nomChanson.replaceAll("_", " ");
                 nomChanson = nomChanson.replaceAll("  ", " ");
                 if (nomChanson in listeAdresses) {
-                    console.log(`${chanson} se trouve potentiellement en double.`);
+                    console.log(`${nomChanson} se trouve potentiellement en double.`);
                 }
                 else {
                     listeAdresses[nomChanson] = adresseChanson;
