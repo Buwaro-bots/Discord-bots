@@ -1,6 +1,16 @@
 let statsLancers = require('../Données/stats.json');
 const fs = require('fs');
 const levenshtein = require('js-levenshtein');
+let listeDésPondérés = {
+    "ins" : {nombreDeFaces : 6, nombreDeSeries : 3, nombreDeDésAléatoires : 30, liste : []},
+    "dng 1" : {nombreDeFaces : 4, nombreDeSeries : 1, nombreDeDésAléatoires : 8, liste : []},
+    "dng 2" : {nombreDeFaces : 6, nombreDeSeries : 2, nombreDeDésAléatoires : 12, liste : []},
+    "dng 3" : {nombreDeFaces : 8, nombreDeSeries : 2, nombreDeDésAléatoires : 16, liste : []},
+    "dng 4" : {nombreDeFaces : 10, nombreDeSeries : 2, nombreDeDésAléatoires : 12, liste : []},
+    "dng 5" : {nombreDeFaces : 12, nombreDeSeries : 1, nombreDeDésAléatoires : 6, liste : []},
+    "dng crit" : {nombreDeFaces : 20, nombreDeSeries : 2, nombreDeDésAléatoires : 60, liste : []},
+    "num" : {nombreDeFaces : 20, nombreDeSeries : 1, nombreDeDésAléatoires : 40, liste : []},
+}
 
 module.exports = {
     outils:function(){throw("Cette fonction n'est pas censé être appelée.");},
@@ -11,6 +21,35 @@ module.exports = {
         }
         // Cette fonction sert à tirer un nombre au pif de 1 à x, j'en ai beaucoup besoin.
         return Math.floor(Math.random() * maximum) + 1;
+    },
+
+    lancerDéPondéré: function(type, nombreDeFaces) {
+        if (!(type in listeDésPondérés)) {
+            return module.exports.randomNumber(nombreDeFaces);
+        }
+        let listeDés = listeDésPondérés[type].liste;
+        if (listeDés.length === 0) {
+            module.exports.générerDésPondérés(type);
+        }
+        return listeDés.pop();
+    },
+
+    générerDésPondérés: function(type) {
+        if (!(type in listeDésPondérés)) throw("Type de lancer à générer invalide.");
+        let listeDés = listeDésPondérés[type];
+        for (let i = 0; i < listeDés.nombreDeSeries; i++) {
+            for (let j = 1; j <= listeDés.nombreDeFaces; j++) {
+                listeDés.liste.push(j);
+            }
+        }
+        for (let i = 0; i < listeDés.nombreDeDésAléatoires; i++) {
+            listeDés.liste.push(Math.floor(Math.random() * listeDés.nombreDeFaces) + 1);
+        }
+        listeDés.liste = module.exports.shuffleFisherYates(listeDés.liste);
+    },
+
+    getDésPondérés : function() {
+        return listeDésPondérés;
     },
 
     pad: function(nombre, longueur = 2) {
@@ -234,5 +273,15 @@ module.exports = {
             }
         }
         throw(`L'entré n'est pas validée par le regex.`);
-    }
+    },
+
+    // https://sebhastian.com/fisher-yates-shuffle-javascript/
+    shuffleFisherYates: function(array) {
+        let i = array.length;
+        while (--i > 0) {
+          let randIndex = Math.floor(Math.random() * (i + 1));
+          [array[randIndex], array[i]] = [array[i], array[randIndex]];
+        }
+        return array;
+      }
 }

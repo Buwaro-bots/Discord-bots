@@ -200,18 +200,18 @@ module.exports = {
     let nombreLancers = args.length > 1 && !(args[1].includes("dd")) ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1; // Si l'utilisateur ne mentionne pas le nombre de lancer, il n'en fait qu'un.
     let alerteStatLimite = stat > 5 ? "(Attention, normalement les stats ne dépassent pas 5.)" : "";
     
-    let lancerCritique = outils.randomNumber(20);
+    let lancerCritique = outils.lancerDéPondéré("dng crit",20);
     let lancerCaracteristique = "";
     let meilleurLancer = "";
 
     if (nombreLancers === 1) {
-        lancerCaracteristique = outils.randomNumber((1+stat)*2);
+        lancerCaracteristique = outils.lancerDéPondéré(`dng ${stat}`,(1+stat)*2);
         meilleurLancer = lancerCaracteristique;
     }
     else {
         let listeLancers = [];
         for (let i = 0; i < nombreLancers ; i++) {
-            listeLancers.push(outils.randomNumber((1+stat)*2));
+            listeLancers.push(outils.lancerDéPondéré(`dng ${stat}`,(1+stat)*2));
         }
         
         meilleurLancer = Math.max.apply(Math, listeLancers); // On récupère le meilleur lancer pour le mettre en gras après.

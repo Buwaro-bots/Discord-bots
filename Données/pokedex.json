@@ -964,14 +964,18 @@
     {"numero" : "91?" , "nom" : "Gourmelet", "tags" : ["Normal", "Gen9", "DnG", "PasDnG", "Base", "Nouveau"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/6/6a/Lechonk.png/600px-Lechonk.png" },
     {"numero" : "91?" , "nom" : "Pohm", "tags" : ["Electrique", "Gen9", "DnG", "PasDnG", "Base", "Nouveau"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/6/68/Pawmi.png/600px-Pawmi.png" },
     {"numero" : "91?" , "nom" : "Olivini", "tags" : ["Normal", "Plante", "Gen9", "DnG", "PasDnG", "Base", "Nouveau"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/8/83/Smoliv.png/600px-Smoliv.png" },
-    {"numero" : "92?" , "nom" : "Pâtachiot", "tags" : ["Fée", "Gen9", "DnG", "PasDnG", "Base", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/2/2d/Fidough.png/600px-Fidough.png" },
-    {"numero" : "92?" , "nom" : "Balbalèze", "tags" : ["Glace", "Gen9", "DnG", "PasDnG", "Base", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/8/82/Cetitan.png/600px-Cetitan.png" },
+    {"numero" : "92?" , "nom" : "Pâtachiot", "tags" : ["Fée", "Gen9", "DnG", "PasDnG", "Base", "Nouveau"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/2/2d/Fidough.png/600px-Fidough.png" },
+    {"numero" : "92?" , "nom" : "Balbalèze", "tags" : ["Glace", "Gen9", "DnG", "PasDnG", "Base", "Nouveau"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/8/82/Cetitan.png/600px-Cetitan.png" },
     {"numero" : "93?" , "nom" : "Motorizard", "tags" : ["Dragon", "Normal", "Gen9", "DnG", "PasDnG", "Base", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/1/12/Cyclizar.png/600px-Cyclizar.png" },
     {"numero" : "93?" , "nom" : "Tag-tag", "tags" : ["Poison", "Normal", "Gen9", "DnG", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/9/96/Grafaiai.png/600px-Grafaiai.png" },
 
     {"numero" : "94?" , "nom" : "Craparoi", "tags" : ["Roche", "Gen9", "DnG", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/9/96/Klawf.png/600px-Klawf.png" },
     {"numero" : "94?" , "nom" : "Carmadura", "tags" : ["Feu", "Psy", "Gen9", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/b/b5/Armarouge.png/600px-Armarouge.png" },
     {"numero" : "94?" , "nom" : "Malvalame", "tags" : ["Feu", "Spectre", "Gen9", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/5/52/Ceruledge.png/600px-Ceruledge.png" },
+
+    {"numero" : "95?" , "nom" : "Taupikeau", "tags" : ["Eau", "Gen9", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/e/e6/Wiglett.png/600px-Wiglett.png" },
+    {"numero" : "95?" , "nom" : "Farigiraf", "tags" : ["Normal", "Psy", "Gen9", "DnG", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://archives.bulbagarden.net/media/upload/thumb/1/11/Farigiraf.png/600px-Farigiraf.png" },
+    {"numero" : "95?" , "nom" : "Ampibidou", "tags" : ["Electrique", "Gen9", "DnG", "PasDnG", "Nouveau", "Spoiler"], "image" : "https://img.game8.co/3596827/deee63e8500afdd5b6b1006cbb4f5ccc.png/show" },
 
     {"numero" : "99?" , "nom" : "Koraidon", "tags" : ["Inconnu", "Gen9", "DnG", "PasDnG", "Légendaire", "Nouveau"], "probabilite" : 0.4, "image" : "https://archives.bulbagarden.net/media/upload/thumb/2/24/Koraidon.png/600px-Koraidon.png" },
     {"numero" : "99?" , "nom" : "Miraidon", "tags" : ["Inconnu", "Gen9", "DnG", "PasDnG", "Légendaire", "Nouveau"], "probabilite" : 0.4, "image" : "https://archives.bulbagarden.net/media/upload/thumb/f/fb/Miraidon.png/600px-Miraidon.png" },

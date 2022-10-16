@@ -48,7 +48,11 @@
         "alias" : "ins",
         "unshift" : ["opposition"]
     },
-    
+    {
+        "nom": "stats",
+        "alias": "log",
+        "unshift": ["couleur","canal"]
+    },
     {
         "nom" : "8ball",
         "alias" : "ball_8"

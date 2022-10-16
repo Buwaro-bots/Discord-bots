@@ -27,7 +27,7 @@ module.exports = {
     if (args.length > 0 && ["purge","purgé","purger"].includes(args[0].toString().toLowerCase())) {
         let botReply = `${message.author.toString()} a purgé :  \`\`\``;
         while (botReply.length < 1989) {
-            let dices = [outils.randomNumber(6), outils.randomNumber(6), outils.randomNumber(6)];
+            let dices = [outils.lancerDéPondéré("ins",6), outils.randomNumber(6), outils.randomNumber(6)];
             botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
         }
         botReply = botReply.slice(0,-2) + "\`\`\`"
@@ -107,7 +107,7 @@ module.exports = {
 
     if (args[0] === "gacha") {
 
-        let lancer = outils.randomNumber(6) * 10 +  outils.randomNumber(6);
+        let lancer = outils.lancerDéPondéré("ins",6) * 10 +  outils.randomNumber(6);
         let resultat = INSdata.gacha[lancer];
         let botReply = `${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ||${resultat}||`;
 
@@ -123,7 +123,7 @@ module.exports = {
     }
 
     let typeLancer = "INS";
-    let dices = [outils.randomNumber(6), outils.randomNumber(6), outils.randomNumber(6)];
+    let dices = [outils.lancerDéPondéré("ins",6), outils.randomNumber(6), outils.randomNumber(6)];
     let lancerSpecial = false;
     let verbe = "lancé";
 

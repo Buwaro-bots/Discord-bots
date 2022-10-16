@@ -117,7 +117,7 @@ dummyMessageAdmin.author.toString = function () {return "admin";};
 
 var stdin = process.stdin;
 
-console.log("Pour lancer des commandes ici, c'est l pour les logs (l pour 5 heures, L pour 24 heures), h pour l'historique isekai.");
+console.log("Pour lancer des commandes ici, c'est l pour les logs (l pour 5 heures, L pour 24 heures), h pour l'historique isekai, d pour avoir l'état du rng.");
 
 // https://stackoverflow.com/a/12506613
 stdin.setRawMode( true ); // without this, we would only get streams once enter is pressed
@@ -149,5 +149,57 @@ stdin.on( 'data', function( key ){ // on any data into stdin
             tableau[utilisateur] = liste;
         }
         console.log(tableau);
+    }
+    else if (key === "d") {
+        let fonctionGet = renvoyerFonction("outils", "getDésPondérés");
+        let fonctionGénérer = renvoyerFonction("outils", "générerDésPondérés");
+        let listeDés = fonctionGet();
+        for (const [nom, dés] of Object.entries(listeDés)) {
+            let liste = dés.liste;
+            if (liste.length === 0) {
+                fonctionGénérer(nom);
+            }
+            let infos = `(${liste.length} lancers restants) [${dés.nombreDeDésAléatoires} dés aléatoires vs ${dés.nombreDeSeries * dés.nombreDeFaces} dés non-aléatoires]`
+            if (nom === "ins") {
+                console.log(`\u001b[0;0mins ${infos}\r\n`+
+                `\u001b[0;36mLancers de 1x : ${liste.filter(x => x==1).length}\r\n`+
+                `\u001b[0;34mLancers de 2x : ${liste.filter(x => x==2).length}\r\n`+
+                `\u001b[0;32mLancers de 3x : ${liste.filter(x => x==3).length}\r\n`+
+                `\u001b[0;33mLancers de 4x : ${liste.filter(x => x==4).length}\r\n`+
+                `\u001b[0;35mLancers de 5x : ${liste.filter(x => x==5).length}\r\n`+
+                `\u001b[0;31mLancers de 6x : ${liste.filter(x => x==6).length}\r\n`
+                )
+            }
+            else if (nom === "dng crit") {
+                console.log(`\u001b[0;0mCritiques de DnG ${infos}\r\n`+
+                `\u001b[0;36mLancers à 4-    : ${liste.filter(x => x<=4).length} (${Math.round(liste.filter(x => x<=4).length / liste.length * 100)}% / 20%)\r\n`+
+                `\u001b[0;32mLancers normaux : ${liste.filter(x => x>4 && x<19).length} (${Math.round(liste.filter(x => x>4 && x<19).length / liste.length * 100)}% / 70%)\r\n`+
+                `\u001b[0;31mLancers à 19+   : ${liste.filter(x => x>=19).length} (${Math.round(liste.filter(x => x>=19).length / liste.length * 100)}% / 10%)\r\n`
+                )
+            }
+            else if (nom.includes("dng")) {
+                let stat = parseInt(nom.slice(-1));
+                let déMax = (stat + 1) * 2;
+                console.log(`\u001b[0;0mJets de DnG avec une stat de ${stat} ${infos}\r\n`+
+                `\u001b[0;33mLancers à 2+ : ${liste.filter(x => x>=2).length} (${Math.round(liste.filter(x => x>=2).length / liste.length * 100)}% / ${Math.round((déMax - 1) / déMax * 100)}%)\r\n`+
+                `\u001b[0;32mLancers à 4+ : ${liste.filter(x => x>=4).length} (${Math.round(liste.filter(x => x>=4).length / liste.length * 100)}% / ${Math.round((déMax - 3) / déMax * 100)}%)\r\n`+
+                `\u001b[0;36mLancers à 6+ : ${liste.filter(x => x>=6).length} (${Math.round(liste.filter(x => x>=6).length / liste.length * 100)}% / ${Math.round((déMax - 5) / déMax * 100)}%)\r\n`
+                )
+            }
+            else {
+                console.log(dés);
+            }
+        }
+    }
+    else if (key === "D") {
+        let fonctionGet = renvoyerFonction("outils", "getDésPondérés");
+        let fonctionGénérer = renvoyerFonction("outils", "générerDésPondérés");
+        let listeDés = fonctionGet();
+        for (const [nom, dés] of Object.entries(listeDés)) {
+            if (dés.liste.length === 0) {
+                fonctionGénérer(nom);
+            }
+        }
+        console.log(listeDés);
     }
 });
