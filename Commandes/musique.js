@@ -106,10 +106,12 @@ module.exports = {
                 let botReply = "Liste des utilisateurs sur ce serveur :\r\n";
                 for (let j = 0; j < listeUtilisateursGlobale.length; j++) {
                     let utilisateurEnCours = listeServeurs[listeidServeurs[i]].listeChansons[listeUtilisateursGlobale[j]];
-                    console.log(`${utilisateurEnCours.nom} : ${utilisateurEnCours.liste.length} / ${listeChansons[listeUtilisateursGlobale[j]].liste.length}`);
-                    if (listeChansons[listeUtilisateursGlobale[j]].liste.length > 0) {
-                        botReply += `${utilisateurEnCours.nom} : ${utilisateurEnCours.liste.length} / ${listeChansons[listeUtilisateursGlobale[j]].liste.length}\r\n`;
-                    }
+                        if (utilisateurEnCours.serveurs.length === 0 || utilisateurEnCours.serveurs.includes(message.guild.id)) {
+                            console.log(`${utilisateurEnCours.nom} : ${utilisateurEnCours.liste.length} / ${listeChansons[listeUtilisateursGlobale[j]].liste.length}`);
+                            if (listeChansons[listeUtilisateursGlobale[j]].liste.length > 0) {
+                                botReply += `${utilisateurEnCours.nom} : ${utilisateurEnCours.liste.length} / ${listeChansons[listeUtilisateursGlobale[j]].liste.length}\r\n`;
+                            }
+                        }
                 }
                 if (listeidServeurs[i] === message.guildId) {
                     outils.envoyerMessage(client, botReply, message, envoyerPM);
@@ -127,8 +129,20 @@ module.exports = {
             // Note : Le fichier ne doit pas comporter les intros et les outtris à rajouter, ceci est seulement pour les musiques d'utilisateurs.
             let musiquesARajouter = JSON.parse(fs.readFileSync(__dirname + '/../Données/musique-a-rajouter.json', 'utf-8'));
             for (let [idUtilisateur, utilisateurModifications] of Object.entries(musiquesARajouter)) {
-                for (let [idServeur, serveur] of Object.entries(listeServeurs)) {
-                    let utilisateurEnCours = serveur.listeChansons[idUtilisateur];
+                if (listeUtilisateursGlobale.includes(idUtilisateur)) {
+                    for (let [idServeur, serveur] of Object.entries(listeServeurs)) {
+                        let utilisateurEnCours = serveur.listeChansons[idUtilisateur];
+                        utilisateurEnCours.nom = utilisateurModifications.nom;
+                        utilisateurEnCours.probabilité_present = utilisateurModifications.probabilité_present;
+                        utilisateurEnCours.probabilité_absent = utilisateurModifications.probabilité_absent;
+                        utilisateurEnCours.serveurs = utilisateurModifications.serveurs;
+                        for (let i = 0; i < utilisateurModifications.rajouts.length; i++) {
+                            utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
+                        }
+                        utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
+                    }
+
+                    let utilisateurEnCours = listeChansons[idUtilisateur];
                     utilisateurEnCours.nom = utilisateurModifications.nom;
                     utilisateurEnCours.probabilité_present = utilisateurModifications.probabilité_present;
                     utilisateurEnCours.probabilité_absent = utilisateurModifications.probabilité_absent;
@@ -137,18 +151,21 @@ module.exports = {
                         utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
                     }
                     utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
+                    utilisateurModifications.rajouts = [];
                 }
-
-                let utilisateurEnCours = listeChansons[idUtilisateur];
-                utilisateurEnCours.nom = utilisateurModifications.nom;
-                utilisateurEnCours.probabilité_present = utilisateurModifications.probabilité_present;
-                utilisateurEnCours.probabilité_absent = utilisateurModifications.probabilité_absent;
-                utilisateurEnCours.serveurs = utilisateurModifications.serveurs;
-                for (let i = 0; i < utilisateurModifications.rajouts.length; i++) {
-                    utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
+                else {
+                    let utilisateurEnCours = JSON.parse(JSON.stringify(utilisateurModifications))
+                    utilisateurEnCours.liste = utilisateurEnCours.rajouts.sort();
+                    delete utilisateurEnCours.rajouts;
+                    delete utilisateurEnCours.retraits;
+                    delete utilisateurEnCours.modifications;
+                    for (let [idServeur, serveur] of Object.entries(listeServeurs)) {
+                        serveur.listeChansons[idUtilisateur] = utilisateurEnCours;
+                    }
+                    listeChansons[idUtilisateur] = utilisateurEnCours;
+                    utilisateurModifications.rajouts = [];
+                    listeUtilisateursGlobale.push(idUtilisateur);
                 }
-                utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
-                utilisateurModifications.rajouts = [];
             }
             let writer = JSON.stringify(musiquesARajouter, null, 4); // On sauvegarde le fichier.
             fs.writeFileSync('./Données/musique-a-rajouter.json', writer);
@@ -207,6 +224,9 @@ module.exports = {
                     serveur.message = msg;
                 });
             }
+            else {
+                serveur.message = null;
+            }
         }
         else {
             serveur = {
@@ -234,6 +254,7 @@ module.exports = {
         //message.guild.me.voice.setRequestToSpeak(true);
         let numeroIntro = outils.randomNumber(listeChansons.intro.liste.length)-1;
         console.log(listeChansons.intro.liste[numeroIntro]);
+        outils.logLancer(message, listeChansons.intro.liste[numeroIntro].replace(/^.*[\\\/]/, '').slice(0,-4), "musique opening");
         let resource = createAudioResource(listeChansons.intro.liste[numeroIntro]);
         
         player.play(resource)
@@ -257,9 +278,10 @@ module.exports = {
                 else if (serveur.estStop === 0){
                     let numeroOuttro = outils.randomNumber(listeChansons.outtro.liste.length)-1;
                     console.log(listeChansons.outtro.liste[numeroOuttro])
+                    outils.logLancer(message, listeChansons.outtro.liste[numeroOuttro].replace(/^.*[\\\/]/, '').slice(0,-4), "musique ending");
                     resource = createAudioResource(listeChansons.outtro.liste[numeroOuttro]);
                     serveur.estStop += 1;
-                    player.play(resource)
+                    player.play(resource);
                 }
                 else {
                     if (listeChansonsEnCours.length === 0) {
@@ -284,8 +306,9 @@ module.exports = {
                             for (let i = 0; i < listeUtilisateursGlobale.length; i++) {
                                 let utilisateurEnCours = serveur.listeChansons[listeUtilisateursGlobale[i]];
                                 
-                                if ( (listeUtilisateursConnectés.includes(listeUtilisateursGlobale[i]) && Math.random() < utilisateurEnCours.probabilité_present)
-                                || Math.random() < utilisateurEnCours.probabilité_absent) {
+                                if ( ((listeUtilisateursConnectés.includes(listeUtilisateursGlobale[i]) && Math.random() < utilisateurEnCours.probabilité_present)
+                                || Math.random() < utilisateurEnCours.probabilité_absent)
+                                && (utilisateurEnCours.serveurs.length === 0 || utilisateurEnCours.serveurs.includes(message.guild.id)) ) {
                                     if (utilisateurEnCours.liste.length === 0) {
                                         console.log(utilisateurEnCours.nom);
                                         utilisateurEnCours.liste = JSON.parse(JSON.stringify(listeChansons[listeUtilisateursGlobale[i]].liste));
@@ -385,7 +408,7 @@ module.exports = {
                 let nomChanson = adresseChanson.replace(/^.*[\\\/]/, '').slice(0,-4);
                 nomChanson = nomChanson.replaceAll("_", " ");
                 nomChanson = nomChanson.replaceAll("  ", " ");
-                if (nomChanson in listeAdresses) {
+                if (nomChanson in listeAdresses && listeAdresses[nomChanson] !== adresseChanson) {
                     console.log(`${nomChanson} se trouve potentiellement en double.`);
                 }
                 else {
