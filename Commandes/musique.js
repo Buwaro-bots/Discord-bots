@@ -192,27 +192,99 @@ module.exports = {
             message.react('👍');
             return;
         }
-
-        else if (args[0] === "rajouter") {
-            module.exports.verifierSiUtilisateurConnecté(message);
+        else if (args[0] === "chercher") {
             args.shift();
+
             let serveur = listeServeurs[message.guildId];
-            if (serveur.estStop === -1 && serveur.message.content.length < 1850) {
-                let proposition = args.join(" ");
-                if (proposition in listeAdresses) {
-                    if (!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || message.author.id === config.admin) {
-                        serveur.listeChansonsEnCours.push(listeAdresses[proposition]);
-                        let messageEnCours = serveur.message
-                        let botReply = messageEnCours.content;
-                        let rajoutMessage = `\u001b[0;34m${message.author.username}${"           ".slice(message.author.username.length)}\u001b[0;36m ${proposition}\r\n\u001b[0m\`\`\``
-                        botReply = botReply.replace("\u001b[0m```", rajoutMessage);
-                        messageEnCours.edit(botReply);
-                        message.react("👍")
+            serveur.recherche = [];
+            let listeEnCours = serveur.recherche;
+
+            let proposition = outils.normalisationString(args.join(" "));
+            let botReply = "";
+            let nombreChansonsTrouvées = 0;
+            let nombreMessagesEnvoyés = 0;
+            let nombreChansonsZapées = 0;
+            let listeNoms = Object.keys(listeAdresses);
+            for (let i = 0; i < listeNoms.length; i++) {
+                if (outils.normalisationString(listeNoms[i]).includes(proposition)) {
+                    listeEnCours.push(listeNoms[i]);
+                    if (botReply.length + listeNoms[i].length > 1980) {
+                        if (nombreMessagesEnvoyés >= 4) {
+                            nombreChansonsZapées += 1;
+                        }
+                        else {
+                            nombreMessagesEnvoyés += 1;
+                            outils.envoyerMessage(client, botReply, message, true, null, true);
+                            nombreChansonsTrouvées += 1;
+                            botReply = `${nombreChansonsTrouvées}) ${listeNoms[i]}\r\n`;
+                        }
+                    }
+                    else {
+                        nombreChansonsTrouvées += 1;
+                        botReply += `${nombreChansonsTrouvées}) ${listeNoms[i]}\r\n`;
                     }
                 }
             }
+            if (nombreChansonsZapées > 0) {
+                botReply += `**+${nombreChansonsZapées}**`
+            }
+
+            if (nombreChansonsTrouvées === 0) {
+                botReply = `Désolé votre recherche n'a pas de résultat.`
+                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+            }
+            else if ((nombreChansonsTrouvées <= 11 || message.author.id === config.admin) && nombreMessagesEnvoyés == 0) {
+                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+            }
+            else {
+                outils.envoyerMessage(client, botReply, message, true, null, true);
+            }
             return;
         }
+        else if (args[0] === "jouer") {
+            // Corriger bug où on ne peut pas lancer le bot avec cette commande
+            if (!(message.guildId in listeServeurs)) throw("Serveur non existant.");
+            args.shift();
+            let serveur = listeServeurs[message.guildId];
+            let proposition = args.join(" ");
+
+            let regex = new RegExp('^[0-9]+$');
+            if (regex.test(proposition)) {
+                proposition = parseInt(proposition) - 1;
+                if (proposition > serveur.recherche) {
+                    outils.envoyerMessage(client, `La recherche en cours ne contient que ${serveur.recherche.length} éléments.`, envoyerPM, null, true);
+                }
+                proposition = serveur.recherche[proposition];
+            }
+
+            if (!(proposition in listeAdresses)) throw("Ce nom n'a pas été trouvé.");
+            if (serveur.estStop === -1) {
+                module.exports.verifierSiUtilisateurConnecté(message);
+                if ((!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || message.author.id === config.admin) && serveur.message.content.length + proposition.length < 1940) {
+                    serveur.listeChansonsEnCours.unshift(listeAdresses[proposition]);
+                    let messageEnCours = serveur.message
+                    let botReply = messageEnCours.content;
+                    let rajoutMessage = `\u001b[0m\r\n\u001b[0;32m${message.author.username}${"           ".slice(message.author.username.length)}\u001b[0;36m ${proposition}\u001b[0m`
+                    botReply = botReply.replace("\u001b[0m", rajoutMessage);
+                    messageEnCours.edit(botReply);
+                    message.react("👍");
+                }
+                return;
+            }
+            else if (!("estStop" in serveur) || serveur.estStop >= 2) {
+                if (botEnCours /*|| message.author.id === config.admin*/) {
+                    outils.envoyerMessage(client, "Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
+                    return;
+                }
+                if (message.member.voice.channelId === null) throw("Vous devez être connecté à un canal audio pour utiliser cette commande.");
+                serveur.listeChansonsEnCours.unshift(listeAdresses[proposition]);
+            }
+            else {
+                throw("Le bot est en train de s'éteindre");
+            }
+        }
+        
+        if (message.member.voice.channelId === null) throw("Vous devez être connecté à un canal audio pour utiliser cette commande.");
         
         let serveur;
         let listeChansonsEnCours = [];
@@ -233,7 +305,7 @@ module.exports = {
                     let nomChansonARajouter = listeChansonsEnCours[i].replace(/^.*[\\\/]/, '').slice(0,-4);
                     nomChansonARajouter = nomChansonARajouter.replaceAll("_", " ");
                     nomChansonARajouter = nomChansonARajouter.replaceAll("  ", " ");
-                    botReply += `\u001b[0;34mReprise    \u001b[0;36m ${nomChansonARajouter}\r\n`;
+                    botReply += `\u001b[0;34mReprise    \u001b[0;36m ${nomChansonARajouter}\u001b[0m\r\n`;
                 }
                 botReply += "\u001b[0m```";
                 botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
@@ -262,6 +334,7 @@ module.exports = {
         serveur.enPause = false;
         serveur.estSkip = false;
         serveur.estStop = -1; // -1 En cours de lecture. 0 L'outtro doit jouer. +1 L'outtro est en train de jouer. +2 Le bot est arrêté.
+        serveur.recherche = [];
 
         const subscription = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
@@ -342,7 +415,7 @@ module.exports = {
                                     let nomChansonARajouter = chansonARajouter.replace(/^.*[\\\/]/, '').slice(0,-4);
                                     nomChansonARajouter = nomChansonARajouter.replaceAll("_", " ");
                                     nomChansonARajouter = nomChansonARajouter.replaceAll("  ", " ");
-                                    botReply += `\u001b[0;34m${utilisateurEnCours.nom}${"           ".slice(utilisateurEnCours.nom.length)}\u001b[0;36m ${nomChansonARajouter}\r\n`;
+                                    botReply += `\u001b[0;34m${utilisateurEnCours.nom}${"           ".slice(utilisateurEnCours.nom.length)}\u001b[0;36m ${nomChansonARajouter}\u001b[0m\r\n`;
                                     listeChansonsEnCours.push(chansonARajouter);
                                     for (let j = 0; j < listeUtilisateursGlobale.length; j++) {
                                         if (serveur.listeChansons[listeUtilisateursGlobale[j]].liste.includes(chansonARajouter)) {
@@ -370,6 +443,7 @@ module.exports = {
                             botReply = botReply.replace("\u001b[1;35m", "\u001b[0;33m");
                         }
                         botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
+                        botReply = botReply.replace("\u001b[0m", "");
                         messageEnCours.edit(botReply);
                     }
                     premièreOSTListe = false;
