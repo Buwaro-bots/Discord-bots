@@ -16,7 +16,7 @@ module.exports = {
         return;
     }
     if (args[0] === "table" || args[0] === "types" || args[0] === "type") {
-        outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ, true);
         return;
     }
 
@@ -52,7 +52,7 @@ module.exports = {
                     }
                 }
                 pokemonDemande = outils.rattrapageFauteOrthographe(listePokemons, pokemonDemande);
-                outils.envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ);
+                outils.envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ, true);
                 return;
             }
         }
@@ -85,7 +85,7 @@ module.exports = {
             for (let trait in dexDng.Traits) {
                 listeTraits += trait + ", ";
             }
-            outils.envoyerMessage(client, listeTraits, message, envoyerPM, idMJ);
+            outils.envoyerMessage(client, listeTraits, message, envoyerPM, idMJ, true);
             return;
         }
         args.shift();
@@ -96,13 +96,13 @@ module.exports = {
         }
         botReply += `${trait} : ${dexDng.Traits[trait].DescriptionLongue}`;
 
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
         return;
     }
 
     if (["ini", "init", "initiative"].includes(args[0])) {
         if (args.length === 1) {
-            outils.envoyerMessage(client, "Pour faire un jet d'initiative, les stats sont l'instinct et l'agilité, la commande est **;dng ini *instinct* + *agilité***.", message, false, null);
+            outils.envoyerMessage(client, "Pour faire un jet d'initiative, les stats sont l'instinct et l'agilité, la commande est **;dng ini *instinct* + *agilité***.", message, false, null, true);
             return;
         }
 
@@ -130,7 +130,7 @@ module.exports = {
     }
     if (args[0] === "pc") {
         if (args.length === 1) {
-            outils.envoyerMessage(client, "Pour faire un jet de PC, la commande est **;dng pc *niveau de jauge* + *(points ajoutés)***.", message, false, null);
+            outils.envoyerMessage(client, "Pour faire un jet de PC, la commande est **;dng pc *niveau de jauge* + *(points ajoutés)***.", message, false, null, true);
             return;
         }
         let stat;
@@ -165,7 +165,7 @@ module.exports = {
 
     if (args[0] === "autocheck") {
         let botReply = message.author.toString() + outils.gestionAutocheck("dng", message.author.id);
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
         return;
     }
 

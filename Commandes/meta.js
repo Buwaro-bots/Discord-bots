@@ -97,7 +97,7 @@ module.exports = {
         if (args.length === 0 || args[0] === "aide") {
             let botReply = "Pour faire une commande toutes les x minutes, la commande est ;tempo [nombre de minutes] [nom de la commande (roll, ins, etc.)] [le reste de la commande si besoin comme des bonus au jet].\r\n" +
             "Par exemple **;tempo 60 ins**, ou **;tempo 10 dng 3**."
-            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
         }
 
         if (args[0] === "stop") {
@@ -108,7 +108,7 @@ module.exports = {
                 botReply += ` La commande de ce message a été arrêté : ${listeTempo[idAuteur][tempo]}\r\n`;
             }
             listeTempo[idAuteur] = {};
-            outils.envoyerMessage(client, botReply, message, envoyerPM);
+            outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
             return;
         }
         let timer = parseFloat(args.shift()) * 60 * 1000;

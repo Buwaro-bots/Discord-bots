@@ -1,6 +1,8 @@
 const outils = require("./outils.js");
 const config = require('../config.json');
 const fs = require('fs');
+const { musique: aide } = require("./aide.js");
+
 
 const { createAudioResource, StreamType, createAudioPlayer, joinVoiceChannel, getVoiceConnection, AudioPlayerStatus  } = require('@discordjs/voice'); 
 let listeServeurs = {};
@@ -9,15 +11,31 @@ let listeUtilisateursGlobale = Object.keys(listeChansons);
 let indexIntro = listeUtilisateursGlobale.indexOf("intro"); listeUtilisateursGlobale.splice(indexIntro, 1);
 let indexOuttro = listeUtilisateursGlobale.indexOf("outtro"); listeUtilisateursGlobale.splice(indexOuttro, 1);
 let listeAdresses = {};
+let botEnCours = false;
+let botEstDésactivé = false;
 
 module.exports = {
     musique: function(client, message, args, envoyerPM, idMJ) {
-        // A utiliser quand le bot est en travaux.
-        if (false){//message.author.id !== config.admin) {
-            outils.envoyerMessage(client, /*"En travaux. Pingez l'admin pour en savoir plus."*/ "JDR en cours, revenez plus tard.", message);
+        if (["aide", "help", "commandes", "commande"].includes(args[0])) {
+            aide(client, message, args, envoyerPM, idMJ);
             return;
         }
-        if (args[0] === "verifier") {
+
+        if (args[0] === "activer" && message.author.id === config.admin) {
+            botEstDésactivé = false;
+            outils.envoyerMessage(client, "Le bot musical est réactivé.", message, envoyerPM, null, true);
+            return
+        }
+        if (args[0] === "désactiver" && message.author.id === config.admin) {
+            botEstDésactivé = true;
+            outils.envoyerMessage(client, "Le bot musical est désactivé.", message, envoyerPM, null, true);
+            return
+        }
+        if (botEstDésactivé){
+            outils.envoyerMessage(client, "JDR en cours, revenez plus tard.", message, envoyerPM, null, true);
+            return;
+        }
+        if (args[0] === "vérifier" && message.author.id === config.admin) {
             if (message.author.id === config.admin) {
                 for (let i = 0; i < listeUtilisateursGlobale.length; i++) {
                     let listeChansonsUtilisateur = listeChansons[listeUtilisateursGlobale[i]].liste;
@@ -114,7 +132,7 @@ module.exports = {
                         }
                 }
                 if (listeidServeurs[i] === message.guildId) {
-                    outils.envoyerMessage(client, botReply, message, envoyerPM);
+                    outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
                 }
                 console.log(listeServeurs[listeidServeurs[i]]);
             }
@@ -204,7 +222,7 @@ module.exports = {
         if (listeServeurs.hasOwnProperty(message.guildId)) {
             serveur = listeServeurs[message.guildId];
             if (serveur.estStop < 2) {
-                outils.envoyerMessage(client, "Le bot musical est déjà en route sur ce serveur.", message);
+                outils.envoyerMessage(client, "Le bot musical est déjà en route sur ce serveur.", message, envoyerPM, null, true);
                 return;
             }
             serveur.estStop = -1;

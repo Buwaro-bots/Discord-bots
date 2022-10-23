@@ -5,9 +5,8 @@ const {exec} = require('child_process');
 
 module.exports = {
     id: function(client, message, args, envoyerPM, idMJ) {
-        outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ, true);
     },
-
     ramoloss: function(client, message, args, envoyerPM, idMJ) {
         async function speak() {
             temps = 5*60*1000 + outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.

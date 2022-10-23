@@ -71,7 +71,7 @@ module.exports = {
     },  
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
-    envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null) {
+    envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null, aSupprimer = false) {
         if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
   
         module.exports.loggerMessage(botReply, message);
@@ -84,7 +84,36 @@ module.exports = {
             return message.author.send(botReply);
         }
         else {
-            return message.channel.send(botReply);
+            if (aSupprimer) { // Le if est ici sinon le return n'a pas lieu à temps, oui je sais que je devrais faire de l'async.
+                message.channel.send(botReply)
+                .then((msg) => {
+                        msg.react('❌');
+                        let estSupprimé = false
+
+                        const collector = msg.createReactionCollector({
+                            time: 300 * 1000
+                        });
+                        collector.on('collect', (reaction, user) => {
+                            if(user.id === message.author.id && reaction.emoji.name === "❌") {
+                                estSupprimé = true;
+                                collector.resetTimer({time: 1});
+                            }
+                        })
+                        collector.on('end', collected => {
+                            if (estSupprimé) {
+                                message.delete();
+                                msg.delete();
+                            }
+                            else {
+                                msg.reactions.removeAll();
+                            }
+                        });
+                    return msg;
+                })
+            }
+            else {
+                return message.channel.send(botReply);
+            }
         }
     },
 

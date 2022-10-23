@@ -20,7 +20,7 @@ module.exports = {
     }
 
     if (["table","tum","TUM"].includes(args[0])) {
-        outils.envoyerMessage(client, "https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png", message);
+        outils.envoyerMessage(client, "https://media.discordapp.net/attachments/678319564685180930/695726135836934312/Screenshot_2020-03-30-20-20-37-1.png", message, envoyerPM, null, true);
         return;
     }
 
@@ -44,7 +44,7 @@ module.exports = {
             else {
                 outils.envoyerMessage(client, "Vous essayez de rajouter un message, soit par mp, soit sur un serveur qui n'a pas de messages personalisés." +
                 " Dans cette situation, utilisez cette commande sur le bon serveur, soit rajoutez l'id du serveur entre le lancer et le message." + 
-                " Comme **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**.", message);
+                " Comme **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**.", message, envoyerPM, idMJ, true);
                 return;
             }
         }
@@ -64,7 +64,7 @@ module.exports = {
             else {
                 botReply = "Ce serveur n'a pas de message personalisé.";
             }
-            outils.envoyerMessage(client, botReply, message, true, idMJ);
+            outils.envoyerMessage(client, botReply, message, true, idMJ, true);
             return;
         }
 
@@ -74,7 +74,7 @@ module.exports = {
         if (args[2] === "deletethis") {
             delete paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id];
             let botReply = `${message.author.toString()} : Votre message pour le lancer ${lancer} a été supprimé.`;	
-            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
         }
         else {
             if (!(lancer in paramJoueurs.ins.lancersSpeciaux[serverID])) { // Si le lancer n'existait pas dans la base, on le rajoute
@@ -88,7 +88,7 @@ module.exports = {
             paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
-            outils.envoyerMessage(client, botReply, message);
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
             if (client !== null && config.canalLogs !== null) client.channels.cache.get(config.canalLogs).send(botReply);
         }
 
@@ -101,7 +101,7 @@ module.exports = {
 
     if (args[0] === "autocheck") {
         let botReply = message.author.toString() + outils.gestionAutocheck("ins", message.author.id);
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
         return;
     }
 
