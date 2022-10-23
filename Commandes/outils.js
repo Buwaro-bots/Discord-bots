@@ -52,6 +52,24 @@ module.exports = {
         return listeDésPondérés;
     },
 
+    setDésPondérés : function(nouveauxDés) {
+        listeDésPondérés = nouveauxDés;
+    },
+
+    initialiserDésPondérés : function() {
+        fichier = "./Données/tempDés.json"
+        fs.access(fichier, fs.constants.F_OK, (manque) => {
+            if (!manque) {
+                let jsonHistorique = JSON.parse(fs.readFileSync('./Données/tempDés.json', 'utf-8'));
+                module.exports.setDésPondérés(jsonHistorique);
+                fs.unlink('./Données/tempDés.json', (err) => {
+                    if (err) throw err;
+                    console.log("L'historique a bien été archivé et le fichier supprimé.");
+                });
+            }
+        });
+    },
+
     pad: function(nombre, longueur = 2) {
         return ("0".repeat(longueur) + nombre).slice(-longueur);
     },
@@ -313,4 +331,8 @@ module.exports = {
         }
         return array;
       }
+}
+
+if (global.serveurProd) {
+    module.exports.initialiserDésPondérés();
 }

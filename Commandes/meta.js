@@ -203,6 +203,15 @@ module.exports = {
                 fs.writeFileSync('./Données/tempMusiqueArchive.json', writer, function(err, result) {
                     if(err) console.log('error', err);
                 });
+
+                historiqueDés = outils.getDésPondérés();
+                writer = JSON.stringify(historiqueDés, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./Données/tempDés.json', writer, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+                fs.writeFileSync('./Données/tempDésArchive.json', writer, function(err, result) {
+                    if(err) console.log('error', err);
+                });
             }
             client.destroy();
             process.exit();

@@ -54,6 +54,31 @@
         "unshift": ["couleur","canal"]
     },
     {
+        "nom": "chercher",
+        "alias": "musique",
+        "unshift": ["chercher"]
+    },
+    {
+        "nom": "jouer",
+        "alias": "musique",
+        "unshift": ["jouer"]
+    },
+    {
+        "nom": "pause",
+        "alias": "musique",
+        "unshift": ["pause"]
+    },
+    {
+        "nom": "skip",
+        "alias": "musique",
+        "unshift": ["skip"]
+    },
+    {
+        "nom": "stop",
+        "alias": "musique",
+        "unshift": ["stop"]
+    },
+    {
         "nom" : "8ball",
         "alias" : "ball_8"
     }

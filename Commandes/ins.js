@@ -26,12 +26,29 @@ module.exports = {
 
     if (args.length > 0 && ["purge","purgé","purger"].includes(args[0].toString().toLowerCase())) {
         let botReply = `${message.author.toString()} a purgé :  \`\`\``;
+        let INSLancers = { 1 : [0,0], 2 : [0,0], 3 : [0,0], 4 : [0,0], 5 : [0,0], 6 : [0,0]};
+        let INSLancersChiffres = { 1 : 0, 2 : 0, 3 : 0, 4 : 0, 5 : 0, 6 : 0};
         while (botReply.length < 1989) {
             let dices = [outils.lancerDéPondéré("ins",6), outils.randomNumber(6), outils.randomNumber(6)];
             botReply += `[${dices[0]}${dices[1]}]+[${dices[2]}]  `;
+            INSLancers[dices[0]][0] += 1;
+            INSLancers[dices[0]][1] += dices[0] === dices[1] && dices[1] === dices[2] ? 1 : 0;
+            INSLancersChiffres[dices[0]] += 1;
+            INSLancersChiffres[dices[1]] += 1;
+            INSLancersChiffres[dices[2]] += 1;
         }
         botReply = botReply.slice(0,-2) + "\`\`\`"
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+
+        botReply = `\`\`\`ansi\r\nStats pour INS (premier dé de chaque lancer, triples, et totaux des trois dés.):\r\n`
+        botReply += `\u001b[0;36mLancers de 1x : ${INSLancers[1][0]} ${INSLancers[1][1] > 0 ? "dont " + INSLancers[1][1] + " '111'" : ""} [${INSLancersChiffres[1]}]\r\n`
+        botReply += `\u001b[0;34mLancers de 2x : ${INSLancers[2][0]}  [${INSLancersChiffres[2]}]\r\n`
+        botReply += `\u001b[0;32mLancers de 3x : ${INSLancers[3][0]} ${INSLancers[3][1] > 0 ? "dont " + INSLancers[3][1] + " '333'" : ""} [${INSLancersChiffres[3]}]\r\n`
+        botReply += `\u001b[0;33mLancers de 4x : ${INSLancers[4][0]} ${INSLancers[4][1] > 0 ? "dont " + INSLancers[4][1] + " '444'" : ""} [${INSLancersChiffres[4]}]\r\n`
+        botReply += `\u001b[0;35mLancers de 5x : ${INSLancers[5][0]}  [${INSLancersChiffres[5]}]\r\n`
+        botReply += `\u001b[0;31mLancers de 6x : ${INSLancers[6][0]} ${INSLancers[6][1] > 0 ? "dont " + INSLancers[6][1] + " '666'" : ""} [${INSLancersChiffres[6]}]\u001b[0;0m\r\n`
+        botReply += "```"
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
         return;
     }
 
