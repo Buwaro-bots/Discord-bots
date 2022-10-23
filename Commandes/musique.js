@@ -74,7 +74,7 @@ module.exports = {
             //delete listeServeurs[message.guildId];
             return;
         }
-        else if (args[0] === "reset") {
+        else if (args[0] === "reset" && message.author.id === config.admin) {
             module.exports.verifierSiUtilisateurConnecté(message);
             let serveur = listeServeurs[message.guildId];
             let messageEnCours = serveur.message
@@ -89,10 +89,7 @@ module.exports = {
             while (serveur.listeChansonsEnCours.length > 0){
                 serveur.listeChansonsEnCours.shift();
             }
-            serveur.player.stop(); // test
-            //subscription.unsubscribe();
-            //connection.destroy();
-            //delete listeServeurs[message.guildId];
+            serveur.player.stop();
             return;
         }
         else if (args[0] === "skip") {
@@ -114,6 +111,17 @@ module.exports = {
             serveur.enPause = !(serveur.enPause);
             return;
         }
+        /*
+        else if (args[0] === "np") {
+            module.exports.verifierSiUtilisateurConnecté(message);
+            let serveur = listeServeurs[message.guildId];
+            if (serveur.estStop === -1) {
+                console.log(serveur.player.state.resource.playbackDuration);
+            }
+
+            return;
+        }
+        */
         else if (args[0] === "liste") {
             let listeidServeurs = [message.guildId];
             if (args.length > 1 && args[1] === "totale") {
@@ -142,7 +150,6 @@ module.exports = {
             listeServeurs[message.guildId].listeChansons = JSON.parse(JSON.stringify(listeChansons));
             return;
         }
-
         else if (args[0] === "maj" && message.author.id === config.admin) {
             // Note : Le fichier ne doit pas comporter les intros et les outtris à rajouter, ceci est seulement pour les musiques d'utilisateurs.
             let musiquesARajouter = JSON.parse(fs.readFileSync(__dirname + '/../Données/musique-a-rajouter.json', 'utf-8'));
@@ -300,6 +307,10 @@ module.exports = {
         
         if (message.member.voice.channelId === null) throw("Vous devez être connecté à un canal audio pour utiliser cette commande.");
         
+        if (botEnCours /*|| message.author.id === config.admin*/) {
+            outils.envoyerMessage(client, "Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
+            return;
+        }
         let serveur;
         let listeChansonsEnCours = [];
         let botReply;
@@ -363,7 +374,7 @@ module.exports = {
         let resource = createAudioResource(listeChansons.intro.liste[numeroIntro]);
         
         player.play(resource)
-
+        botEnCours = true;
         
 
         player.on('error', error => {
@@ -387,6 +398,7 @@ module.exports = {
                     resource = createAudioResource(listeChansons.outtro.liste[numeroOuttro]);
                     serveur.estStop += 1;
                     player.play(resource);
+                    botEnCours = false;
                 }
                 else {
                     if (listeChansonsEnCours.length === 0) {
@@ -513,6 +525,7 @@ module.exports = {
                 let adresseChanson = listeChansonsUtilisateur[j];
                 let nomChanson = adresseChanson.replace(/^.*[\\\/]/, '').slice(0,-4);
                 nomChanson = nomChanson.replaceAll("_", " ");
+                nomChanson = nomChanson.replaceAll("  ", " ");
                 nomChanson = nomChanson.replaceAll("  ", " ");
                 if (nomChanson in listeAdresses && listeAdresses[nomChanson] !== adresseChanson) {
                     console.log(`${nomChanson} se trouve potentiellement en double.`);
