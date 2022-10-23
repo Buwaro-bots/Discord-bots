@@ -157,6 +157,12 @@ module.exports = {
                         for (let i = 0; i < utilisateurModifications.rajouts.length; i++) {
                             utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
                         }
+                        for (let i = 0; i < utilisateurModifications.modifications.length; i++) {
+                            let position = utilisateurEnCours.liste.indexOf(utilisateurModifications.modifications[i][0]);
+                            if (position > -1) {
+                                utilisateurEnCours.liste[position] = utilisateurModifications.modifications[i][1];
+                            }
+                        }
                         utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
                     }
 
@@ -168,8 +174,15 @@ module.exports = {
                     for (let i = 0; i < utilisateurModifications.rajouts.length; i++) {
                         utilisateurEnCours.liste.push(utilisateurModifications.rajouts[i]);
                     }
+                    for (let i = 0; i < utilisateurModifications.modifications.length; i++) {
+                        let position = utilisateurEnCours.liste.indexOf(utilisateurModifications.modifications[i][0]);
+                        if (position > -1) {
+                            utilisateurEnCours.liste[position] = utilisateurModifications.modifications[i][1];
+                        }
+                    }
                     utilisateurEnCours.liste = utilisateurEnCours.liste.sort();
                     utilisateurModifications.rajouts = [];
+                    utilisateurModifications.modifications = [];
                 }
                 else {
                     let utilisateurEnCours = JSON.parse(JSON.stringify(utilisateurModifications))
@@ -189,6 +202,7 @@ module.exports = {
             fs.writeFileSync('./Données/musique-a-rajouter.json', writer);
             writer = JSON.stringify(listeChansons, null, 4); // On sauvegarde le fichier.
             fs.writeFileSync('./Données/musique.json', writer);
+            module.exports.initialiserAdresses(listeAdresses);
             message.react('👍');
             return;
         }

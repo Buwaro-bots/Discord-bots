@@ -8,7 +8,9 @@
             "C:/adresse.mp3"
         ],
         "retraits": [],
-        "modifications": []
+        "modifications": [
+            ["C:/adresse d'origine.mp3", "C:/nouvelle adresse.mp3"]
+        ]
     },
     "2" : {
         "nom" : "def",
