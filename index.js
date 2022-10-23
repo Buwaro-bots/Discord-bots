@@ -84,9 +84,14 @@ client.on("messageCreate", (message) => {
     }
 
     catch(err) {
-        message.react('❌');
-        console.log(err/*.substring(0, 200)*/);
+        if (typeof(err) === "string") {
+            outils.envoyerMessage(client, `${err}\r\nVous pouvez supprimer ce message en cliquant sur la petite croix.`, message, envoyerPM, null, true);
         }
+        else {
+            outils.envoyerMessage(client, "Erreur interne.", message, envoyerPM, null);
+            console.log(err/*.substring(0, 200)*/);
+        }
+    }
 });
  
 client.login(config.botToken);

@@ -384,7 +384,7 @@ module.exports = {
 
     verifierSiUtilisateurConnecté: function(message) {
         if (message.member.voice.channel.id !== listeServeurs[message.guildId].canal && message.author.id !== config.admin) {
-            throw("Utilisateur non connecté au canal audio.")
+            throw("Vous devez être connecté au canal audio pour utiliser cette commande.");
         }
     },
 

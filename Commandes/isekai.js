@@ -50,7 +50,7 @@ module.exports = {
                 }
                 else {
                     nombreProblemes += 1;
-                    if (nombreProblemes > 20) throw("Plus de 20 tentatives ratées.");
+                    if (nombreProblemes > 20) throw("Il n'y a pas assez de pokémons.");
                 }
             }
             else {
@@ -229,7 +229,7 @@ module.exports = {
 
         if (nouvelleListe.length === 0) { // Si il n'y a pas de pokémon correspondant, on renvoit une erreur
             console.log(listeTagsDemandes);
-            throw("Aucun pokémon avec ses tags");
+            throw("Aucun pokémon trouvé avec ses tags.");
         }
         
         listePokemon = nouvelleListe;

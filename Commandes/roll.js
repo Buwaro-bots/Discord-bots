@@ -25,7 +25,7 @@ module.exports = {
         args[0] = args[0].toLowerCase().replace("d", "");
         outils.verifierNaN(args);
         let lancer = parseInt(args[0]);
-        if (lancer > 9000000000000000) throw("Nombre trop grand");
+        if (lancer > 9000000000000000) throw("Résultat trop grand.");
         let resultat = outils.randomNumber(lancer) ;
         let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${resultat}**.`;
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
@@ -37,7 +37,7 @@ module.exports = {
         let [reponseCommandes, listeLancers, reponseLancers, reponseSomme] = module.exports.commandeComplexe(commandeLancer);
 
         let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
-        if (botReply.length > 2000) throw ("Réponse trop longue");
+        if (botReply.length > 2000) throw ("Réponse trop longue.");
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
         outils.logLancer(message, `${reponseLancers}= ${reponseSomme}` , reponseCommandes, envoyerPM);
         return;
@@ -107,7 +107,7 @@ module.exports = {
     reponseLancers = reponseLancers.replaceAll('*', '\\*');
     
     outils.verifierNaN([reponseSomme]);
-    if (Math.abs(reponseSomme) > 9000000000000000) throw("Nombre trop grand");
+    if (Math.abs(reponseSomme) > 9000000000000000) throw("Résultat trop grand.");
 
     return [reponseCommandes, listeLancers, reponseLancers, reponseSomme];    
     }

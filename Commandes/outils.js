@@ -17,7 +17,7 @@ module.exports = {
 
     randomNumber: function(maximum) {
         if (maximum < 2) {
-            throw 'dé inférieur à 2';
+            throw 'Dé demandé inférieur à 2.';
         }
         // Cette fonction sert à tirer un nombre au pif de 1 à x, j'en ai beaucoup besoin.
         return Math.floor(Math.random() * maximum) + 1;
@@ -59,8 +59,8 @@ module.exports = {
     // Cette fonction vérifie un tableau de nombre pour être sûr que ça ne renvoie pas NaN. Un tableau.
     verifierNaN: function(array) {
         for(let i = 0; i < array.length; i++)
-            if (isNaN(array[i])) {
-                throw 'nan error';
+            if (isNaN(parseInt(array[i]))) {
+                throw "Le nombre attendu n'est pas valide.";
             }
         },
 
@@ -235,7 +235,7 @@ module.exports = {
             return liste[minIndex];
         }
         else {
-            throw("Aucun résultat trouvé");
+            throw("Aucun résultat trouvé.");
         }
     },
 
@@ -301,7 +301,7 @@ module.exports = {
                 return entrée;
             }
         }
-        throw(`L'entré n'est pas validée par le regex.`);
+        throw(`L'entrée n'est pas dans le bon format.`);
     },
 
     // https://sebhastian.com/fisher-yates-shuffle-javascript/

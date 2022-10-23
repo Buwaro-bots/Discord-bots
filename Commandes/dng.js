@@ -155,7 +155,7 @@ module.exports = {
         modificateur = modificateur === 0 ? "" : `+ ${modificateur}`;
 
         if ( stat < 1 || stat > 20 ) {
-            throw("Stat incorrecte");
+            throw("La stat envoyée est incorrecte.");
         }
 
         let lancer = `${dexDng.LancersPC[stat]} ${modificateur}`;
