@@ -209,13 +209,13 @@ module.exports = {
             fs.writeFileSync('./Données/musique-a-rajouter.json', writer);
             writer = JSON.stringify(listeChansons, null, 4); // On sauvegarde le fichier.
             fs.writeFileSync('./Données/musique.json', writer);
-            module.exports.initialiserAdresses(listeAdresses);
+            listeAdresses = module.exports.initialiserAdresses()
             message.react('👍');
             return;
         }
         else if (args[0] === "chercher") {
             args.shift();
-
+            if (!(message.guildId in listeServeurs)) throw("Serveur non existant.");
             let serveur = listeServeurs[message.guildId];
             serveur.recherche = [];
             let listeEnCours = serveur.recherche;
@@ -279,6 +279,10 @@ module.exports = {
             }
 
             if (!(proposition in listeAdresses)) throw("Ce nom n'a pas été trouvé.");
+
+            serveur.historique.push(listeAdresses[proposition]);
+            if (serveur.historique.length > 200) serveur.historique.shift()
+            
             if (serveur.estStop === -1) {
                 module.exports.verifierSiUtilisateurConnecté(message);
                 if ((!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || message.author.id === config.admin) && serveur.message.content.length + proposition.length < 1940) {
@@ -312,7 +316,7 @@ module.exports = {
             return;
         }
         let serveur;
-        let listeChansonsEnCours = [];
+        let listeChansonsEnCours;
         let botReply;
         let premièreOSTListe = true;
 
@@ -348,10 +352,12 @@ module.exports = {
                 listeChansons : JSON.parse(JSON.stringify(listeChansons)),
                 listeChansonsEnCours : [],
                 message : null,
+                historique : []
             };
             delete serveur.listeChansons.intro;
             delete serveur.listeChansons.outtro;
             listeServeurs[message.guildId] = serveur;
+            listeChansonsEnCours = serveur.listeChansonsEnCours;
         }
         const player = createAudioPlayer(); 
         serveur.player = player;
@@ -433,21 +439,37 @@ module.exports = {
                                     let chansonARajouter = "";
                                     if (utilisateurEnCours.liste.length === 1) {
                                         chansonARajouter = utilisateurEnCours.liste[0];
+                                        utilisateurEnCours.liste.shift();
                                     }
                                     else {
-                                        let numeroChansonARajouter = outils.randomNumber(utilisateurEnCours.liste.length) - 1;
-                                        chansonARajouter = utilisateurEnCours.liste[numeroChansonARajouter];
+                                        let numeroChansonARajouter;
+                                        let listeRejets = [];
+                                        // let numeroDansHistorique; (puis utiliser la variable pour ne pas avoir à refaire indexOf)
+                                        while (listeRejets.length < 10) {
+                                            numeroChansonARajouter = outils.randomNumber(utilisateurEnCours.liste.length) - 1;
+                                            chansonARajouter = utilisateurEnCours.liste[numeroChansonARajouter];
+                                            if (serveur.historique.includes(chansonARajouter)) {
+                                                listeRejets.push(serveur.historique.indexOf(chansonARajouter));
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                            if (listeRejets.length >= 10) {
+                                                let numeroHistorique = Math.max.apply(Math, listeRejets);
+                                                chansonARajouter = serveur.historique[numeroHistorique];
+                                                numeroChansonARajouter = utilisateurEnCours.liste.indexOf(chansonARajouter);
+                                                break;
+                                            }
+                                        }
+                                        utilisateurEnCours.liste.splice(numeroChansonARajouter, 1);
                                     }
+                                    serveur.historique.push(chansonARajouter);
+                                    if (serveur.historique.length > 200) serveur.historique.shift()
                                     let nomChansonARajouter = chansonARajouter.replace(/^.*[\\\/]/, '').slice(0,-4);
                                     nomChansonARajouter = nomChansonARajouter.replaceAll("_", " ");
                                     nomChansonARajouter = nomChansonARajouter.replaceAll("  ", " ");
                                     botReply += `\u001b[0;34m${utilisateurEnCours.nom}${"           ".slice(utilisateurEnCours.nom.length)}\u001b[0;36m ${nomChansonARajouter}\u001b[0m\r\n`;
                                     listeChansonsEnCours.push(chansonARajouter);
-                                    for (let j = 0; j < listeUtilisateursGlobale.length; j++) {
-                                        if (serveur.listeChansons[listeUtilisateursGlobale[j]].liste.includes(chansonARajouter)) {
-                                            serveur.listeChansons[listeUtilisateursGlobale[j]].liste.splice(serveur.listeChansons[listeUtilisateursGlobale[j]].liste.indexOf(chansonARajouter), 1);
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -474,6 +496,24 @@ module.exports = {
                     }
                     premièreOSTListe = false;
                     let chansonAJouer = listeChansonsEnCours.shift();
+
+                    fs.access(chansonAJouer, fs.constants.F_OK, (manque) => {
+                        let dateHeure = new Date();
+                        let heure = outils.pad(dateHeure.getHours()) + ':' + outils.pad(dateHeure.getMinutes()) + ':' + outils.pad(dateHeure.getSeconds());
+                        process.stdout.write(`\x1b[92m${heure}  \x1b[94m`);
+                        if (!manque) {
+                            console.log(`Lecture en cours : ${chansonAJouer}\x1b[97m`);
+                        }
+                        else {
+                            console.log(`Fichier manquant : ${chansonAJouer}\x1b[97m`);
+                            setTimeout(function() {
+                                let messageEnCours = serveur.message;
+                                botReply = messageEnCours.content;
+                                botReply = botReply.replace("\u001b[0;33m", "\u001b[0;31m");
+                                messageEnCours.edit(botReply);
+                            }, 1000)
+                        }
+                    })
                     resource = createAudioResource(chansonAJouer);
                     player.play(resource);
                 }
@@ -499,6 +539,7 @@ module.exports = {
             listeTempServeurs[listeIDServeurs[i]] = {
                 listeChansons : listeServeurs[listeIDServeurs[i]].listeChansons,
                 listeChansonsEnCours : listeServeurs[listeIDServeurs[i]].listeChansonsEnCours,
+                historique : listeServeurs[listeIDServeurs[i]].historique
             }
         }
         return listeTempServeurs;
@@ -518,7 +559,8 @@ module.exports = {
         });
     },
 
-    initialiserAdresses : function(listeAdresses) {
+    initialiserAdresses : function() {
+        listeAdresses = {};
         for (let i = 0; i < listeUtilisateursGlobale.length; i++) {
             let listeChansonsUtilisateur = listeChansons[listeUtilisateursGlobale[i]].liste;
             for (let j = 0; j < listeChansonsUtilisateur.length; j++) {
@@ -535,10 +577,11 @@ module.exports = {
                 }
             }
         }
+        return listeAdresses;
     }
 }
 
 if (global.serveurProd) {
     module.exports.initialiserHistorique();
-    module.exports.initialiserAdresses(listeAdresses);
+    listeAdresses = module.exports.initialiserAdresses();
 }
