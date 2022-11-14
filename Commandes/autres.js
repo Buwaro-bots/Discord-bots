@@ -1,6 +1,8 @@
 const outils = require("./outils.js");
 const config = require('../config.json');
-const horoscope = require("../Données/horoscope.json");
+const liste = require("../Données/autres.json");
+const horoscope = liste.horoscope;
+const lol = liste.lol;
 const {exec} = require('child_process');
 
 module.exports = {
@@ -122,6 +124,35 @@ module.exports = {
             boucleEnCours += 1;
         }
         outils.envoyerMessage(client, `${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM, idMJ);
+    },
+    lol: function(client, message, args, envoyerPM, idMJ) {
+        let dé = outils.randomNumber(lol.length) - 1;
+        let champion = lol[dé];
+        let botReply = `${message.author.toString()} : ${champion}`;
+        outils.logLancer(message, champion, "lol", envoyerPM);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+        .then((msg)=> {
+            msg.react("🖼️");
+            const collector = msg.createReactionCollector({
+                time: 400 * 1000
+            });
+            collector.on('collect', (reaction, user) => {
+                if(reaction.emoji.name === "🖼️" && !(user.bot)) {
+                    collector.resetTimer({time: 1});
+                    champion = champion.replaceAll("'","-");
+                    champion = champion.replaceAll(" ","-");
+                    champion = champion.replaceAll(".","-");
+                    champion = champion.toLowerCase();
+                    let lien = ` ( https://www.leagueoflegends.com/fr-fr/champions/${champion}/ )`
+                    botReply += lien;
+                    msg.edit(botReply);
+                }
+            });
+            collector.on('end', collected => {
+                msg.reactions.removeAll();
+            });
+            
+        })
     },
 
     renommer: function(client, message, args, envoyerPM, idMJ) {

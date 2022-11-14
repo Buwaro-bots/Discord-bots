@@ -1,0 +1,131 @@
+{
+    "horoscope" : [
+        {
+            "nom": "vertébrés",
+            "probabilité": 95,
+            "type": "classe",
+            "liste": 
+            [
+                {
+                    "nom": "mammifères",
+                    "probabilité": 55,
+                    "type": "classe",
+                    "liste":
+                    [
+                        {
+                            "nom": "canidés",
+                            "probabilité": 25,
+                            "type": "classe",
+                            "liste" :
+                            [
+                                {
+                                    "nom": "chiens domestiques",
+                                    "probabilité": 40,
+                                    "type": "liste",
+                                    "liste" : ["Labrador", "Chihuahua", "Huskie", "Berger Allemand", "Shiba Inu"]
+                                },
+                                {
+                                    "nom": "renards",
+                                    "probabilité": 40,
+                                    "type": "liste",
+                                    "liste" : ["Renard roux", "Renard arctique", "Fennec"]
+                                },
+                                {
+                                    "nom": "autres",
+                                    "probabilité": 20,
+                                    "type": "liste",
+                                    "liste" : ["Loup", "Coyote", "Dingo"]
+                                }
+                            ]
+                        },
+                        {
+                            "nom": "félins",
+                            "probabilité": 10,
+                            "type": "liste",
+                            "liste" : ["Chat", "Tigre", "Lion", "Guépard", "Lynx", "Léopard", "Hyène"]
+                        },
+                        {
+                            "nom": "autres (à faire)",
+                            "probabilité": 70,
+                            "type": "liste",
+                            "liste": ["Cochon", "Cheval", "Bouc", "Ane", "Ornithorynque", "Lapin", "Souris", "Ecureuil", "Loutre", "Elephant", "Rhinocéros", "Kangourou", "Furet", "Ours", "Ouistiti", "Blaireau", "Chauve-souris", "Cerf", "Fourmilier", "Taupe", "Boeuf / Vache", "Panda Roux", "Raton laveur", "Hippopotame", "Putois", "Oppossum", "Castor", "Lémurien", "Pangolin"]
+                        }
+                    ]
+                },
+                {
+                    "nom": "reptiles",
+                    "probabilité": 16,
+                    "type": "liste",
+                    "liste": ["Crocodile", "Alligator", "Dragon de Komodo", "Gecko", "Iguane", "Serpent", "Vipère", "Caméléon", "Tortue", "Lézard"]
+                },
+                {
+                    "nom": "oiseaux",
+                    "probabilité": 15,
+                    "type": "liste",
+                    "liste": ["Corbeau", "Pigeon", "Mouette", "Moineau", "Hibou", "Canard", "Cygne", "Pingouin", "Aigle", "Perroquet", "Coq/Poule", "Vautour"]
+                },
+                {
+                    "nom": "poissons et mammifères marin",
+                    "probabilité": 12,
+                    "type": "liste",
+                    "liste": ["Requin", "Dauphin", "Phoque", "Baleine", "Anguille", "Poisson-chat", "Sardine", "Coelacanthe", "Narval", "Orque"]
+                },
+                {
+                    "nom": "amphibiens",
+                    "probabilité": 4,
+                    "type": "liste",
+                    "liste": ["Salamendre", "Grenouille", "Axolotl"]
+                }
+            ]
+        },
+        {
+            "nom": "invertébrés",
+            "probabilité": 4,
+            "type": "liste",
+            "liste": ["Pieuvre", "Escargot", "Scorpion", "Araignée", "Méduse", "Abeille", "Bourdon", "Fourmis", "Mante religieuse", "Libellule", "Scarabée", "Papillon", "Coccinelle", "Criquet", "Crabe"]
+        },
+        {
+            "nom": "mythiques",
+            "probabilité": 1,
+            "type": "classe",
+            "liste": [
+                {
+                    "nom": "éteints",
+                    "probabilité": 65,
+                    "type": "liste",
+                    "liste": ["T-rex", "Vélociraptor", "Tricératops", "Ankylosaure", "Ptéranodon", "Plésiosaure", "Stégosaure", "Mammouth", "Mégalodon"]
+                },
+                {
+                    "nom": "mythiques",
+                    "probabilité": 34,
+                    "type": "liste",
+                    "liste": ["Griffon", "Dragon", "Kobold", "Protogen"]
+                },
+                {
+                    "nom": "dodo",
+                    "probabilité": 1,
+                    "type": "liste",
+                    "liste": ["Dodo"]
+                }
+            ]
+        },
+        {
+            "nom": "",
+            "probabilité": 0,
+            "type": "classe/liste",
+            "liste": []
+        }
+    ],
+    "lol" : [
+        "Aatrox","Ahri","Akali","Akshan","Alistar","Amumu","Anivia","Annie","Aphelios","Ashe","Aurelion Sol","Azir","Bard","Bel'Veth","Blitzcrank","Brand","Braum",
+        "Caitlyn","Camille","Cassiopeia","Cho'Gath","Corki","Darius","Diana","Dr.Mundo","Draven","Ekko","Elise","Evelynn","Ezreal","Fiddlesticks","Fiora","Fizz",
+        "Galio","Gangplank","Garen","Gnar","Gragas","Graves","Gwen","Hecarim","Heimerdinger","Illaoi","Irelia","Ivern","Janna","Jarvan IV","Jax","Jayce","Jhin","Jinx",
+        "K'Sante","Kai'Sa","Kalista","Karma","Karthus","Kassadin","Katarina","Kayle","Kayn","Kennen","Kha'Zix","Kindred","Kled","Kog'Maw","LeBlanc",
+        "Lee Sin","Leona","Lillia","Lissandra","Lucian","Lulu","Lux","Malphite","Malzahar","Maokai","Master Yi","Miss Fortune","Mordekaiser","Morgana",
+        "Nami","Nasus","Nautilus","Neeko","Nidalee","Nilah","Nocturne","Nunu","Olaf","Orianna","Ornn","Pantheon","Poppy","Pyke","Qiyana","Quinn",
+        "Rakan","Rammus","Rek'Sai","Rell","Renata","Renekton","Rengar","Riven","Rumble","Ryze","Samira","Sejuani","Senna","Seraphine","Sett",
+        "Shaco","Shen","Shyvana","Singed","Sion","Sivir","Skarner","Sona","Soraka","Swain","Sylas","Syndra","Tahm Kench","Taliyah","Talon","Taric","Teemo","Thresh",
+        "Tristana","Trundle","Tryndamere","Twisted Fate","Twitch","Udyr","Urgot","Varus","Vayne","Veigar","Vel'Koz","Vex","Vi","Viego","Viktor","Vladimir","Volibear",
+        "Warwick","Wukong","Xayah","Xerath","Xin Zhao","Yasuo","Yone","Yorick","Yuumi","Zac","Zed","Zeri","Ziggs","Zilean","Zoe","Zyra"
+    ]
+}
