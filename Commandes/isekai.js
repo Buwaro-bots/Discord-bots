@@ -2,6 +2,7 @@ const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
 const fs = require('fs');
 let historique = {"collectif" : []};
+let listeIsekaisEnCours = [];
 
 // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
 let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
@@ -9,7 +10,7 @@ let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "
 "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon"]
 
 module.exports = {
-    isekai : function(client, message, args, envoyerPM, idMJ, messageReroll = null, listePokemonsDejaTires = []) {
+    isekai : function(client, message, args, envoyerPM, idMJ) {
 
     if (args.length > 0 && args[0] === "roll") {
         args.shift();
@@ -72,7 +73,19 @@ module.exports = {
         return;
     }
 
-    let nombreReroll = listePokemonsDejaTires.length;
+    let isekaiEnCours;
+    if (!(listeIsekaisEnCours.hasOwnProperty(message.id))) {
+        isekaiEnCours = {
+            messageEnvoyé : null,
+            contenuMessage : "",
+            listePokemonsDejaTires : []
+        };
+        listeIsekaisEnCours[message.id] = isekaiEnCours;
+    }
+    else {
+        isekaiEnCours = listeIsekaisEnCours[message.id]
+    }
+    let nombreReroll = isekaiEnCours.listePokemonsDejaTires.length;
     let timerSpoiler = 4000; 
     [timerSpoiler, args] = outils.rechercheDoubleParametre(args, "timer", timerSpoiler);
     outils.verifierNaN([timerSpoiler]);
@@ -90,54 +103,32 @@ module.exports = {
     let pokemonChoisi;
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
-        pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], listePokemonsDejaTires, message.author.id);
+        pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
     else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 3) || nombreReroll > 15 )  {
-        pokemonChoisi = module.exports.tiragePokemon(["Digimon"], listePokemonsDejaTires, message.author.id);
+        pokemonChoisi = module.exports.tiragePokemon(["Digimon"], isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
     else {
-        pokemonChoisi = module.exports.tiragePokemon(args, listePokemonsDejaTires, message.author.id);
+        pokemonChoisi = module.exports.tiragePokemon(args, isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
 
-    let rollShiny = outils.randomNumber(64 * 1.5 ** nombreReroll);
-    let estShiny = "";
-    let suffixe = "";
-
-    if (rollShiny === 1) {
-        estShiny = " **shiny**";
-        suffixe += "✨";
-    }
-
-    let pokemonNumero = pokemonChoisi.numero; let pokemonNumeroForme = pokemonNumero;
-    let pokemonNom = pokemonChoisi.nom; let pokemonNomForme = pokemonNom;
-    if (pokemonChoisi.hasOwnProperty("nomForme")) {
-        pokemonNumeroForme = pokemonChoisi.numeroForme;
-        pokemonNomForme = pokemonChoisi.nomForme;
-        suffixe += pokemonChoisi.tags.includes("Alola") ? "🏝️" : "";
-        suffixe += pokemonChoisi.tags.includes("Galar") ? "🍵" : "";
-        suffixe += pokemonChoisi.tags.includes("Hisui") ? "🍙" : "";
-        suffixe += pokemonChoisi.tags.includes("Espagne (nom temporaire") ? "💃" : "";
-        suffixe += pokemonChoisi.tags.includes("Digimon") ? "🖥️" : "";
-    }
-    process.stdout.write(`\x1b[90m${pokemonNomForme}${estShiny} [${rollNouveau}][${rollShiny}] => \x1b[0m`);
-    outils.logLancer(message, `${pokemonNomForme}${estShiny}`, `isekai${args.length > 0 ? " " + args.join(" ") : ""}${nombreReroll > 0 ? " *reroll n°" + nombreReroll + "*" : ""}`, envoyerPM);
-    listePokemonsDejaTires.push(pokemonChoisi);
+    let estShiny = outils.randomNumber(64 * 1.5 ** nombreReroll) === 1;
+    isekaiEnCours.listePokemonsDejaTires.push(pokemonChoisi);
     
     if (modeSimple) {
-        botReply = `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`;
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+        botReply = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        delete listeIsekaisEnCours[message.id];
     }
 
-    else if (messageReroll === null) {
-        outils.envoyerMessage(client, `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`, message, envoyerPM, idMJ)
+    else if (isekaiEnCours.messageEnvoyé === null) {
+        isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny);
+        outils.envoyerMessage(client, isekaiEnCours.contenuMessage, message, envoyerPM, idMJ)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
+            isekaiEnCours.messageEnvoyé = msg;
+            isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
             setTimeout(function() {
-                if (pokemonChoisi["tags"].includes("Digimon")) {
-                    msg.edit(`${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}. (https://digimon.fandom.com/wiki/${pokemonNomForme})`);
-                }
-                else if ( !(pokemonChoisi["tags"].includes("Spoiler"))) {
-                    msg.edit(`${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-                }
+                msg.edit(isekaiEnCours.contenuMessage);
                 if (!(args.includes("starter+"))) {msg.react("🎲").then(() => msg.react("🖼️"))};
             }, timerSpoiler)
             const collector = msg.createReactionCollector({
@@ -148,7 +139,7 @@ module.exports = {
                     collector.resetTimer({time: 40 * 1000});
                     nombreReroll += 1;
                     timerSpoiler = timerSpoiler / 1.25 + 100;
-                    let dernierPokemon = module.exports.isekai(client, message, args.concat(["timer", timerSpoiler]), envoyerPM, idMJ, msg, listePokemonsDejaTires);
+                    let dernierPokemon = module.exports.isekai(client, message, args.concat(["timer", timerSpoiler]), envoyerPM, idMJ);
                     if ( !(dernierPokemon.tags.includes("Digimon")) ) {
                         setTimeout(function() {
                             reaction.users.remove(user);
@@ -161,42 +152,39 @@ module.exports = {
                 else if (user.id === message.author.id && reaction.emoji.name === "🖼️") {
                     reaction.users.remove(user);
 
-                    let dernierPokemon = listePokemonsDejaTires[listePokemonsDejaTires.length - 1];
+                    let dernierPokemon = isekaiEnCours.listePokemonsDejaTires.slice(-1)[0];
                     let dernierPokemonNumero = outils.pad(dernierPokemon.numero, 3);
                     if (dernierPokemon.hasOwnProperty("numeroForme")) { dernierPokemonNumero += "-" + dernierPokemon.numeroForme.slice(dernierPokemon.numeroForme.length -1);}
 
-                    let messageEdite = msg.content;
                     if (dernierPokemon.hasOwnProperty("image")) {
                         if (dernierPokemon.tags.includes("Spoiler")) {
-                            messageEdite += ` ||<${dernierPokemon.image}>||`;
+                            isekaiEnCours.contenuMessage += ` ||<${dernierPokemon.image}>||`;
                         }
                         else {
-                            messageEdite += ` <${dernierPokemon.image}>`;
+                            isekaiEnCours.contenuMessage += ` <${dernierPokemon.image}>`;
                         }
                     }
                     else {
-                        messageEdite += ` (https://www.serebii.net/pokedex-swsh/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`
+                        isekaiEnCours.contenuMessage += ` (https://www.serebii.net/pokedex-swsh/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`
                     }
-                    msg.edit(messageEdite);
+                    if (!(msg.content.includes("|| "))){
+                        msg.edit(isekaiEnCours.contenuMessage);
+                    }
                 }
             });
             collector.on('end', collected => {
+                delete listeIsekaisEnCours[message.id];
                 msg.reactions.removeAll();
             });
         })
     }
     else {
-        let messageOriginel = messageReroll.content + "\r\n";
-        messageReroll.edit(messageOriginel + `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumero} qui est ||${pokemonNom}${suffixe}||.`)
+        let messageTemporaire = `${isekaiEnCours.contenuMessage}\r\n${module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny)}`
+        isekaiEnCours.contenuMessage += `\r\n${module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny)}`;
+        isekaiEnCours.messageEnvoyé.edit(messageTemporaire)
         .then((msg)=> { 
             setTimeout(function() {
-                if (pokemonChoisi["tags"].includes("Digimon")) {
-                    msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le digimon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.  (https://digimon.fandom.com/wiki/${pokemonNomForme})`);
-                }
-                else {
-                    msg.edit(messageOriginel + `${message.author.toString()} va être isekai en le pokémon numéro ${pokemonNumeroForme} qui est ${pokemonNomForme}${estShiny}.`);
-                }
-                
+                msg.edit(isekaiEnCours.contenuMessage);
             }, timerSpoiler)
         });
     }
@@ -255,9 +243,6 @@ module.exports = {
         !(nouveauPokemon.tags.includes("Légendaire") && Math.random() > 0.9 ** (nombreReroll ** 2) ) ) { // s'il est un légendaire un autre roll doit être fait en fonction du nombre de rerolls
             pokemonChoisi = nouveauPokemon;
         }    
-        else {
-            process.stdout.write(`\x1b[90m[${nouveauPokemon.hasOwnProperty("nomForme") ? nouveauPokemon.nomForme : nouveauPokemon.nom }]\x1b[0m`);
-        }
     }
 
     if (listeTagsDemandes.length === 0 && Math.random() < 0.6) historique.collectif.push(pokemonChoisi);
@@ -269,6 +254,31 @@ module.exports = {
     }
 
     return pokemonChoisi;
+    },
+    
+    genererPhraseReponse :function(message, pokémon, estMasqué, estShiny) {
+        let intro = `${message.author.toString()} va être isekai en le`;
+        let type = estMasqué || !(pokémon.tags.includes("Digimon")) ? "pokémon" : "digimon";
+        let [numéro, espèce] = estMasqué || !(pokémon.hasOwnProperty("nomForme") || pokémon.tags.includes("Digimon")) ? [pokémon.numero, pokémon.nom] : [pokémon.numeroForme, pokémon.nomForme];
+        let masque = estMasqué || pokémon.tags.includes("Spoiler") ? "||" : "";
+        let lienDigimon = estMasqué || !(pokémon.tags.includes("Digimon")) ? "" : ` (https://digimon.fandom.com/wiki/${pokémon.nomForme})`
+        let suffixe;
+        if (estMasqué){
+            suffixe = estShiny? "✨": "";
+            if (pokémon.hasOwnProperty("nomForme")) {
+                suffixe += pokémon.tags.includes("Alola") ? "🏝️" : "";
+                suffixe += pokémon.tags.includes("Galar") ? "🍵" : "";
+                suffixe += pokémon.tags.includes("Hisui") ? "🍙" : "";
+                suffixe += pokémon.tags.includes("Paldea") ? "💃" : "";
+                suffixe += pokémon.tags.includes("Digimon") ? "🖥️" : "";
+            }
+        }
+        else {
+            suffixe = estShiny? " **shiny**" : "";
+            let nombreReroll = listeIsekaisEnCours[message.id].listePokemonsDejaTires.length;
+            outils.logLancer(message, `${espèce}${estShiny ? "shiny" : ""}`, `${message.content.slice(1,1000)}${nombreReroll > 1 ? ` *reroll n°${nombreReroll-1}*` : ""}`, false);
+        }
+        return `${intro} ${type} numéro ${numéro} qui est ${masque}${espèce}${suffixe}${masque}.${lienDigimon}`;
     },
 
     setHistorique : function(nouvelHistorique) {
