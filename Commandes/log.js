@@ -6,19 +6,8 @@ const binomialProbability = require('binomial-probability')
 module.exports = {
     log : function(client, message, args, envoyerPM, idMJ) {
     // Si l'argument est effacer et que l'utilisateur est l'admin, on effectue une copie de sauvegarde en mettant la date du jour, puis on efface les logs
-    if (args[0] === "effacer" && message.author.id === config.admin) {
-
-        let date = new Date();
-        let jour = outils.pad(date.getDate());
-        let mois = outils.pad(date.getMonth() + 1);
-        let annee = date.getFullYear();
-        let heure = outils.pad(date.getHours());
-        let minute = outils.pad(date.getMinutes());
-        let seconde = outils.pad(date.getSeconds());
-        let dateString = `${annee}-${mois}-${jour}_${heure}-${minute}-${seconde}`;
-        fs.copyFileSync('./Données/stats.json', `./Données/Archives/Logs_${dateString}.json`);
-        outils.logLancerEffacer();
-        message.react('👍');
+    if (args[0] === "archiver" && message.author.id === config.admin) {
+        module.exports.archiver();
         return;
     }
 
@@ -56,7 +45,7 @@ module.exports = {
 
     // Pour l'instant je ne rajoute pas de fonctionalité pour récupérer les PM.
     listeJoueurs : function(nombreHeures, estCouleurs = false, canal = null, mj = "", joueurUnique = "",recupererPM = false) {
-    let jets = JSON.parse(fs.readFileSync(__dirname + '/../Données/stats.json', 'utf-8'))
+    let jets = outils.getHistoriqueLancers();
     let listeJoueurs = {};
     let nombreD100Lancers = 0;
     let nombreD100ReussitesCrit = 0;
@@ -222,5 +211,54 @@ module.exports = {
         listeJoueurs[nomJoueur] = listeLancers;
     }
     return listeJoueurs;
+    },
+
+    archiver : function() {
+        let date = new Date();
+        let jour = outils.pad(date.getDate());
+        let mois = outils.pad(date.getMonth() + 1);
+        let annee = date.getFullYear();
+        let heure = outils.pad(date.getHours());
+        let minute = outils.pad(date.getMinutes());
+        let seconde = outils.pad(date.getSeconds());
+        let dateString = `${annee}-${mois}-${jour}_${heure}-${minute}-${seconde}`;
+        let ancienHistorique = outils.getHistoriqueLancers();
+        let nouvelHistorique = {};
+
+        let timeStampLimite = Date.now() - 2 * 24 * 60 * 60 * 1000;
+
+        let listeUtilisateurs = Object.keys(ancienHistorique);
+        for (let i = 0; i < listeUtilisateurs.length; i++) {
+            let nomUtilisateur = listeUtilisateurs[i];
+            let ancienUtilisateur = ancienHistorique[nomUtilisateur];
+            if (ancienUtilisateur[ancienUtilisateur.length - 1].timestamp > timeStampLimite) { // Si le dernier roll est plus récent que la limite...
+                nouvelHistorique[nomUtilisateur] = [];
+                let nouvelUtilisateur = nouvelHistorique[nomUtilisateur];
+                while (ancienUtilisateur.length > 0 && ancienUtilisateur[ancienUtilisateur.length - 1].timestamp > timeStampLimite) { // On enlève les rolls les plus récents pour les mettre dans le nouvel historique...
+                    nouvelUtilisateur.unshift(ancienUtilisateur.pop());
+                }
+            }
+        }
+        outils.setHistoriqueLancers(nouvelHistorique); // Pour pouvoir garder les rolls récents dans l'historique...
+        let writer = JSON.stringify(ancienHistorique, null, 4);
+        fs.writeFileSync(`./Données/Archives/Logs_${dateString}.json`, writer); // Et n'archiver que les anciens
+    },
+
+    checkDernierArchivage : function() {
+        let timeStampLimite = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        let historique = outils.getHistoriqueLancers();
+
+        let listeUtilisateurs = Object.keys(historique);
+        for (let i = 0; i < listeUtilisateurs.length; i++) {
+            if (historique[listeUtilisateurs[i]][0].timestamp < timeStampLimite) {
+                module.exports.archiver();
+                console.log("Lancers archivés.");
+                return;
+            }
+        }
     }
+}
+
+if (global.serveurProd) {
+    module.exports.checkDernierArchivage();
 }

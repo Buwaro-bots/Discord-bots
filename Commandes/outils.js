@@ -56,6 +56,16 @@ module.exports = {
         listeDésPondérés = nouveauxDés;
     },
 
+    getHistoriqueLancers : function() {
+        return statsLancers;
+    },
+
+    setHistoriqueLancers : function(nouveauxHistorique) {
+        statsLancers = nouveauxHistorique;
+        let writer = JSON.stringify(statsLancers, null, 4);
+        fs.writeFileSync('./Données/stats.json', writer);
+    },
+
     initialiserDésPondérés : function() {
         fichier = "./Données/tempDés.json"
         fs.access(fichier, fs.constants.F_OK, (manque) => {
