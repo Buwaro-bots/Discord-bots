@@ -5,9 +5,9 @@ let historique = {"collectif" : []};
 let listeIsekaisEnCours = [];
 
 // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
-let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
-"Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Nouveau", "Spectre", "Dragon",
-"Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon"]
+let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Starter+", "Final", "Feu", "Vol", "Eau", "Insecte", "Normal", "Ténèbres",
+"Forme", "Alola", "Electrique", "Psy", "Sol", "Glace", "Acier", "Femelle", "Mâle", "Fée", "PasDnG", "Galar", "Combat", "Roche", "Hisui", "Paldea", "Nouveau", "Spectre", "Dragon",
+"Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon", "Spoiler"]
 
 module.exports = {
     isekai : function(client, message, args, envoyerPM, idMJ) {
@@ -37,8 +37,8 @@ module.exports = {
             module.exports.tiragePokemon(args.concat("Légendaire"), [], message.author.id) : module.exports.tiragePokemon(args, [], message.author.id);
             let estShiny = outils.randomNumber(400) == 1 ? " **shiny**" : ""
             if (!(pokemonChoisi.tags.includes("Légendaire")) || Math.random() < probabiliteLegendaire) {
-                // Note : J'empêche de roll la génération 9 jusqu'à sa sortie
-                if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Gen9") )) {
+                // Note : Les pokémons spoilers ne peuvent pas être roll dans une équipe à cause des balises retirées. Quand une génération est révélée, je préfère attendre qu'elle sorte avant d'être ajouté dans les équipes.
+                if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Spoiler") )) {
                     listeNomsDejaTires.push(pokemonChoisi.nom);
                     if (pokemonChoisi.tags.includes("Forme")) {
                         botReply += `${listeNomsDejaTires.length}) Le pokémon numéro ${pokemonChoisi.numeroForme} qui est ||${pokemonChoisi.nomForme}${estShiny}||.\r\n`
@@ -98,7 +98,7 @@ module.exports = {
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 0;
+    let tauxDeNouveau = 5;
     let rollNouveau = outils.randomNumber(100);
     let pokemonChoisi;
 
@@ -151,7 +151,7 @@ module.exports = {
                     outils.retirerReaction(message, reaction, user);
 
                     let dernierPokemon = isekaiEnCours.listePokemonsDejaTires.slice(-1)[0];
-                    let dernierPokemonNumero = outils.pad(dernierPokemon.numero, 3);
+                    let dernierPokemonNumero =  parseInt(dernierPokemon.numero) < 1000 ? outils.pad(dernierPokemon.numero, 3) : dernierPokemon.numero;
                     if (dernierPokemon.hasOwnProperty("numeroForme")) { dernierPokemonNumero += "-" + dernierPokemon.numeroForme.slice(dernierPokemon.numeroForme.length -1);}
 
                     if (dernierPokemon.hasOwnProperty("image")) {
@@ -163,7 +163,12 @@ module.exports = {
                         }
                     }
                     else {
-                        isekaiEnCours.contenuMessage += ` (https://www.serebii.net/pokedex-swsh/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`
+                        if (dernierPokemon.tags.includes("Spoiler")) {
+                            isekaiEnCours.contenuMessage += ` (|| https://www.serebii.net/pokedex-sv/icon/${dernierPokemonNumero}.png || <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
+                        }
+                        else {
+                            isekaiEnCours.contenuMessage += ` (https://www.serebii.net/pokedex-sv/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
+                        }
                     }
                     if (!(msg.content.includes("|| "))){
                         msg.edit(isekaiEnCours.contenuMessage);
@@ -223,7 +228,7 @@ module.exports = {
     else {
         let nouvelleListe = [];
         let pokemonsARetirer = listePokemonsDejaTires.concat(historique.collectif);
-        if (historique.hasOwnProperty(idAuteur)) pokemonsARetirer = pokemonsARetirer.concat(historique.idAuteur);
+        if (historique.hasOwnProperty(idAuteur)) pokemonsARetirer = pokemonsARetirer.concat(historique[idAuteur]);
         for (let i = 0; i < pokedex.length; i++) {
             if ( !(pokemonsARetirer.includes(pokedex[i]))) {
                 nouvelleListe.push(pokedex[i]);
