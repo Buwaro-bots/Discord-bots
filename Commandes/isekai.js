@@ -274,7 +274,7 @@ module.exports = {
         else {
             suffixe = estShiny? " **shiny**" : "";
             let nombreReroll = listeIsekaisEnCours[message.id].listePokemonsDejaTires.length;
-            outils.logLancer(message, `${espèce}${estShiny ? "shiny" : ""}`, `${message.content.slice(1,1000)}${nombreReroll > 1 ? ` *reroll n°${nombreReroll-1}*` : ""}`, false);
+            outils.logLancer(message, `${espèce}${estShiny ? "shiny" : ""}`, `${message.content.slice(1,900)}${nombreReroll > 1 ? ` *reroll n°${nombreReroll-1}*` : ""}`, false);
         }
         return `${intro} ${type} numéro ${numéro} qui est ${masque}${espèce}${suffixe}${masque}.${lienDigimon}`;
     },

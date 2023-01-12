@@ -39,7 +39,12 @@ module.exports = {
         let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
         if (botReply.length > 2000) throw ("Réponse trop longue.");
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
-        outils.logLancer(message, `${reponseLancers}= ${reponseSomme}` , reponseCommandes, envoyerPM);
+        let reponseALogger = `${reponseLancers}= ${reponseSomme}`;
+        if (reponseALogger.length + reponseCommandes.length > 950) {
+            reponseCommandes = reponseCommandes.slice(0,100);
+            reponseALogger = `${reponseALogger.slice(0, 880 - reponseCommandes.length)} [...] ${reponseALogger.slice(reponseALogger.length - 15, reponseALogger.length)}`;
+        }
+        outils.logLancer(message, reponseALogger , reponseCommandes, envoyerPM);
         return;
     }
 },

@@ -72,19 +72,23 @@ module.exports = {
                     if (roll.timestamp > (Date.now() - (nombreHeures * 3600 * 1000))
                     && (recupererPM || roll.estPM === false)
                     && (canal === null || roll.canal === canal) ){
+                        let texte;
                         if (roll.estReussite === null) {
-                            let texte = `${roll["lancer"]}`;
+                            texte = `${roll["lancer"]}`;
                             texte += roll["type"] == "1d100" ? ", " : ` \u001b[0;33m(${roll["type"]})\u001b[0;37m, `;
-                            listeLancers += texte;
                         }
                         else if (roll.estReussite) {
-                            let texte = `\u001b[0;32m${roll["lancer"]}`;
+                            texte = `\u001b[0;32m${roll["lancer"]}`;
                             texte += roll["type"] == "1d100" ? "\u001b[0;37m, " : ` (${roll["type"]})\u001b[0;37m, `;
-                            listeLancers += texte;
                         }
                         else {
-                            let texte = `\u001b[0;31m${roll["lancer"]}`;
+                            texte = `\u001b[0;31m${roll["lancer"]}`;
                             texte += roll["type"] == "1d100" ? "\u001b[0;37m, " : ` (${roll["type"]})\u001b[0;37m, `;
+                        }
+                        if (texte.length + listeLancers.length >= 900 && listeLancers.length < 900) {
+                            listeLancers += `\r\n${texte}`;
+                        }
+                        else {
                             listeLancers += texte;
                         }
 
@@ -122,11 +126,11 @@ module.exports = {
                         }
                     }
 
-                    if (listeLancers.length > 920) { // Ca bugue à partir de 1000 caractères *sans saut de ligne*, pour l'instant je laisse la limite à 1000 le temps que je revois cette partie du code.
+                    if (listeLancers.length > 1720) { // Il y a une limite de 1000 caractères par lignes en plus de la limite de 2000 caractères par message.
                         nomJoueur = `\`\`\`ansi\r\n\u001b[0;34m${key} \u001b[0;36m(partie ${numeroPartie})\u001b[0;37m`;
                         // nomJoueur = key == mj ? `\`\`\`ansi\r\n\u001b[0;36m${key} \u001b[0;34m(partie ${numeroPartie})\u001b[0;37m` : `\`\`\`ansi\r\n\u001b[0;34m${key} \u001b[0;36m(partie ${numeroPartie})\u001b[0;37m`;
                         numeroPartie += 1;
-                        let nombreCaracteres = Math.min(listeLancers.length-2, 998 - 20 - key.length);
+                        let nombreCaracteres = Math.min(listeLancers.length-2, 1798 - 20 - key.length);
                         listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
                         listeJoueurs[nomJoueur] = listeLancers;
                         listeLancers = "";
@@ -134,7 +138,7 @@ module.exports = {
                     }
                 }
                 if (listeLancers.length > 0) {
-                    let nombreCaracteres = Math.min(listeLancers.length-2, 998);
+                    let nombreCaracteres = Math.min(listeLancers.length-2, 1798);
                     listeLancers = listeLancers.slice(0,nombreCaracteres) + "\r\n\`\`\`";
                     listeJoueurs[nomJoueur] = listeLancers;
                 }
