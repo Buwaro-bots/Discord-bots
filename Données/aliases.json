@@ -81,5 +81,10 @@
     {
         "nom" : "8ball",
         "alias" : "ball_8"
+    },
+    {
+        "nom" : "iceberg",
+        "alias" : "aide",
+        "unshift" : ["iceberg"]
     }
 ]

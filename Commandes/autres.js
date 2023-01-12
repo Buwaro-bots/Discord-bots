@@ -176,5 +176,10 @@ module.exports = {
                 outils.envoyerMessage(client, config.autresBots[args[0]].message, message, envoyerPM, idMJ);
             }
         }
+    },
+
+    play: function(client, message, args, envoyerPM, idMJ) {
+        let botreply = `${message.author.toString()} C'est **£play** scrogneugneu. Le symbole livre anglaise. (╯°□°)╯︵ ┻━┻`;
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     }
 }

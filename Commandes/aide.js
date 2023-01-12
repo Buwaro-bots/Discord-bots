@@ -94,4 +94,10 @@ module.exports = {
         let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=patch>\r\nGithub : https://github.com/Buwaro-bots/Discord-bots/commits/main";
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
     },
+
+    iceberg: function(client, message, args, envoyerPM, idMJ) {
+        let botReply = strings.Iceberg;
+        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        return;
+    },
 }
