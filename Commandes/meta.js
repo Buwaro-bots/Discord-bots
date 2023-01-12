@@ -83,7 +83,7 @@ module.exports = {
                 collector.resetTimer({time: 400 * 1000});
                 dummyMessage.author = user;
                 fonctionCommande(client, dummyMessage, args, envoyerPM, idMJ);
-                reaction.users.remove(user);
+                outils.retirerReaction(message, reaction, user);
             }
         });
         collector.on('end', collected => {

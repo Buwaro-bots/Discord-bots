@@ -141,16 +141,14 @@ module.exports = {
                     timerSpoiler = timerSpoiler / 1.25 + 100;
                     let dernierPokemon = module.exports.isekai(client, message, args.concat(["timer", timerSpoiler]), envoyerPM, idMJ);
                     if ( !(dernierPokemon.tags.includes("Digimon")) ) {
-                        setTimeout(function() {
-                            reaction.users.remove(user);
-                        }, timerSpoiler);
+                        outils.retirerReaction(message, reaction, user, timerSpoiler);
                     }
                     else {
-                        collector.resetTimer({time: timerSpoiler + 200});
+                        collector.resetTimer({time: 400});
                     }
                 }
                 else if (user.id === message.author.id && reaction.emoji.name === "🖼️") {
-                    reaction.users.remove(user);
+                    outils.retirerReaction(message, reaction, user);
 
                     let dernierPokemon = isekaiEnCours.listePokemonsDejaTires.slice(-1)[0];
                     let dernierPokemonNumero = outils.pad(dernierPokemon.numero, 3);

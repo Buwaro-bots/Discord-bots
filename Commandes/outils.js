@@ -330,7 +330,15 @@ module.exports = {
           [array[randIndex], array[i]] = [array[i], array[randIndex]];
         }
         return array;
-      }
+    },
+
+    retirerReaction: function(message, reaction, user, timer = 1000) {
+        if (message.guildId !== null) { // Si le serveur est null, c'est que c'est un MP.
+            setTimeout(function() {
+                reaction.users.remove(user);
+            }, timer);
+        }
+    }
 }
 
 if (global.serveurProd) {

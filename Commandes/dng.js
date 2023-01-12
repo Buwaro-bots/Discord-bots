@@ -184,7 +184,7 @@ module.exports = {
                     collector.resetTimer({time: 400 * 1000});
                     dummyMessage.author = user;
                     module.exports.dng(client, dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
-                    reaction.users.remove(user);
+                    outils.retirerReaction(message, reaction, user);
                 }
             }
         });
