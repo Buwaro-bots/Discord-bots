@@ -147,11 +147,16 @@ stdin.on( 'data', function( key ){ // on any data into stdin
         let historique = fonction();
         let tableau = {};
         for (let [utilisateur, historiquePerso] of Object.entries(historique)) {
-            liste = []
-            for (let i = 0; i < historiquePerso.length; i++) {
-                liste.push(historiquePerso[i]["nom"]);
+            if (utilisateur == "dernierIsekai") {
+                tableau[utilisateur] = historiquePerso
             }
-            tableau[utilisateur] = liste;
+            else {
+                liste = []
+                for (let i = 0; i < historiquePerso.length; i++) {
+                    liste.push(historiquePerso[i]["nom"]);
+                }
+                tableau[utilisateur] = liste;
+            }
         }
         console.log(tableau);
     }

@@ -1,7 +1,7 @@
 const outils = require("./outils.js");
 const pokedex = require('../Données/pokedex.json');
 const fs = require('fs');
-let historique = {"collectif" : []};
+let historique = {"collectif" : [], "dernierIsekai" : {}};
 let listeIsekaisEnCours = [];
 
 // Note : La liste des tags doit être mise à jour à chaque fois que j'en rajoute un.
@@ -72,6 +72,27 @@ module.exports = {
         })
         return;
     }
+    if (args.length > 0 && args[0] === "dernier") {
+        if (historique.dernierIsekai.hasOwnProperty(message.author.id)) {
+            let botReply = `${message.author.toString()} s'est actuellement fait isekai en **${historique.dernierIsekai[message.author.id].pokémon}**.`;
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+            return;
+        }
+        else {
+            args.shift();
+        }
+    }
+    if (args.length > 0 && args[0] === "liste") {
+            let botReply = "";
+            //historique.dernierIsekai.forEach(utilisateur => {
+            for (let [id, isekaiEnCours] of Object.entries(historique.dernierIsekai)) {
+                if (isekaiEnCours.timestamp > Date.now() - (24 * 14 * 3600 * 1000)) {
+                    botReply += `**${isekaiEnCours.nom}** s'est actuellement fait isekai en **${isekaiEnCours.pokémon}**.\r\n`;
+                }
+            }
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+            return;
+    }
 
     let isekaiEnCours;
     if (!(listeIsekaisEnCours.hasOwnProperty(message.id))) {
@@ -98,7 +119,7 @@ module.exports = {
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 5;
+    let tauxDeNouveau = 3;
     let rollNouveau = outils.randomNumber(100);
     let pokemonChoisi;
 
@@ -114,6 +135,16 @@ module.exports = {
 
     let estShiny = outils.randomNumber(64 * 1.5 ** nombreReroll) === 1;
     isekaiEnCours.listePokemonsDejaTires.push(pokemonChoisi);
+
+    if (args.length === 0) {
+        let nomPokémonHistorique = pokemonChoisi.hasOwnProperty("nomForme") ? pokemonChoisi.nomForme : pokemonChoisi.nom;
+        if (estShiny) nomPokémonHistorique += " shiny";
+        historique.dernierIsekai[message.author.id] = {
+            "nom" : message.author.username,
+            "pokémon" : nomPokémonHistorique,
+            "timestamp" : message.createdTimestamp
+        }
+    }
     
     if (modeSimple) {
         botReply = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
@@ -309,6 +340,8 @@ module.exports = {
 
                     let jsonIsekai = JSON.parse(fs.readFileSync('./Données/tempIsekai.json', 'utf-8'));
                     let historiqueIsekai = {};
+                    historiqueIsekai["dernierIsekai"] = jsonIsekai["dernierIsekai"];
+                    delete jsonIsekai["dernierIsekai"];
 
                     for (let [utilisateur, historiquePerso] of Object.entries(jsonIsekai)) {
                         nouvelHistorique = []
