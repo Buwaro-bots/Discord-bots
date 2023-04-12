@@ -80,8 +80,8 @@ module.exports = {
         });
     },
 
-    pad: function(nombre, longueur = 2) {
-        return ("0".repeat(longueur) + nombre).slice(-longueur);
+    pad: function(nombre, longueur = 2, caractère = "0") {
+        return (caractère.repeat(longueur) + nombre).slice(-longueur);
     },
 
     // Cette fonction vérifie un tableau de nombre pour être sûr que ça ne renvoie pas NaN. Un tableau.
@@ -115,28 +115,29 @@ module.exports = {
             if (aSupprimer) { // Le if est ici sinon le return n'a pas lieu à temps, oui je sais que je devrais faire de l'async.
                 message.channel.send(botReply)
                 .then((msg) => {
-                        msg.react('❌');
-                        let estSupprimé = false
+                    msg.react('❌');
+                    let estSupprimé = false
 
-                        const collector = msg.createReactionCollector({
-                            time: 300 * 1000
-                        });
-                        collector.on('collect', (reaction, user) => {
-                            if(user.id === message.author.id && reaction.emoji.name === "❌") {
-                                estSupprimé = true;
-                                collector.resetTimer({time: 1});
-                            }
-                        })
-                        collector.on('end', collected => {
-                            if (estSupprimé) {
-                                message.delete();
-                                msg.delete();
-                            }
-                            else {
-                                msg.reactions.removeAll();
-                            }
-                        });
-                    return msg;
+                    const collector = msg.createReactionCollector({
+                        time: 300 * 1000
+                    });
+                    collector.on('collect', (reaction, user) => {
+                        if(user.id === message.author.id && reaction.emoji.name === "❌") {
+                            estSupprimé = true;
+                            collector.resetTimer({time: 1});
+                        }
+                    })
+                    collector.on('end', collected => {
+                        if (estSupprimé) {
+                            message.delete();
+                            msg.delete();
+                        }
+                        else {
+                            msg.reactions.removeAll();
+                        }
+                    });
+                    // To do : Regarder si c'est possible de retourner la promise.
+                    // return msg;
                 })
             }
             else {

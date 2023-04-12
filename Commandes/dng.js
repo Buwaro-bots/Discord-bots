@@ -194,10 +194,32 @@ module.exports = {
         return;
     }
 
-    let stat = parseInt(args[0]);
+    let affichageLancerDemande = "dng " + args.toString().replace(",", " ");
+    let stat = parseInt(args.shift());
     outils.verifierNaN([stat]);
 
-    let nombreLancers = args.length > 1 && !(args[1].includes("dd")) ? Math.max(Math.min(parseInt(args[1]), 5), 1) : 1; // Si l'utilisateur ne mentionne pas le nombre de lancer, il n'en fait qu'un.
+    let dd = 3;
+    let avantage = 0;
+    let avantage_mis = false;
+    let nombreLancers = 1;
+
+    while (args.length > 0) { // On regarde la liste des paramètres données, on peut les mettre dans n'importe quel ordre car les trois ont leur propre nomenclature.
+        if (args[0][0] === "+" || args[0][0] === "-") { // Si ça commence par + ou -, c'est des avantages / désavantages
+            avantage_mis = true;
+            avantage = parseInt(args.shift());
+        }
+        else if (args[0].includes("dd")) { // Si ça commence par dd, c'est le dd.
+            dd = parseInt(args.shift()[2]);
+        }
+        else if (!isNaN(args[0])) {
+            nombreLancers = Math.max(Math.min(parseInt(args.shift()), 5), 1);
+        }
+        else {
+            args.shift()
+        }
+    }
+    outils.verifierNaN([dd, avantage]);
+
     let alerteStatLimite = stat > 5 ? "(Attention, normalement les stats ne dépassent pas 5.)" : "";
     
     let lancerCritique = outils.lancerDéPondéré("dng crit",20);
@@ -224,35 +246,15 @@ module.exports = {
     let message_reussite;
     let estReussite = null;
     if (paramJoueurs.dng.listeAutoVerifications.includes(message.author.id)) {
-        [message_reussite, estReussite] = module.exports.verificationReussite(meilleurLancer, lancerCritique, args);
+        [message_reussite, estReussite] = module.exports.verificationReussite(meilleurLancer, lancerCritique, dd, avantage, avantage_mis);
         botReply += message_reussite;
     }
-
-
-    let affichageLancerDemande = "dng " + args.toString().replace(",", " ");
-
 
     outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     outils.logLancer(message, `[${lancerCaracteristique}] [${lancerCritique}]`, affichageLancerDemande, envoyerPM, estReussite);
     },
 
-    verificationReussite : function(lancerCaracteristique, lancerCritique, args) {
-    let dd = 3;
-    let avantage = 0;
-    let avantage_mis = false;
-    let estReussite;
-
-    for (let i = 0; i < args.length; i++) { // On regarde la liste des paramètres données, on peut les mettre dans n'importe quel ordre car les trois ont leur propre nomenclature.
-        if (args[i][0] === "+" || args[i][0] === "-") { // Si ça commence par + ou -, c'est des avantages / désavantages
-            avantage_mis = true;
-            avantage = parseInt(args[i]);
-        }
-        else if (args[i].includes("dd")) { // Si ça commence par dd, c'est le dd.
-            dd = parseInt(args[i][2])
-        }
-    }
-    outils.verifierNaN([dd, avantage]);
-
+    verificationReussite : function(lancerCaracteristique, lancerCritique, dd, avantage, avantage_mis) {
     let message_reussite = ` Avec un dd de ${dd}`;
     if (avantage_mis) {
         message_reussite += avantage > 0 ? ` et ${avantage} avantage${avantage > 1 ? "s" : ""}` : ` et ${-avantage} désavantage${avantage < -1 ? "s" : ""}`

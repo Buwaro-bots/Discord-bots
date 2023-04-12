@@ -186,32 +186,7 @@ module.exports = {
     fermer: function(client, message, args, envoyerPM, idMJ) {
         if (message === null || message.author.id === config.admin) {
             if (global.serveurProd) {
-                let historiqueIsekai = mesCommandes.isekai.getHistorique();
-                let writer = JSON.stringify(historiqueIsekai, null, 4); // On sauvegarde le fichier.
-                fs.writeFileSync('./Données/tempIsekai.json', writer, function(err, result) {
-                    if(err) console.log('error', err);
-                });
-                fs.writeFileSync('./Données/tempIsekaiArchive.json', writer, function(err, result) {
-                    if(err) console.log('error', err);
-                });
-
-                historiqueMusique = mesCommandes.musique.getHistorique();
-                writer = JSON.stringify(historiqueMusique, null, 4); // On sauvegarde le fichier.
-                fs.writeFileSync('./Données/tempMusique.json', writer, function(err, result) {
-                    if(err) console.log('error', err);
-                });
-                fs.writeFileSync('./Données/tempMusiqueArchive.json', writer, function(err, result) {
-                    if(err) console.log('error', err);
-                });
-
-                historiqueDés = outils.getDésPondérés();
-                writer = JSON.stringify(historiqueDés, null, 4); // On sauvegarde le fichier.
-                fs.writeFileSync('./Données/tempDés.json', writer, function(err, result) {
-                    if(err) console.log('error', err);
-                });
-                fs.writeFileSync('./Données/tempDésArchive.json', writer, function(err, result) {
-                    if(err) console.log('error', err);
-                });
+                archiver(true);
             }
             client.destroy();
             process.exit();
@@ -281,3 +256,37 @@ module.exports = {
     },
 
 }
+
+function archiver(créerSauvegardeSecours) {
+    let historiqueIsekai = mesCommandes.isekai.getHistorique();
+    let writerIsekai = JSON.stringify(historiqueIsekai, null, 4);
+    fs.writeFileSync('./Données/tempIsekai.json', writerIsekai, function(err, result) {
+        if(err) console.log('error', err);
+    });
+
+    historiqueMusique = mesCommandes.musique.getHistorique();
+    writerHistorique = JSON.stringify(historiqueMusique, null, 4);
+    fs.writeFileSync('./Données/tempMusique.json', writerHistorique, function(err, result) {
+        if(err) console.log('error', err);
+    });
+
+    historiqueDés = outils.getDésPondérés();
+    writerDés = JSON.stringify(historiqueDés, null, 4);
+    fs.writeFileSync('./Données/tempDés.json', writerDés, function(err, result) {
+        if(err) console.log('error', err);
+    });
+
+    if (créerSauvegardeSecours) {
+        fs.writeFileSync('./Données/tempIsekaiArchive.json', writerIsekai, function(err, result) {
+            if(err) console.log('error', err);
+        });
+        fs.writeFileSync('./Données/tempDésArchive.json', writerDés, function(err, result) {
+            if(err) console.log('error', err);
+        });
+        fs.writeFileSync('./Données/tempMusiqueArchive.json', writerHistorique, function(err, result) {
+            if(err) console.log('error', err);
+        });
+    }
+}
+
+setInterval(function() {archiver(false)}, 1 * 60 * 60 * 1000);
