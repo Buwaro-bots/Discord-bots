@@ -74,8 +74,33 @@ module.exports = {
     }
     if (args.length > 0 && args[0] === "dernier") {
         if (historique.dernierIsekai.hasOwnProperty(message.author.id)) {
-            let botReply = `${message.author.toString()} s'est actuellement fait isekai en **${historique.dernierIsekai[message.author.id].pokémon}**.`;
-            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+            let isekaiEnCours = historique.dernierIsekai[message.author.id];
+            let botReply = `${message.author.toString()}`;
+            if (isekaiEnCours.timestamp > Date.now() - (24 * 4 * 3600 * 1000)) {
+                botReply += ` s'est actuellement fait isekai en **${isekaiEnCours.pokémon}**.`;
+                outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+            }
+            else {
+                let date = new Date(isekaiEnCours.timestamp);
+                botReply += ` est isekai en ${isekaiEnCours.pokémon} depuis le ${date.getDate()}/${outils.pad(date.getMonth()+1)}/${date.getFullYear()}.`;
+                outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+                .then((msg)=> {
+                    msg.react("🎲");
+                    const collector = msg.createReactionCollector({
+                        time: 40 * 1000
+                    });
+                    collector.on('collect', (reaction, user) => {
+                        if(user.id === message.author.id && reaction.emoji.name === "🎲") {
+                            collector.resetTimer({time: 1});
+                            module.exports.isekai(client, message, [], envoyerPM, idMJ);
+                        }
+                    });
+                    collector.on('end', collected => {
+                        msg.reactions.removeAll();
+                    });
+                })
+                // fin
+            }
             return;
         }
         else {
