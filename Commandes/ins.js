@@ -44,7 +44,7 @@ module.exports = {
         botReply += `\u001b[0;36mLancers de 1x : ${INSLancers[1][0]} ${INSLancers[1][1] > 0 ? "dont " + INSLancers[1][1] + " '111'" : ""} [${INSLancersChiffres[1]}]\r\n`
         botReply += `\u001b[0;34mLancers de 2x : ${INSLancers[2][0]}  [${INSLancersChiffres[2]}]\r\n`
         botReply += `\u001b[0;32mLancers de 3x : ${INSLancers[3][0]} ${INSLancers[3][1] > 0 ? "dont " + INSLancers[3][1] + " '333'" : ""} [${INSLancersChiffres[3]}]\r\n`
-        botReply += `\u001b[0;33mLancers de 4x : ${INSLancers[4][0]} ${INSLancers[4][1] > 0 ? "dont " + INSLancers[4][1] + " '444'" : ""} [${INSLancersChiffres[4]}]\r\n`
+        botReply += `\u001b[0;33mLancers de 4x : ${INSLancers[4][0]}  [${INSLancersChiffres[4]}]\r\n`
         botReply += `\u001b[0;35mLancers de 5x : ${INSLancers[5][0]}  [${INSLancersChiffres[5]}]\r\n`
         botReply += `\u001b[0;31mLancers de 6x : ${INSLancers[6][0]} ${INSLancers[6][1] > 0 ? "dont " + INSLancers[6][1] + " '666'" : ""} [${INSLancersChiffres[6]}]\u001b[0;0m\r\n`
         botReply += "```"
@@ -53,6 +53,12 @@ module.exports = {
     }
 
     if (args[0] === "message") { // Commande permettant à quelqu'un de rajouter un message personalisé
+        if (args.length === 1) {
+            let botReply = "Pour rajouter un message, veuillez consulter le mode d'emploi, partie \"Messages personalisés\". \r\nhttps://buwaro-bots.github.io/Discord-bots/?mode=ins\r\n"
+            + "Si vous souhaitez rajouter un message par mp ou pour un autre serveur, il faut rajouter l'id du serveur comme ça : **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**. ";
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+            return;
+        }
         if (serverID === "aucun") {
             if (args[2] in paramJoueurs.ins.lancersSpeciaux) {
                 serverID = args[2];

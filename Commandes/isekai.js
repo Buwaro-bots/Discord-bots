@@ -115,7 +115,7 @@ module.exports = {
                     botReply += `**${isekaiEnCours.nom}** s'est actuellement fait isekai en **${isekaiEnCours.pokémon}**.\r\n`;
                 }
             }
-            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
             return;
     }
 
@@ -144,14 +144,14 @@ module.exports = {
 
     /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
     (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 3;
+    let tauxDeNouveau = 2;
     let rollNouveau = outils.randomNumber(100);
     let pokemonChoisi;
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
         pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
-    else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 3) || nombreReroll > 15 )  {
+    else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 4) || nombreReroll > 15 )  {
         pokemonChoisi = module.exports.tiragePokemon(["Digimon"], isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
     else {

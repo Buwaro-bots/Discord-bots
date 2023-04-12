@@ -1062,6 +1062,8 @@
     {"numero" : "1006" , "nom" : "Garde-de-Fer", "tags" : ["Combat","Fée", "Gen9", "Nouveau"]}, 
     {"numero" : "1007" , "nom" : "Koraidon", "tags" : ["Combat", "Dragon", "Gen9", "Légendaire", "Nouveau"]},
     {"numero" : "1008" , "nom" : "Miraidon", "tags" : ["Electrique", "Combat", "Gen9", "Légendaire", "Nouveau"]},
+    {"numero" : "1009" , "nom" : "Serpente-Eau", "tags" : ["Eau", "Dragon", "Gen9", "Légendaire", "Nouveau"]},
+    {"numero" : "1010" , "nom" : "Vert-de-Fer", "tags" : ["Plante", "Eau", "Gen9", "Légendaire", "Nouveau"]},
 
     {"numero" : "407" , "nom" : "Kranidos", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.10 , "numeroForme" : "/](" ,  "nomForme" : "Agumon" },
     {"numero" : "103" , "nom" : "Osselait", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.10 , "numeroForme" : "o|o" ,  "nomForme" : "Gabumon" },
@@ -1090,9 +1092,10 @@
     {"numero" : "190" , "nom" : "Héliatronc", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : ")v(" ,  "nomForme" : "Floramon" },
     {"numero" : "858" , "nom" : "Grimalin", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "`\\ò" ,  "nomForme" : "Impmon" },
     {"numero" : "3" , "nom" : "Carapuce", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "⌜@⌝" ,  "nomForme" : "Kamemon" },
-    {"numero" : "14" , "nom" : "Aspicot", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "www" ,  "nomForme" : "Kudamon" },
+    {"numero" : "163" , "nom" : "Fouinar", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "~~w" ,  "nomForme" : "Kudamon" },
     {"numero" : "290" , "nom" : "Chuchmur", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "☢w☢" ,  "nomForme" : "Offmon" },
     {"numero" : "27" , "nom" : "Sablaireau", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "<^w" ,  "nomForme" : "Herissmon" },
+    {"numero" : "56" , "nom" : "Caninos", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.05 , "numeroForme" : "ow^" ,  "nomForme" : "Loogamon" },
     
     {"numero" : "606" , "nom" : "Funécire", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "^^^" ,  "nomForme" : "Candlemon" },
     {"numero" : "656" , "nom" : "Roussil", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "~~)" ,  "nomForme" : "Dorumon" },
@@ -1102,5 +1105,7 @@
     {"numero" : "779" , "nom" : "Mimiqui", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "###" ,  "nomForme" : "Hackmon" },
     {"numero" : "24" , "nom" : "Pikachu", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "o^o" ,  "nomForme" : "Pulsemon" },
     {"numero" : "172" , "nom" : "Lanturn", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "~~^" ,  "nomForme" : "Dolphmon" },
-    {"numero" : "358" , "nom" : "Tropius", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "--^" ,  "nomForme" : "Parasaurmon" }
+    {"numero" : "358" , "nom" : "Tropius", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "--^" ,  "nomForme" : "Parasaurmon" },
+    {"numero" : "14" , "nom" : "Aspicot", "tags" : ["Non-pokemon", "Digimon"], "probabilite" : 0.025 , "numeroForme" : "www" ,  "nomForme" : "Kunemon" }
+
 ]

@@ -194,14 +194,21 @@ module.exports = {
         listeLancers += `\u001b[0;35mNombre de critiques : ${DNGLancers["crit"]} / ${nombreDNGlancers} (${Math.round(DNGLancers["crit"] / nombreDNGlancers * 1000) / 10}% / 10%) \r\n`;
     }
     if (nombreINSLancers > 4) {
+        let padLancers = 1;
+        let padChiffres = 1;
+        for (let i = 1; i < 7; i++) {
+            if (INSLancers[i][0].toString().length > padLancers) padLancers = INSLancers[i][0].toString().length;
+            if (INSLancersChiffres[i].toString().length > padChiffres) padChiffres = INSLancersChiffres[i].toString().length;
+        }
+
         listeLancers += `\r\nStats pour INS (premier dé de chaque lancer, triples, et totaux des trois dés.):\r\nNombre de lancers : ${nombreINSLancers}\r\n`
-        if (INSLancers[1][0] > 0) listeLancers += `\u001b[0;36mLancers de 1x : ${INSLancers[1][0]} ${INSLancers[1][1] > 0 ? "dont " + INSLancers[1][1] + " '111'" : ""} [${INSLancersChiffres[1]}]\r\n`
-        if (INSLancers[2][0] > 0) listeLancers += `\u001b[0;34mLancers de 2x : ${INSLancers[2][0]}  [${INSLancersChiffres[2]}]\r\n`
-        if (INSLancers[3][0] > 0) listeLancers += `\u001b[0;32mLancers de 3x : ${INSLancers[3][0]} ${INSLancers[3][1] > 0 ? "dont " + INSLancers[3][1] + " '333'" : ""} [${INSLancersChiffres[3]}]\r\n`
-        if (INSLancers[4][0] > 0) listeLancers += `\u001b[0;33mLancers de 4x : ${INSLancers[4][0]} ${INSLancers[4][1] > 0 ? "dont " + INSLancers[4][1] + " '444'" : ""} [${INSLancersChiffres[4]}]\r\n`
-        if (INSLancers[5][0] > 0) listeLancers += `\u001b[0;35mLancers de 5x : ${INSLancers[5][0]}  [${INSLancersChiffres[5]}]\r\n`
-        if (INSLancers[6][0] > 0) listeLancers += `\u001b[0;31mLancers de 6x : ${INSLancers[6][0]} ${INSLancers[6][1] > 0 ? "dont " + INSLancers[6][1] + " '666'" : ""} [${INSLancersChiffres[6]}]\r\n`
-        listeLancers += "\u001b[0;0mMedianes : "
+        listeLancers += `\u001b[0;36mLancers de 1x : ${outils.pad(INSLancers[1][0], padLancers, " ")} [${outils.pad(INSLancersChiffres[1], padChiffres, " ")}]${INSLancers[1][1] > 0 ? " (dont " + INSLancers[1][1] + " '111')" : ""}\r\n`;
+        listeLancers += `\u001b[0;34mLancers de 2x : ${outils.pad(INSLancers[2][0], padLancers, " ")} [${outils.pad(INSLancersChiffres[2], padChiffres, " ")}]\r\n`;
+        listeLancers += `\u001b[0;32mLancers de 3x : ${outils.pad(INSLancers[3][0], padLancers, " ")} [${outils.pad(INSLancersChiffres[3], padChiffres, " ")}]${INSLancers[3][1] > 0 ? " (dont " + INSLancers[3][1] + " '333')" : ""} \r\n`;
+        listeLancers += `\u001b[0;33mLancers de 4x : ${outils.pad(INSLancers[4][0], padLancers, " ")} [${outils.pad(INSLancersChiffres[4], padChiffres, " ")}]\r\n`;
+        listeLancers += `\u001b[0;35mLancers de 5x : ${outils.pad(INSLancers[5][0], padLancers, " ")} [${outils.pad(INSLancersChiffres[5], padChiffres, " ")}]\r\n`;
+        listeLancers += `\u001b[0;31mLancers de 6x : ${outils.pad(INSLancers[6][0], padLancers, " ")} [${outils.pad(INSLancersChiffres[6], padChiffres, " ")}]${INSLancers[6][1] > 0 ? " (dont " + INSLancers[6][1] + " '666')" : ""}\r\n`;
+        listeLancers += "\u001b[0;0mMedianes : ";
         keysSorted = Object.keys(INSMedianes).sort(function(a,b){return INSMedianes[a]-INSMedianes[b]})
         for (let i = 0; i < keysSorted.length; i++) {
             let mediane = Math.floor(INSMedianes[keysSorted[i]] / 6) * 10 + INSMedianes[keysSorted[i]] % 6;
