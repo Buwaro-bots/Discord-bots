@@ -4,13 +4,14 @@
     "@discordjs/voice": "^0.11.0",
     "binomial-probability": "^1.0.0",
     "ffmpeg": "^0.0.4",
+    "ffmpeg-static": "^5.1.0",
     "js-levenshtein": "^1.1.6",
     "libsodium-wrappers": "^0.7.10",
     "require-dir": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",
-    "discord.js": "^13.6.0"
+    "discord.js": "^14.8.0"
   },
   "name": "bot-discord",
   "description": "Un bot perso que j'ai fait pour des projets persos, notamment un bot de lancer pour INS/MV.",

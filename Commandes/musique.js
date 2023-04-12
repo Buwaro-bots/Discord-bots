@@ -388,6 +388,20 @@ module.exports = {
         });
         
 
+        const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
+            const newUdp = Reflect.get(newNetworkState, 'udp');
+            clearInterval(newUdp?.keepAliveInterval);
+        }
+
+        const test = getVoiceConnection(message.guild.id);
+        test.on('stateChange', (oldState, newState) => {
+           const oldNetworking = Reflect.get(oldState, 'networking');
+           const newNetworking = Reflect.get(newState, 'networking');
+
+           oldNetworking?.off('stateChange', networkStateChangeHandler);
+           newNetworking?.on('stateChange', networkStateChangeHandler);
+        });
+
         player.addListener("stateChange", (oldOne, newOne) => {
             if (newOne.status == "idle") {
                 if (serveur.estStop >= 1) {
