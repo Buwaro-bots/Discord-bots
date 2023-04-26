@@ -1,12 +1,11 @@
 const fs = require('fs');
 const outils = require("./outils.js");
-const config = require('../config.json');
 const binomialProbability = require('binomial-probability')
 
 module.exports = {
     log : function(client, message, args, envoyerPM, idMJ) {
     // Si l'argument est effacer et que l'utilisateur est l'admin, on effectue une copie de sauvegarde en mettant la date du jour, puis on efface les logs
-    if (args[0] === "archiver" && message.author.id === config.admin) {
+    if (args[0] === "archiver" && outils.verifierSiAdmin(message.author.id)) {
         module.exports.archiver();
         return;
     }
@@ -19,7 +18,7 @@ module.exports = {
     let [joueurUnique] = outils.rechercheDoubleParametre(args, "joueur");
 
     // Si l'utilisateur n'est pas l'admin, on limite les horaires possibles.
-    nombreHeures = message.author.id === config.admin ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
+    nombreHeures = outils.verifierSiAdmin(message.author.id) ? nombreHeures : Math.min(Math.max(nombreHeures, 1), 24);
 
     let listeJoueurs = module.exports.listeJoueurs(nombreHeures, estCouleurs, canal, mj, joueurUnique);
     let nomsJoueurs  = Object.keys(listeJoueurs).sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'})); // Tri sans faire attention à la casse

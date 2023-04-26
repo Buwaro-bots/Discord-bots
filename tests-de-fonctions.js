@@ -1,8 +1,7 @@
 global.serveurProd = false;
 const outils = require("./Commandes/outils.js");
 const {recherchercommande} = require('./Commandes/meta.js')
-const config = require('./config.json');
-const ancienLancerParDefaut = config.lancerParDefault;
+const ancienLancerParDefaut = outils.getConfig("roll.lancerParDefault");
 const fs = require('fs');
 
 let message = {
@@ -27,7 +26,7 @@ let message = {
 message.author.toString = function () {return "utilisateur";};
 let messageAdmin = JSON.parse(JSON.stringify(message));
 messageAdmin.author.toString = function () {return "admin";};
-messageAdmin.author.id = config.admin;
+messageAdmin.author.id = outils.getConfig("paramètres.admin");
 
 process.on('uncaughtException', function (exception) {
 	console.log(exception);

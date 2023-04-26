@@ -7,7 +7,6 @@ if (process.argv.length > 2) {
 }
 
 const fs = require('fs');
-const config = require('./config.json'); // Ce fichier contient le token de connection et d'autres infos nécéssaires à différentes commandes
 const outils = require("./Commandes/outils.js");
 [global.aliases, global.aliasesPerso] = outils.genererAliases();
 const {recherchercommande} = require('./Commandes/meta.js')
@@ -21,7 +20,7 @@ process.on('uncaughtException', function (err) {
     console.log("Penser à gérer correctment les erreurs 400 un jour.");
 });
 
-let prefix = global.serveurProd ? config.prefix : "§";
+let prefix = global.serveurProd ? outils.getConfig("paramètres.prefix") : "§";
 console.log("Ready!");
 
 client.on("messageCreate", (message) => {
@@ -94,7 +93,7 @@ client.on("messageCreate", (message) => {
     }
 });
  
-client.login(config.botToken);
+client.login(outils.getConfig("paramètres.botToken"));
 
 // https://stackoverflow.com/questions/14031763/doing-a-cleanup-action-just-before-node-js-exits
 process.stdin.resume();//so the program will not close instantly
@@ -113,7 +112,7 @@ const dummyMessageAdmin = {
 	createdTimestamp: Date.now(),
 	content: '',
 	author: {
-	  id: config.admin,
+	  id: outils.getConfig("paramètres.admin"),
 	  username: 'admin',
 	  discriminator: 'admin',
 	}

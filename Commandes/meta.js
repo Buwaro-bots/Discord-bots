@@ -2,7 +2,6 @@ const fs = require('fs');
 const outils = require("./outils.js");
 const requireDir = require('require-dir');
 let mesCommandes = requireDir('../Commandes');
-const config = require('../config.json');
 
 let listeTempo = {};
 
@@ -47,7 +46,7 @@ module.exports = {
     repeter: function(client, message, args, envoyerPM, idMJ) {
         let nombreBoucles = args.shift();
         outils.verifierNaN([nombreBoucles]);
-        if (nombreBoucles > 10 && message.author.id !== config.admin ) {
+        if (nombreBoucles > 10 && outils.verifierSiAdmin(message.author.id) ) {
             nombreBoucles = 5; // Pour eviter les abus, on limite le nombre de boucles à 5, le nombre de messages qui peut-être envoyé toutes les 5 secondes.
         }
         let commande = args.shift();
@@ -102,7 +101,7 @@ module.exports = {
 
         if (args[0] === "stop") {
             botReply = message.author.toString();
-            let idAuteur = args.length >=2 && message.author.id === config.admin ? args[1] : message.author.id;
+            let idAuteur = args.length >=2 && outils.verifierSiAdmin(message.author.id) ? args[1] : message.author.id;
             for (const tempo in listeTempo[idAuteur]) {
                 clearInterval(tempo);
                 botReply += ` La commande de ce message a été arrêté : ${listeTempo[idAuteur][tempo]}\r\n`;
@@ -131,7 +130,7 @@ module.exports = {
         });
 
         collector.on('collect', (reaction, user) => {
-            if(!user.bot && reaction.emoji.name === "🛑" && (user.id === message.author.id || user.id === config.admin)) {
+            if(!user.bot && reaction.emoji.name === "🛑" && (user.id === message.author.id || outils.verifierSiAdmin(message.author.id))) {
                 collector.resetTimer({time: 1});
             }
         });
@@ -184,7 +183,7 @@ module.exports = {
     },
 
     fermer: function(client, message, args, envoyerPM, idMJ) {
-        if (message === null || message.author.id === config.admin) {
+        if (message === null || outils.verifierSiAdmin(message.author.id)) {
             if (global.serveurProd) {
                 archiver(true);
             }
@@ -216,7 +215,7 @@ module.exports = {
             outils.envoyerMessage(client, botReply, message, envoyerPM);
         }
 
-        else if (args.length >= 2 && args[0] == "effacer" && message.author.id === config.admin) {
+        else if (args.length >= 2 && args[0] == "effacer" && outils.verifierSiAdmin(message.author.id)) {
             for (let i = 0; i < listeAliasGlobal.length; i++) {
                 if (listeAliasGlobal[i].nom === args[1]) {
                     listeAliasGlobal.splice(i, 1);

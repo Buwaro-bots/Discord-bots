@@ -1,7 +1,6 @@
 const outils = require("./outils.js");
 const INSdata = require('../Données/ins.json');
 const fs = require('fs');
-const config = require('../config.json');
 const { ins: aide } = require("./aide.js");
 
 
@@ -112,7 +111,7 @@ module.exports = {
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
             outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
-            if (client !== null && config.canalLogs !== null) client.channels.cache.get(config.canalLogs).send(botReply);
+            if (client !== null && outils.getConfig("paramètres.canalLogs") !== null) client.channels.cache.get(outils.getConfig("paramètres.canalLogs")).send(botReply);
         }
 
         let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.

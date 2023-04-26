@@ -1,5 +1,4 @@
 const outils = require("./outils.js");
-const config = require('../config.json');
 const liste = require("../Données/autres.json");
 const horoscope = liste.horoscope;
 const lol = liste.lol;
@@ -157,15 +156,16 @@ module.exports = {
 
     renommer: function(client, message, args, envoyerPM, idMJ) {
         const voiceChannelID = message.member.voice.channelId;
-        if (voiceChannelID !== null && message.author.id === config.admin) {
+        if (voiceChannelID !== null && outils.verifierSiAdmin(message.author.id)) {
             client.channels.fetch(voiceChannelID)
                 .then(channel => channel.setName(args[0]));}
     },
 
     bot: function(client, message, args, envoyerPM, idMJ) {
-        if (message.author.id === config.admin) {
-            if (config.autresBots.hasOwnProperty(args[0])) {
-                exec(`start cmd /c ${config.autresBots[args[0]].fichier}`, (err, stdout, stderr) => {
+        if (outils.verifierSiAdmin(message.author.id)) {
+            let listeBots = outils.getConfig("autresBots");
+            if (listeBots.hasOwnProperty(args[0])) {
+                exec(`start cmd /c ${listeBots[args[0]].fichier}`, (err, stdout, stderr) => {
                     if (err) {
                       console.error(err);
                       return;
@@ -173,7 +173,7 @@ module.exports = {
                      console.log(stdout);
                     }
                    );
-                outils.envoyerMessage(client, config.autresBots[args[0]].message, message, envoyerPM, idMJ);
+                outils.envoyerMessage(client, listeBots[args[0]].message, message, envoyerPM, idMJ);
             }
         }
     },

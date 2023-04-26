@@ -1,3 +1,4 @@
+const config = require('../config.json');
 let statsLancers = require('../Données/stats.json');
 const fs = require('fs');
 const levenshtein = require('js-levenshtein');
@@ -349,6 +350,39 @@ module.exports = {
                 reaction.users.remove(user);
             }, timer);
         }
+    },
+
+    getConfig: function(clefs) {
+        if (clefs === null) {
+            return config;
+        }
+        else {
+            let configARenvoyer = config;
+            let listeClefs = clefs.split(".");
+            for (const clef of listeClefs) {
+                configARenvoyer = configARenvoyer[clef];
+            }
+            return configARenvoyer;
+        }
+    },
+
+    setConfig: function(clefs, nouvelleValeur, configEnCours = config) {
+        let listeClefs = clefs.split(".");
+        let clef = listeClefs.shift()
+
+        if (listeClefs.length === 0) {
+            if (typeof configEnCours[clef] != "string") throw("La variable spécifiée n'est pas une chaine de caractères.");
+            configEnCours[clef] = nouvelleValeur;
+            let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./config.json', writer);
+        }
+        else {
+            module.exports.setConfig(listeClefs.join("."), nouvelleValeur, configEnCours[clef]);
+        }
+    },
+
+    verifierSiAdmin: function(idAVerifier) {
+        return idAVerifier === config.paramètres.admin;
     }
 }
 

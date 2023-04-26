@@ -1,5 +1,4 @@
 const outils = require("./outils.js");
-const config = require('../config.json');
 const fs = require('fs');
 const { musique: aide } = require("./aide.js");
 
@@ -21,12 +20,12 @@ module.exports = {
             return;
         }
 
-        if (args[0] === "activer" && message.author.id === config.admin) {
+        if (args[0] === "activer" && outils.verifierSiAdmin(message.author.id)) {
             botEstDésactivé = false;
             outils.envoyerMessage(client, "Le bot musical est réactivé.", message, envoyerPM, null, true);
             return
         }
-        if (args[0] === "désactiver" && message.author.id === config.admin) {
+        if (args[0] === "désactiver" && outils.verifierSiAdmin(message.author.id)) {
             botEstDésactivé = true;
             outils.envoyerMessage(client, "Le bot musical est désactivé.", message, envoyerPM, null, true);
             return
@@ -35,8 +34,8 @@ module.exports = {
             outils.envoyerMessage(client, "JDR en cours, revenez plus tard.", message, envoyerPM, null, true);
             return;
         }
-        if (args[0] === "vérifier" && message.author.id === config.admin) {
-            if (message.author.id === config.admin) {
+        if (args[0] === "vérifier" && outils.verifierSiAdmin(message.author.id)) {
+            if (outils.verifierSiAdmin(message.author.id)) {
                 for (let i = 0; i < listeUtilisateursGlobale.length; i++) {
                     let listeChansonsUtilisateur = listeChansons[listeUtilisateursGlobale[i]].liste;
                     for (let j = 0; j < listeChansonsUtilisateur.length; j++) {
@@ -74,7 +73,7 @@ module.exports = {
             //delete listeServeurs[message.guildId];
             return;
         }
-        else if (args[0] === "reset" && message.author.id === config.admin) {
+        else if (args[0] === "reset" && outils.verifierSiAdmin(message.author.id)) {
             module.exports.verifierSiUtilisateurConnecté(message);
             let serveur = listeServeurs[message.guildId];
             let messageEnCours = serveur.message
@@ -146,11 +145,11 @@ module.exports = {
             }
             return;
         }
-        else if (args[0] === "reset" && message.author.id === config.admin) {
+        else if (args[0] === "reset" && outils.verifierSiAdmin(message.author.id)) {
             listeServeurs[message.guildId].listeChansons = JSON.parse(JSON.stringify(listeChansons));
             return;
         }
-        else if (args[0] === "maj" && message.author.id === config.admin) {
+        else if (args[0] === "maj" && outils.verifierSiAdmin(message.author.id)) {
             // Note : Le fichier ne doit pas comporter les intros et les outtris à rajouter, ceci est seulement pour les musiques d'utilisateurs.
             let musiquesARajouter = JSON.parse(fs.readFileSync(__dirname + '/../Données/musique-a-rajouter.json', 'utf-8'));
             for (let [idUtilisateur, utilisateurModifications] of Object.entries(musiquesARajouter)) {
@@ -254,7 +253,7 @@ module.exports = {
                 botReply = `Désolé votre recherche n'a pas de résultat.`
                 outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
             }
-            else if ((nombreChansonsTrouvées <= 11 || message.author.id === config.admin) && nombreMessagesEnvoyés == 0) {
+            else if ((nombreChansonsTrouvées <= 11 || outils.verifierSiAdmin(message.author.id)) && nombreMessagesEnvoyés == 0) {
                 outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
             }
             else {
@@ -285,7 +284,7 @@ module.exports = {
             
             if (serveur.estStop === -1) {
                 module.exports.verifierSiUtilisateurConnecté(message);
-                if ((!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || message.author.id === config.admin) && serveur.message.content.length + proposition.length < 1940) {
+                if ((!(serveur.listeChansonsEnCours.includes(listeAdresses[proposition])) || outils.verifierSiAdmin(message.author.id)) && serveur.message.content.length + proposition.length < 1940) {
                     serveur.listeChansonsEnCours.unshift(listeAdresses[proposition]);
                     let messageEnCours = serveur.message
                     let botReply = messageEnCours.content;
@@ -297,7 +296,7 @@ module.exports = {
                 return;
             }
             else if (!("estStop" in serveur) || serveur.estStop >= 2) {
-                if (botEnCours /*|| message.author.id === config.admin*/) {
+                if (botEnCours /*|| outils.verifierSiAdmin(message.author.id)*/) {
                     outils.envoyerMessage(client, "Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
                     return;
                 }
@@ -311,7 +310,7 @@ module.exports = {
         
         if (message.member.voice.channelId === null) throw("Vous devez être connecté à un canal audio pour utiliser cette commande.");
         
-        if (botEnCours /*|| message.author.id === config.admin*/) {
+        if (botEnCours /*|| outils.verifierSiAdmin(message.author.id)*/) {
             outils.envoyerMessage(client, "Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
             return;
         }
@@ -537,7 +536,7 @@ module.exports = {
 
 
     verifierSiUtilisateurConnecté: function(message) {
-        if (message.member.voice.channel.id !== listeServeurs[message.guildId].canal && message.author.id !== config.admin) {
+        if (message.member.voice.channel.id !== listeServeurs[message.guildId].canal && !(outils.verifierSiAdmin(message.author.id))) {
             throw("Vous devez être connecté au canal audio pour utiliser cette commande.");
         }
     },
