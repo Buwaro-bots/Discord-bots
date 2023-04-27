@@ -35,7 +35,7 @@ module.exports = {
         while (listeNomsDejaTires.length < nombreLancers) {
             let pokemonChoisi = listeNomsDejaTires.length +1 === nombreLancers && Math.random() < probabiliteLegendaire - 1 ?
             module.exports.tiragePokemon(args.concat("Légendaire"), [], message.author.id) : module.exports.tiragePokemon(args, [], message.author.id);
-            let estShiny = outils.randomNumber(400) == 1 ? " **shiny**" : ""
+            let estShiny = outils.randomNumber(outils.getConfig("isekai.tauxShinyEquipe")) == 1 ? " **shiny**" : ""
             if (!(pokemonChoisi.tags.includes("Légendaire")) || Math.random() < probabiliteLegendaire) {
                 // Note : Les pokémons spoilers ne peuvent pas être roll dans une équipe à cause des balises retirées. Quand une génération est révélée, je préfère attendre qu'elle sorte avant d'être ajouté dans les équipes.
                 if ( !(pokemonChoisi.tags.includes("Non-pokemon") || listeNomsDejaTires.includes(pokemonChoisi.nom) || pokemonChoisi.tags.includes("Spoiler") )) {
@@ -142,23 +142,21 @@ module.exports = {
         args.shift();
     }
 
-    /* En % le taux de forcer un nouveau pokémon, je conseille de mettre entre 1 et 5. 
-    (pour Hisui, 3 jusqu'au 1er Mai, 2 jusqu'au 1er Juillet, puis 1 jusqu'à la 9G, puis retirer les tags nouveau sur les Hisui.) */
-    let tauxDeNouveau = 2;
+    let tauxDeNouveau = outils.getConfig("isekai.tauxNouveau");
     let rollNouveau = outils.randomNumber(100);
     let pokemonChoisi;
 
     if (args.length === 0 && rollNouveau <= tauxDeNouveau) {
         pokemonChoisi = module.exports.tiragePokemon(["Nouveau"], isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
-    else if ( (args.length === 0 && nombreReroll > 3 && outils.randomNumber(100) <= nombreReroll - 4) || nombreReroll > 15 )  {
+    else if ( (args.length === 0 && outils.randomNumber(100) <= nombreReroll - outils.getConfig("isekai.rollsAvantApparitionsDigimon")) || nombreReroll > outils.getConfig("isekai.rollsMaximum") )  {
         pokemonChoisi = module.exports.tiragePokemon(["Digimon"], isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
     else {
         pokemonChoisi = module.exports.tiragePokemon(args, isekaiEnCours.listePokemonsDejaTires, message.author.id);
     }
 
-    let estShiny = outils.randomNumber(64 * 1.5 ** nombreReroll) === 1;
+    let estShiny = outils.randomNumber(outils.getConfig("isekai.tauxShiny") * 1.5 ** nombreReroll) === 1;
     isekaiEnCours.listePokemonsDejaTires.push(pokemonChoisi);
 
     if (args.length === 0) {

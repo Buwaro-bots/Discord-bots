@@ -179,7 +179,18 @@ module.exports = {
     },
 
     play: function(client, message, args, envoyerPM, idMJ) {
-        let botreply = `${message.author.toString()} C'est **£play** scrogneugneu. Le symbole livre anglaise. (╯°□°)╯︵ ┻━┻`;
+        let botreply = `${message.author.toString()} C'est **;play** scrogneugneu. (╯°□°)╯︵ ┻━┻`;
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+    },
+
+    config: function(client, message, args, envoyerPM, idMJ) {
+        if (!(outils.verifierSiAdmin(message.author.id))) {
+            outils.envoyerMessage(client, "Seul un admin peut utiliser cette commande.", message);
+            return;
+        }
+        let clef = args.shift();
+        let valeur = args.join(".");
+        outils.setConfig(clef, valeur);
+        outils.envoyerMessage(client, `La configuration de ${clef} est maintenant "${valeur}".`, message, envoyerPM, false, true);
     }
 }
