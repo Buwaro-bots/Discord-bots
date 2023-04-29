@@ -12,6 +12,7 @@ let listeDésPondérés = {
     "dng crit" : {nombreDeFaces : 20, nombreDeSeries : 2, nombreDeDésAléatoires : 60, liste : []},
     "num" : {nombreDeFaces : 20, nombreDeSeries : 1, nombreDeDésAléatoires : 40, liste : []},
 }
+let client = null;
 
 module.exports = {
     outils:function(){throw("Cette fonction n'est pas censé être appelée.");},
@@ -145,6 +146,14 @@ module.exports = {
                 return message.channel.send(botReply);
             }
         }
+    },
+
+    envoyerMessageAUnCanal: function(client, botReply, idCanal) {
+        if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
+        let message = {author : {username :"Benji-bot"}};
+        module.exports.loggerMessage(botReply, message);
+        let canal = client.channels.cache.get(idCanal)
+        return canal.send(botReply)
     },
 
     // Cette fonction a été faite juste pour mettre des couleurs dans le console.log du message de l'utilisateur et la réponse. Sa longueur fait que je l'ai séparé de envoyerMessage.
@@ -383,7 +392,15 @@ module.exports = {
 
     verifierSiAdmin: function(idAVerifier) {
         return idAVerifier === config.paramètres.admin;
-    }
+    },
+
+    getClient: function() {
+        return client;
+    },
+
+    setClient: function(nouveauClient) {
+        client = nouveauClient;
+    },
 }
 
 if (global.serveurProd) {

@@ -1,0 +1,14 @@
+{
+    "lien.rss": {
+        "timestampDernierPost": "1", 
+        "nombreJoursAprèsDernierPost" : "7 (On vérifie toutes les heures, pour ne pas checker trop souvent on attends un ou plusieurs jours.",
+        "timestampProchaineVérification" : "1",
+        "listeCanaux" : {
+            "idCanal" : {
+                "listeCréateurs": ["idsDeLaPersonneQuiADemandéLeFluxRss"],
+                "listeMentions": ["idsDesPersonnesQuiVeulentÊtreMentionnées"],
+                "NOTE" : "Supprime un objet canal si le créateur et les mentions sont vides."
+            }
+        }
+    }
+}

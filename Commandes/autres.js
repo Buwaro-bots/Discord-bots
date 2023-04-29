@@ -179,7 +179,7 @@ module.exports = {
     },
 
     play: function(client, message, args, envoyerPM, idMJ) {
-        let botreply = `${message.author.toString()} C'est **;play** scrogneugneu. (╯°□°)╯︵ ┻━┻`;
+        let botreply = `${message.author.toString()} C'est **/play** scrogneugneu. (╯°□°)╯︵ ┻━┻`;
         outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
     },
 
