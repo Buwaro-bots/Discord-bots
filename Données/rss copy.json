@@ -1,7 +1,8 @@
 {
     "lien.rss": {
+        "titre": "titre ou null",
         "timestampDernierPost": "1", 
-        "nombreJoursAprèsDernierPost" : "7 (On vérifie toutes les heures, pour ne pas checker trop souvent on attends un ou plusieurs jours.",
+        "joursAvecUpdate" : "2 (On vérifie toutes les heures, pour ne pas checker trop souvent on attends un ou plusieurs jours.",
         "timestampProchaineVérification" : "1",
         "listeCanaux" : {
             "idCanal" : {

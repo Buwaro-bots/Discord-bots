@@ -401,6 +401,15 @@ module.exports = {
     setClient: function(nouveauClient) {
         client = nouveauClient;
     },
+
+    logPermanent: function(texte) {
+        texte = `\r\n ${new Date().toLocaleString()} : ${texte}`;
+        fs.appendFile("./Données/logs.txt", texte, (err) => {
+            if (err) {
+              console.log(err);
+            }
+        })
+    }
 }
 
 if (global.serveurProd) {
