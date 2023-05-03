@@ -199,9 +199,9 @@ module.exports = {
     },
 
     calculerDateProchaineMAJ: function(délai) {
-        let heureActuelle = Date.now();
+        let heureActuelle = new Date();
         if (typeof délai === "number") {
-            return heureActuelle + délai * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000;
+            return heureActuelle.getTime() + délai * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000;
         }
         else {
             let nombreDeJoursMinimum = 7;
@@ -213,7 +213,7 @@ module.exports = {
                     nombreDeJoursMinimum = nombreDeJours;
                 }
             }
-            return heureActuelle + nombreDeJoursMinimum * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000;
+            return heureActuelle.getTime() + nombreDeJoursMinimum * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000;
         }
     }
 }
