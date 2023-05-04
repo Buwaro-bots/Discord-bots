@@ -19,6 +19,7 @@ let listeDeTitres = {}
 
 /* A faire :
 - Commande hiatus qui retarde le prochain check de X jours.
+- Faire en sorte que la commande status envoie un message.
 */
 module.exports = {
     rss : function(client, message, args, envoyerPM, idMJ) {
@@ -27,7 +28,7 @@ module.exports = {
                 args.shift();
                 let nom = args.join(" ");
                 if (listeDeTitres.hasOwnProperty(nom)) {
-                    module.exports.checkerUnFlux(listeDeTitres[nom], listeFlux[listeDeTitres[nom]]);
+                    module.exports.checkerUnFlux(listeDeTitres[nom], listeFlux[listeDeTitres[nom]], true);
                     message.react('👍');
                 }
                 else {
@@ -62,7 +63,7 @@ module.exports = {
     }
         if (args[0] === "status" && outils.verifierSiAdmin) {
             args.shift();
-            if (args.length > 1) {
+            if (args.length > 0) {
                 let nom = args.join(" ");
                 console.log(listeFlux[listeDeTitres][nom]);
             }
@@ -73,9 +74,9 @@ module.exports = {
         }
 },
 
-    checkerUnFlux : async function(adresse, objet) {
+    checkerUnFlux : async function(adresse, objet, forcerVerification = false) {
         let heureActuelle = Date.now();
-        if (heureActuelle > objet.timestampProchaineVérification) {
+        if (heureActuelle > objet.timestampProchaineVérification || forcerVerification) {
             let listeNouveauxPosts = [];
             let timeStampMaximum = objet.timestampDernierPost;
             let feed = [];
@@ -84,16 +85,16 @@ module.exports = {
                 outils.logPermanent(`Vérification de ${adresse}`);
                 feed = await parser.parseURL(adresse);
                 if (objet.timestampDernierPost === 0) {
-                    listeNouveauxPosts.push(feed.items.pop());
+                    listeNouveauxPosts.push(feed.items.shift());
                     objet.timestampDernierPost = new Date(listeNouveauxPosts[0].isoDate).getTime();
                     module.exports.modifierTitre(adresse, feed.title);
                 }
                 else {
                     feed.items.forEach(item => {
                         let timeStampItem = new Date(item.isoDate).getTime();
-                        if (timeStampItem > objet.timestampDernierPost) {
+                        if (timeStampItem > timeStampMaximum) {
                             listeNouveauxPosts.push(item);
-                            if (timeStampItem > timeStampMaximum) {
+                            if (timeStampItem > objet.timestampDernierPost) {
                                 objet.timestampDernierPost = timeStampItem;
                             }
                         }
@@ -118,9 +119,53 @@ module.exports = {
                     let nouveauPost = listeNouveauxPosts.pop();
                     for (let [canal, objetCanal] of Object.entries(objet.listeCanaux)) {
                         outils.envoyerMessageAUnCanal(outils.getClient(), `${nouveauPost.link}`, canal)
+                        .then((msg)=> {
+                            if (listeNouveauxPosts.length === 0) {
+                                msg.react("🔔").then(() => msg.react("🔕"));
+                                const collector = msg.createReactionCollector({
+                                    time: 4 * 60 * 60 * 1000
+                                });
+                                collector.on('collect', (reaction, user) => {
+                                    if (reaction.emoji.name === "🔔" && user.bot === false ) {
+                                        if (!(objetCanal.listeMentions.includes(user.id))) {
+                                            objetCanal.listeMentions.push(user.id);
+                                            let botReply = `<@${user.id}> Vous êtes maintenant abonné`;
+                                            botReply += objet.titre === null ? "." : ` à ${objet.titre}.`;
+                                            outils.envoyerMessageAUnCanal(outils.getClient(), botReply, canal);
+                                            module.exports.sauvegarderJSON(); 
+                                        }
+                                        reaction.users.remove(user);
+                                    }
+                                    if (reaction.emoji.name === "🔕" && user.bot === false ) {
+                                        if (objetCanal.listeMentions.includes(user.id)) {
+                                            const index = objetCanal.listeMentions.indexOf(user.id);
+                                            objetCanal.listeMentions.splice(index, 1);
+                                            let botReply = `<@${user.id}> Vous êtes maintenant désabonné`;
+                                            botReply += objet.titre === null ? "." : ` de ${objet.titre}.`;
+                                            outils.envoyerMessageAUnCanal(outils.getClient(), botReply, canal);
+                                            module.exports.sauvegarderJSON(); 
+                                        }
+                                        reaction.users.remove(user);
+                                    }
+                                });
+                                collector.on('end', collected => {
+                                    msg.reactions.cache.forEach((reaction) => {
+                                        if (reaction.me) {
+                                          reaction.remove().catch(console.error);
+                                        }
+                                    });
+                                });
+                            }
+                        })
+                        if (objetCanal.listeMentions.length > 0) {
+                            let botReply = "";
+                            for (let i = 0; i < objetCanal.listeMentions.length; i++) {
+                                botReply += `<@${objetCanal.listeMentions[i]}> `;
+                            }
+                            outils.envoyerMessageAUnCanal(outils.getClient(), botReply, canal);
+                    }
                     }
                 }
-                //Insérer mentions ici.
                 objet.timestampProchaineVérification = module.exports.calculerDateProchaineMAJ(objet.joursAvecUpdate);
                 outils.logPermanent(`Post trouvé, prochaine vérification le : ${new Date(objet.timestampProchaineVérification).toLocaleString()}`);
                 return;
