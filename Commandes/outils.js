@@ -152,8 +152,8 @@ module.exports = {
         if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
         let message = {author : {username :"Benji-bot"}};
         module.exports.loggerMessage(botReply, message);
-        let canal = client.channels.cache.get(idCanal)
-        return canal.send(botReply)
+        let canal = client.channels.cache.get(idCanal);
+        return canal.send(botReply);
     },
 
     // Cette fonction a été faite juste pour mettre des couleurs dans le console.log du message de l'utilisateur et la réponse. Sa longueur fait que je l'ai séparé de envoyerMessage.
@@ -245,9 +245,9 @@ module.exports = {
         let min = 1000;
         let minIndex = 0;
         entree = module.exports.normalisationString(entree);
-        for (let i = 0; i < liste.length; i++) {
-            let elementTableau = module.exports.normalisationString(liste[i]);
-            if (force === "faible") {
+        if (force === "faible") {
+            for (let i = 0; i < liste.length; i++) {
+                let elementTableau = module.exports.normalisationString(liste[i]);
                 let distance = levenshtein(entree.substring(0, 5), elementTableau.substring(0, 5)) + levenshtein(entree.substring(5, 100), elementTableau.substring(5, 100)) / 100;
 
                 if (distance < 3) {
@@ -259,7 +259,13 @@ module.exports = {
                     minIndex = i;
                 }
             }
-            else {
+            if (min < 3 ) return liste[minIndex];
+
+        }
+          
+        else if (force === "fort") {
+            for (let i = 0; i < liste.length; i++) {
+                let elementTableau = module.exports.normalisationString(liste[i]);
                 let distance = levenshtein(entree, elementTableau);
                 if (distance < entree.length / 3) {
                     process.stdout.write(liste[i] + " " + distance + " ; ");
@@ -269,13 +275,37 @@ module.exports = {
                     }
                 }
             }
+            if (min < 1000) return liste[minIndex];
         }
-        if (min < 3 || (force === "fort" && min < 1000)) {
-            return liste[minIndex];
+        else if (force === "inclure") {
+            let listeIncluantRecherche = {};
+            for (let i = 0; i < liste.length; i++) {
+                let elementTableau = liste[i];
+                if (module.exports.normalisationString(elementTableau).includes(entree)) {
+                    let distance = elementTableau.indexOf(entree);
+                    listeIncluantRecherche[elementTableau] = distance;
+                }
+            }
+            let listeNoms = Object.keys(listeIncluantRecherche);
+            let nombreRésultats = listeNoms.length;
+            if (nombreRésultats == 1) {
+                return listeNoms[0];
+            }
+            else if (nombreRésultats > 1) {
+                for (let i = 0; i < nombreRésultats; i++) {
+                    if (listeIncluantRecherche[listeNoms[i]] < min) {
+                        min = listeIncluantRecherche[listeNoms[i]];
+                        minIndex = i;
+                    }
+                }
+                return listeNoms[minIndex];
+            }
+            else return module.exports.rattrapageFauteOrthographe(liste, entree, "fort");
+
         }
-        else {
-            throw("Aucun résultat trouvé.");
-        }
+        else throw("Fonction de recherche mal établie.");
+        
+        throw("Aucun résultat trouvé.");
     },
 
     // Cette fonction permet d'enlever les accents et majuscules d'une chaîne de caractères.
@@ -409,6 +439,19 @@ module.exports = {
               console.log(err);
             }
         })
+    },
+
+    dateHeureFrançaise: function(timestamp = null) {
+        const objetDate = timestamp === null? new Date() : new Date(timestamp);
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        };
+        return objetDate.toLocaleString('fr-FR', options);
     }
 }
 

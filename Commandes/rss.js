@@ -19,7 +19,6 @@ let listeDeTitres = {}
 
 /* A faire :
 - Commande hiatus qui retarde le prochain check de X jours.
-- Faire en sorte que la commande status envoie un message.
 */
 module.exports = {
     rss : function(client, message, args, envoyerPM, idMJ) {
@@ -27,13 +26,10 @@ module.exports = {
             if (args.length > 1) {
                 args.shift();
                 let nom = args.join(" ");
-                if (listeDeTitres.hasOwnProperty(nom)) {
-                    module.exports.checkerUnFlux(listeDeTitres[nom], listeFlux[listeDeTitres[nom]], true);
-                    message.react('👍');
-                }
-                else {
-                    outils.envoyerMessage(client, "Cette webcomic n'a pas été trouvée.", message, false, null, true);
-                }
+                if (!(listeDeTitres.hasOwnProperty(nom))) nom = outils.rattrapageFauteOrthographe(listeDeTitres, nom, "inclure");
+                module.exports.checkerUnFlux(listeDeTitres[nom], listeFlux[listeDeTitres[nom]], true);
+                message.react('👍');
+                module.exports.sauvegarderJSON();
             }
             else {
                 message.react('👍');
@@ -41,12 +37,13 @@ module.exports = {
             }
             return;
         }
-        if (args[0] === "nouveau") {
+        else if (args[0] === "nouveau") {
             listeFlux[args[1]] = {
                 titre: null,
                 timestampDernierPost: 0,
                 joursAvecUpdate: 2,
                 timestampProchaineVérification: 1,
+                lienDernièreUpdate: "",
                 listeCanaux: {}
             }
             listeFlux[args[1]]["listeCanaux"][message.channel.id] = {
@@ -61,16 +58,38 @@ module.exports = {
             module.exports.sauvegarderJSON(); 
             return; 
     }
-        if (args[0] === "status" && outils.verifierSiAdmin) {
+        else if (args[0] === "statut") {
             args.shift();
             if (args.length > 0) {
                 let nom = args.join(" ");
-                console.log(listeFlux[listeDeTitres][nom]);
+                if (!(listeDeTitres.hasOwnProperty(nom))) nom = outils.rattrapageFauteOrthographe(listeDeTitres, nom, "inclure");
+                let fluxActuel = listeFlux[listeDeTitres[nom]];
+                let joursDesMAJ = typeof fluxActuel.joursAvecUpdate === "number" ? `Estimé à tout les ${fluxActuel.joursAvecUpdate} jours.` : `Le ${fluxActuel.joursAvecUpdate.join(", ")}.`
+                let botReply = `Titre : **${fluxActuel.titre}** \r\n` +
+                `Dernière mise à jour : <${fluxActuel.lienDernièreUpdate}> \r\n` +
+                `Date de la dernière MAJ : Le ${outils.dateHeureFrançaise(fluxActuel.timestampDernierPost)}. \r\n` +
+                `Dates des MAJ : ${joursDesMAJ} \r\n` +
+                `Date de la prochaine vérification par le bot : Le ${outils.dateHeureFrançaise(fluxActuel.timestampProchaineVérification)}. \r\n`;
+                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
             }
             else {
-                console.log(listeDeTitres);
+                let botReply = "";
+                for (let [adresse, objet] of Object.entries(listeFlux)) {
+                    if (objet.listeCanaux.hasOwnProperty(message.channel.id)) {
+                        let listeJours = typeof objet.joursAvecUpdate === "number" ? "" : ` [${objet.joursAvecUpdate.join(", ")}]`;
+                        botReply += `**${objet.titre}** : Le ${outils.dateHeureFrançaise(objet.timestampDernierPost)}${listeJours} (<${objet.lienDernièreUpdate}>).\r\n`
+                        if (botReply.length > 1800) {
+                            outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                            let botReply = "";
+                        }
+                    }
+                }
+                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
             }
             return;
+        }
+        else {
+            throw("Commande non reconnu.") // Rajouter ici commande aide.
         }
 },
 
@@ -87,6 +106,7 @@ module.exports = {
                 if (objet.timestampDernierPost === 0) {
                     listeNouveauxPosts.push(feed.items.shift());
                     objet.timestampDernierPost = new Date(listeNouveauxPosts[0].isoDate).getTime();
+                    objet.lienDernièreUpdate = listeNouveauxPosts[0].link;
                     module.exports.modifierTitre(adresse, feed.title);
                 }
                 else {
@@ -117,6 +137,7 @@ module.exports = {
                 }
                 while (listeNouveauxPosts.length > 0) {
                     let nouveauPost = listeNouveauxPosts.pop();
+                    objet.lienDernièreUpdate = nouveauPost.link;
                     for (let [canal, objetCanal] of Object.entries(objet.listeCanaux)) {
                         outils.envoyerMessageAUnCanal(outils.getClient(), `${nouveauPost.link}`, canal)
                         .then((msg)=> {
@@ -150,7 +171,7 @@ module.exports = {
                                 });
                                 collector.on('end', collected => {
                                     msg.reactions.cache.forEach((reaction) => {
-                                        if (reaction.me) {
+                                        if (reaction.message.author.bot) {
                                           reaction.remove().catch(console.error);
                                         }
                                     });
@@ -214,7 +235,7 @@ module.exports = {
 
             interval = setInterval(function() {
                 module.exports.checkerLesFlux();
-            }, 60 * 60 * 1000);
+            }, 30 * 60 * 1000);
         }
         else {
             listeFlux = {
@@ -246,19 +267,19 @@ module.exports = {
     calculerDateProchaineMAJ: function(délai) {
         let heureActuelle = new Date();
         if (typeof délai === "number") {
-            return heureActuelle.getTime() + délai * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000;
+            return heureActuelle.getTime() + délai * 3 * 60 * 60 * 1000;
         }
         else {
             let nombreDeJoursMinimum = 7;
             let numeroAujourdhui = heureActuelle.getDay();
-            for (let i = 0; i < délai; i++){
+            for (let i = 0; i < délai.length; i++){
                 let numeroAChecker = joursDelaSemaine[délai[i]];
                 let nombreDeJours = (numeroAChecker - numeroAujourdhui +7) % 7;
                 if (nombreDeJours != 0 && nombreDeJours < nombreDeJoursMinimum) {
                     nombreDeJoursMinimum = nombreDeJours;
                 }
             }
-            return heureActuelle.getTime() + nombreDeJoursMinimum * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000;
+            return heureActuelle.getTime() + nombreDeJoursMinimum * 24 * 60 * 60 * 1000 - 3 * 60 * 60 * 1000;
         }
     }
 }
