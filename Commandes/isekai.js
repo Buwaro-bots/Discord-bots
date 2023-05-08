@@ -10,7 +10,7 @@ let listeTags = ["Plante", "Poison", "DnG", "Base", "Starter", "Starter+", "Fina
 "Gen1", "Gen2", "Gen3", "Gen4", "Gen5", "Gen6", "Gen7", "Gen8", "Gen9", "Légendaire", "Non-pokemon", "Digimon", "Spoiler"]
 
 module.exports = {
-    isekai : function(client, message, args, envoyerPM, idMJ) {
+    isekai : function(message, args, envoyerPM, idMJ) {
 
     if (args.length > 0 && args[0] === "roll") {
         args.shift();
@@ -59,7 +59,7 @@ module.exports = {
             }
         }
         outils.logLancer(message, pokemonsTires.join(", "), `isekai roll ${nombreLancers}`, envoyerPM);
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ)
         .then((msg)=> {
             for (let i = 0; i < nombreDeBoucles ; i++) {
                 setTimeout(function() {
@@ -78,12 +78,12 @@ module.exports = {
             let botReply = `${message.author.toString()}`;
             if (isekaiEnCours.timestamp > Date.now() - (24 * 4 * 3600 * 1000)) {
                 botReply += ` s'est actuellement fait isekai en **${isekaiEnCours.pokémon}**.`;
-                outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+                outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
             }
             else {
                 let date = new Date(isekaiEnCours.timestamp);
                 botReply += ` est isekai en ${isekaiEnCours.pokémon} depuis le ${date.getDate()}/${outils.pad(date.getMonth()+1)}/${date.getFullYear()}.`;
-                outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+                outils.envoyerMessage(botReply, message, envoyerPM, idMJ)
                 .then((msg)=> {
                     msg.react("🎲");
                     const collector = msg.createReactionCollector({
@@ -92,7 +92,7 @@ module.exports = {
                     collector.on('collect', (reaction, user) => {
                         if(user.id === message.author.id && reaction.emoji.name === "🎲") {
                             collector.resetTimer({time: 1});
-                            module.exports.isekai(client, message, [], envoyerPM, idMJ);
+                            module.exports.isekai(message, [], envoyerPM, idMJ);
                         }
                     });
                     collector.on('end', collected => {
@@ -115,7 +115,7 @@ module.exports = {
                     botReply += `**${isekaiEnCours.nom}** s'est actuellement fait isekai en **${isekaiEnCours.pokémon}**.\r\n`;
                 }
             }
-            outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
             return;
     }
 
@@ -171,13 +171,13 @@ module.exports = {
     
     if (modeSimple) {
         botReply = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
         delete listeIsekaisEnCours[message.id];
     }
 
     else if (isekaiEnCours.messageEnvoyé === null) {
         isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny);
-        outils.envoyerMessage(client, isekaiEnCours.contenuMessage, message, envoyerPM, idMJ)
+        outils.envoyerMessage(isekaiEnCours.contenuMessage, message, envoyerPM, idMJ)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             isekaiEnCours.messageEnvoyé = msg;
             isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
@@ -193,7 +193,7 @@ module.exports = {
                     collector.resetTimer({time: 40 * 1000});
                     nombreReroll += 1;
                     timerSpoiler = timerSpoiler / 1.25 + 100;
-                    let dernierPokemon = module.exports.isekai(client, message, args.concat(["timer", timerSpoiler]), envoyerPM, idMJ);
+                    let dernierPokemon = module.exports.isekai(message, args.concat(["timer", timerSpoiler]), envoyerPM, idMJ);
                     if ( !(dernierPokemon.tags.includes("Digimon")) ) {
                         outils.retirerReaction(message, reaction, user, timerSpoiler);
                     }

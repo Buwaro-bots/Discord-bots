@@ -8,15 +8,15 @@ const isekai = require('./isekai.js');
 const fs = require('fs');
 
 module.exports = {
-    dng : function(client, message, args, envoyerPM, idMJ) {
+    dng : function(message, args, envoyerPM, idMJ) {
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
-        aide(client, message, args, envoyerPM, idMJ);
+        aide(message, args, envoyerPM, idMJ);
         return;
     }
     if (args[0] === "table" || args[0] === "types" || args[0] === "type") {
-        outils.envoyerMessage(client, "https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ, true);
+        outils.envoyerMessage("https://cdn.discordapp.com/attachments/730133304237359157/958476687090262066/unknown.png", message, envoyerPM, idMJ, true);
         return;
     }
 
@@ -52,7 +52,7 @@ module.exports = {
                     }
                 }
                 pokemonDemande = outils.rattrapageFauteOrthographe(listePokemons, pokemonDemande);
-                outils.envoyerMessage(client, `Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ, true);
+                outils.envoyerMessage(`Désolé, mais ${pokemonDemande} n'est pas dans DnG.`, message, envoyerPM, idMJ, true);
                 return;
             }
         }
@@ -74,7 +74,7 @@ module.exports = {
             botReply += `**${trait}**${description}\r\n`;
         }
 
-        outils.envoyerMessage(client, botReply, message, envoyerPM);
+        outils.envoyerMessage(botReply, message, envoyerPM);
         return;
     }
 
@@ -85,7 +85,7 @@ module.exports = {
             for (let trait in dexDng.Traits) {
                 listeTraits += trait + ", ";
             }
-            outils.envoyerMessage(client, listeTraits, message, envoyerPM, idMJ, true);
+            outils.envoyerMessage(listeTraits, message, envoyerPM, idMJ, true);
             return;
         }
         args.shift();
@@ -96,13 +96,13 @@ module.exports = {
         }
         botReply += `${trait} : ${dexDng.Traits[trait].DescriptionLongue}`;
 
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
         return;
     }
 
     if (["ini", "init", "initiative"].includes(args[0])) {
         if (args.length === 1) {
-            outils.envoyerMessage(client, "Pour faire un jet d'initiative, les stats sont l'instinct et l'agilité, la commande est **;dng ini *instinct* + *agilité***.", message, false, null, true);
+            outils.envoyerMessage("Pour faire un jet d'initiative, les stats sont l'instinct et l'agilité, la commande est **;dng ini *instinct* + *agilité***.", message, false, null, true);
             return;
         }
 
@@ -124,13 +124,13 @@ module.exports = {
         let [reponseCommandes, listeLancers, reponseLancers, reponseSomme] =  roll.commandeComplexe(lancer);
         let lancerAAfficher = `[${listeLancers[0]} + ${listeLancers[1]}] + [${listeLancers[2] - 1}]`
         let botReply = `${message.author.toString()} Avec des stats de ${stat1} et ${stat2}, vous avez fait ${lancerAAfficher} ce qui donne : **${reponseSomme}**`;
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
         outils.logLancer(message, `${lancerAAfficher} = ${reponseSomme}`, `dng ini ${stat1} + ${stat2}`, envoyerPM);
         return;
     }
     if (args[0] === "pc") {
         if (args.length === 1) {
-            outils.envoyerMessage(client, "Pour faire un jet de PC, la commande est **;dng pc *niveau de jauge* + *(points ajoutés)***.", message, false, null, true);
+            outils.envoyerMessage("Pour faire un jet de PC, la commande est **;dng pc *niveau de jauge* + *(points ajoutés)***.", message, false, null, true);
             return;
         }
         let stat;
@@ -159,13 +159,13 @@ module.exports = {
         }
 
         let lancer = `${dexDng.LancersPC[stat]} ${modificateur}`;
-        roll.roll(client, message, [lancer], envoyerPM, idMJ);
+        roll.roll(message, [lancer], envoyerPM, idMJ);
         return;
     }
 
     if (args[0] === "autocheck") {
         let botReply = message.author.toString() + outils.gestionAutocheck("dng", message.author.id);
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
         return;
     }
 
@@ -183,7 +183,7 @@ module.exports = {
                 if (listeReactions.hasOwnProperty(reaction.emoji.name)) {
                     collector.resetTimer({time: 400 * 1000});
                     dummyMessage.author = user;
-                    module.exports.dng(client, dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
+                    module.exports.dng(dummyMessage, [listeReactions[reaction.emoji.name], dd], envoyerPM, idMJ);
                     outils.retirerReaction(message, reaction, user);
                 }
             }
@@ -250,7 +250,7 @@ module.exports = {
         botReply += message_reussite;
     }
 
-    outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+    outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
     outils.logLancer(message, `[${lancerCaracteristique}] [${lancerCritique}]`, affichageLancerDemande, envoyerPM, estReussite);
     },
 

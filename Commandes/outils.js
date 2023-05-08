@@ -101,7 +101,7 @@ module.exports = {
     },  
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
-    envoyerMessage: function(client, botReply, message, envoyerPM = false, idMJ = null, aSupprimer = false) {
+    envoyerMessage: function(botReply, message, envoyerPM = false, idMJ = null, aSupprimer = false) {
         if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
   
         module.exports.loggerMessage(botReply, message);
@@ -148,7 +148,7 @@ module.exports = {
         }
     },
 
-    envoyerMessageAUnCanal: function(client, botReply, idCanal) {
+    envoyerMessageAUnCanal: function(botReply, idCanal) {
         if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
         let message = {author : {username :"Benji-bot"}};
         module.exports.loggerMessage(botReply, message);

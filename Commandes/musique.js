@@ -14,24 +14,24 @@ let botEnCours = false;
 let botEstDésactivé = false;
 
 module.exports = {
-    musique: function(client, message, args, envoyerPM, idMJ) {
+    musique: function(message, args, envoyerPM, idMJ) {
         if (["aide", "help", "commandes", "commande"].includes(args[0])) {
-            aide(client, message, args, envoyerPM, idMJ);
+            aide(message, args, envoyerPM, idMJ);
             return;
         }
 
         if (args[0] === "activer" && outils.verifierSiAdmin(message.author.id)) {
             botEstDésactivé = false;
-            outils.envoyerMessage(client, "Le bot musical est réactivé.", message, envoyerPM, null, true);
+            outils.envoyerMessage("Le bot musical est réactivé.", message, envoyerPM, null, true);
             return
         }
         if (args[0] === "désactiver" && outils.verifierSiAdmin(message.author.id)) {
             botEstDésactivé = true;
-            outils.envoyerMessage(client, "Le bot musical est désactivé.", message, envoyerPM, null, true);
+            outils.envoyerMessage("Le bot musical est désactivé.", message, envoyerPM, null, true);
             return
         }
         if (botEstDésactivé){
-            outils.envoyerMessage(client, "JDR en cours, revenez plus tard.", message, envoyerPM, null, true);
+            outils.envoyerMessage("JDR en cours, revenez plus tard.", message, envoyerPM, null, true);
             return;
         }
         if (args[0] === "vérifier" && outils.verifierSiAdmin(message.author.id)) {
@@ -139,7 +139,7 @@ module.exports = {
                         }
                 }
                 if (listeidServeurs[i] === message.guildId) {
-                    outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                    outils.envoyerMessage(botReply, message, envoyerPM, null, true);
                 }
                 console.log(listeServeurs[listeidServeurs[i]]);
             }
@@ -234,7 +234,7 @@ module.exports = {
                         }
                         else {
                             nombreMessagesEnvoyés += 1;
-                            outils.envoyerMessage(client, botReply, message, true, null, true);
+                            outils.envoyerMessage(botReply, message, true, null, true);
                             nombreChansonsTrouvées += 1;
                             botReply = `${nombreChansonsTrouvées}) ${listeNoms[i]}\r\n`;
                         }
@@ -251,13 +251,13 @@ module.exports = {
 
             if (nombreChansonsTrouvées === 0) {
                 botReply = `Désolé votre recherche n'a pas de résultat.`
-                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                outils.envoyerMessage(botReply, message, envoyerPM, null, true);
             }
             else if ((nombreChansonsTrouvées <= 11 || outils.verifierSiAdmin(message.author.id)) && nombreMessagesEnvoyés == 0) {
-                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                outils.envoyerMessage(botReply, message, envoyerPM, null, true);
             }
             else {
-                outils.envoyerMessage(client, botReply, message, true, null, true);
+                outils.envoyerMessage(botReply, message, true, null, true);
             }
             return;
         }
@@ -272,7 +272,7 @@ module.exports = {
             if (regex.test(proposition)) {
                 proposition = parseInt(proposition) - 1;
                 if (proposition > serveur.recherche) {
-                    outils.envoyerMessage(client, `La recherche en cours ne contient que ${serveur.recherche.length} éléments.`, envoyerPM, null, true);
+                    outils.envoyerMessage(`La recherche en cours ne contient que ${serveur.recherche.length} éléments.`, envoyerPM, null, true);
                 }
                 proposition = serveur.recherche[proposition];
             }
@@ -297,7 +297,7 @@ module.exports = {
             }
             else if (!("estStop" in serveur) || serveur.estStop >= 2) {
                 if (botEnCours /*|| outils.verifierSiAdmin(message.author.id)*/) {
-                    outils.envoyerMessage(client, "Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
+                    outils.envoyerMessage("Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
                     return;
                 }
                 if (message.member.voice.channelId === null) throw("Vous devez être connecté à un canal audio pour utiliser cette commande.");
@@ -311,7 +311,7 @@ module.exports = {
         if (message.member.voice.channelId === null) throw("Vous devez être connecté à un canal audio pour utiliser cette commande.");
         
         if (botEnCours /*|| outils.verifierSiAdmin(message.author.id)*/) {
-            outils.envoyerMessage(client, "Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
+            outils.envoyerMessage("Le bot musical est déjà en route sur un serveur.", message, envoyerPM, null, true);
             return;
         }
         let serveur;
@@ -322,7 +322,7 @@ module.exports = {
         if (listeServeurs.hasOwnProperty(message.guildId)) {
             serveur = listeServeurs[message.guildId];
             if (serveur.estStop < 2) {
-                outils.envoyerMessage(client, "Le bot musical est déjà en route sur ce serveur.", message, envoyerPM, null, true);
+                outils.envoyerMessage("Le bot musical est déjà en route sur ce serveur.", message, envoyerPM, null, true);
                 return;
             }
             serveur.estStop = -1;
@@ -337,7 +337,7 @@ module.exports = {
                 }
                 botReply += "\u001b[0m```";
                 botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
-                outils.envoyerMessage(client, botReply, message)
+                outils.envoyerMessage(botReply, message)
                 .then((msg)=> {
                     serveur.message = msg;
                 });
@@ -488,7 +488,7 @@ module.exports = {
                         }
                         botReply += "\u001b[0m```";
                         botReply = botReply.replace("\u001b[0;36m", "\u001b[1;35m");
-                        outils.envoyerMessage(client, botReply, message)
+                        outils.envoyerMessage(botReply, message)
                         .then((msg)=> {
                             serveur.message = msg;
                         });

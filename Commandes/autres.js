@@ -5,10 +5,10 @@ const lol = liste.lol;
 const {exec} = require('child_process');
 
 module.exports = {
-    id: function(client, message, args, envoyerPM, idMJ) {
-        outils.envoyerMessage(client, `L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ, true);
+    id: function(message, args, envoyerPM, idMJ) {
+        outils.envoyerMessage(`L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ, true);
     },
-    ramoloss: function(client, message, args, envoyerPM, idMJ) {
+    ramoloss: function(message, args, envoyerPM, idMJ) {
         async function speak() {
             temps = 5*60*1000 + outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
             console.log(temps/1000)
@@ -19,7 +19,7 @@ module.exports = {
         speak();
     },
 
-    tarot: function(client, message, args, envoyerPM, idMJ) {
+    tarot: function(message, args, envoyerPM, idMJ) {
         tarot = ["I le magicien", "II la grande prêtresse", "III l'impératrice", "IV l'empereur", "V l'hiérophante", "VI les amoureux", "VII le chariot", "VIII la justice", "IX l'ermite", "X la roue de fortune", "XI la force",
         "XII le pendu", "XIII la mort", "XIV la tempérance", "XV le diable", "XVI la maison dieu", "XVII l'étoile", "XVIII la lune", "XIX le soleil", "XX le jugement", "XXI le monde", "le fou"]
         
@@ -32,11 +32,11 @@ module.exports = {
         cartesTirées = cartesTirées.slice(0, nombreCartes);
         cartesTirées = cartesTirées.join(",  ");
 
-        outils.envoyerMessage(client, `${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
+        outils.envoyerMessage(`${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
         outils.logLancer(message, cartesTirées, "tarot", envoyerPM);
     },
 
-    ouija: function(client, message, args, envoyerPM, idMJ) {
+    ouija: function(message, args, envoyerPM, idMJ) {
         let texte = "";
         let nombreDeMots = outils.randomNumber(3) + 2;
         let consonnes = ["b", "b", "b", "c", "c", "c", "d", "d", "d",
@@ -63,10 +63,10 @@ module.exports = {
             texte += " ";
         }
         texte += ".";
-        outils.envoyerMessage(client, texte, message, envoyerPM, idMJ);
+        outils.envoyerMessage(texte, message, envoyerPM, idMJ);
     },
 
-    ball_8: function(client, message, args, envoyerPM, idMJ) {
+    ball_8: function(message, args, envoyerPM, idMJ) {
         botReply = message.author.toString();
         lancer = outils.randomNumber(100);
         if (lancer <= 40) {
@@ -78,10 +78,10 @@ module.exports = {
         else {
             botReply += " Peut-être."
         }
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
     },
 
-    horoscope: function(client, message, args, envoyerPM, idMJ) {
+    horoscope: function(message, args, envoyerPM, idMJ) {
         let nbBoucle = 1
         if (args.length > 0 && args[0] === "hybride") {
             if (args.length > 1) {
@@ -122,14 +122,14 @@ module.exports = {
             }
             boucleEnCours += 1;
         }
-        outils.envoyerMessage(client, `${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM, idMJ);
+        outils.envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM, idMJ);
     },
-    lol: function(client, message, args, envoyerPM, idMJ) {
+    lol: function(message, args, envoyerPM, idMJ) {
         let dé = outils.randomNumber(lol.length) - 1;
         let champion = lol[dé];
         let botReply = `${message.author.toString()} : ${champion}`;
         outils.logLancer(message, champion, "lol", envoyerPM);
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ)
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ)
         .then((msg)=> {
             msg.react("🖼️");
             const collector = msg.createReactionCollector({
@@ -154,14 +154,15 @@ module.exports = {
         })
     },
 
-    renommer: function(client, message, args, envoyerPM, idMJ) {
+    renommer: function(message, args, envoyerPM, idMJ) {
         const voiceChannelID = message.member.voice.channelId;
         if (voiceChannelID !== null && outils.verifierSiAdmin(message.author.id)) {
+            let client = outils.getClient();
             client.channels.fetch(voiceChannelID)
                 .then(channel => channel.setName(args[0]));}
     },
 
-    bot: function(client, message, args, envoyerPM, idMJ) {
+    bot: function(message, args, envoyerPM, idMJ) {
         if (outils.verifierSiAdmin(message.author.id)) {
             let listeBots = outils.getConfig("autresBots");
             if (listeBots.hasOwnProperty(args[0])) {
@@ -173,24 +174,24 @@ module.exports = {
                      console.log(stdout);
                     }
                    );
-                outils.envoyerMessage(client, listeBots[args[0]].message, message, envoyerPM, idMJ);
+                outils.envoyerMessage(listeBots[args[0]].message, message, envoyerPM, idMJ);
             }
         }
     },
 
-    play: function(client, message, args, envoyerPM, idMJ) {
+    play: function(message, args, envoyerPM, idMJ) {
         let botreply = `${message.author.toString()} C'est **/play** scrogneugneu. (╯°□°)╯︵ ┻━┻`;
-        outils.envoyerMessage(client, botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
     },
 
-    config: function(client, message, args, envoyerPM, idMJ) {
+    config: function(message, args, envoyerPM, idMJ) {
         if (!(outils.verifierSiAdmin(message.author.id))) {
-            outils.envoyerMessage(client, "Seul un admin peut utiliser cette commande.", message);
+            outils.envoyerMessage("Seul un admin peut utiliser cette commande.", message);
             return;
         }
         let clef = args.shift();
         let valeur = args.join(".");
         outils.setConfig(clef, valeur);
-        outils.envoyerMessage(client, `La configuration de ${clef} est maintenant "${valeur}".`, message, envoyerPM, false, true);
+        outils.envoyerMessage(`La configuration de ${clef} est maintenant "${valeur}".`, message, envoyerPM, false, true);
     }
 }

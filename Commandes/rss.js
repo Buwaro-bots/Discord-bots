@@ -21,7 +21,7 @@ let listeDeTitres = {}
 - Commande hiatus qui retarde le prochain check de X jours.
 */
 module.exports = {
-    rss : function(client, message, args, envoyerPM, idMJ) {
+    rss : function(message, args, envoyerPM, idMJ) {
         if (args[0] === "actualiser") {
             if (args.length > 1) {
                 args.shift();
@@ -70,7 +70,7 @@ module.exports = {
                 `Date de la dernière MAJ : Le ${outils.dateHeureFrançaise(fluxActuel.timestampDernierPost)}. \r\n` +
                 `Dates des MAJ : ${joursDesMAJ} \r\n` +
                 `Date de la prochaine vérification par le bot : Le ${outils.dateHeureFrançaise(fluxActuel.timestampProchaineVérification)}. \r\n`;
-                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                outils.envoyerMessage(botReply, message, envoyerPM, null, true);
             }
             else {
                 let botReply = "";
@@ -79,12 +79,12 @@ module.exports = {
                         let listeJours = typeof objet.joursAvecUpdate === "number" ? "" : ` [${objet.joursAvecUpdate.join(", ")}]`;
                         botReply += `**${objet.titre}** : Le ${outils.dateHeureFrançaise(objet.timestampDernierPost)}${listeJours} (<${objet.lienDernièreUpdate}>).\r\n`
                         if (botReply.length > 1800) {
-                            outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                            outils.envoyerMessage(botReply, message, envoyerPM, null, true);
                             let botReply = "";
                         }
                     }
                 }
-                outils.envoyerMessage(client, botReply, message, envoyerPM, null, true);
+                outils.envoyerMessage(botReply, message, envoyerPM, null, true);
             }
             return;
         }

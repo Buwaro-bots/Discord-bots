@@ -8,7 +8,7 @@ let fichiers = requireDir('./Commandes');
 (async () => {
 await outils.sleep(2000); 
     console.log(
-        fichiers.rss.rss(null, null, ["statut"])
+        fichiers.rss.rss(null, ["statut"])
     );
 })();
 */

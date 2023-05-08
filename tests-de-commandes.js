@@ -41,7 +41,7 @@ if (process.argv.length > 2) {
 	let commande = arguments.shift();
 	try{
 		const fonction = recherchercommande(commande);
-        fonction(null, message, arguments, false, false);
+        fonction(message, arguments, false, false);
 	}
 		catch(e){
 			if (!(e.toString().includes("(reading 'then')"))) console.log(e);
@@ -359,7 +359,7 @@ else {
 			let args = listeCommandes[commande][i].args;
 			try {
 				const fonction = recherchercommande(commande);
-        		fonction(null, message, args, false, false);
+        		fonction(message, args, false, false);
 			}
 			catch(e){
 				if (!(e.toString().includes("(reading 'then')")) && !(e.toString().includes("(reading 'channels')")) && !(e.toString().includes("message.react"))){

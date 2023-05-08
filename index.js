@@ -79,16 +79,16 @@ client.on("messageCreate", (message) => {
 
     try {
         const fonction = recherchercommande(command);
-        fonction(client, message, args, envoyerPM, idMJ);
+        fonction(message, args, envoyerPM, idMJ);
         return;
     }
 
     catch(err) {
         if (typeof(err) === "string") {
-            outils.envoyerMessage(client, `${err}\r\nVous pouvez supprimer ce message en cliquant sur la petite croix.`, message, envoyerPM, null, true);
+            outils.envoyerMessage(`${err}\r\nVous pouvez supprimer ce message en cliquant sur la petite croix.`, message, envoyerPM, null, true);
         }
         else {
-            outils.envoyerMessage(client, "Erreur interne.", message, envoyerPM, null);
+            outils.envoyerMessage("Erreur interne.", message, envoyerPM, null);
             console.log(err/*.substring(0, 200)*/);
         }
     }
@@ -101,7 +101,7 @@ process.stdin.resume();//so the program will not close instantly
 
 function exitHandler() {
     const fonction = recherchercommande("fermer");
-    fonction(client, null);
+    fonction(null);
 }
 //catches ctrl+c event
 process.on('SIGINT', exitHandler.bind());
@@ -131,16 +131,16 @@ stdin.setEncoding( 'utf8' ); // i don't want binary, do you?
 stdin.on( 'data', function( key ){ // on any data into stdin
     if ( key === '\u0003' ) {   // ctrl-c ( end of text )
         const fonction = recherchercommande("fermer");
-        fonction(client, null);
+        fonction(null);
     }
     // process.stdout.write( key );   // write the key to stdout all normal like
     if (key === "l") {
         let fonction = recherchercommande("log");
-        fonction(null, dummyMessageAdmin, ["couleur"], false, null);
+        fonction(dummyMessageAdmin, ["couleur"], false, null);
     }
     else if (key === "L") {
         let fonction = recherchercommande("log");
-        fonction(null, dummyMessageAdmin, ["24", "couleur"], false, null);
+        fonction(dummyMessageAdmin, ["24", "couleur"], false, null);
     }
     else if (key === "h") {
         let fonction = renvoyerFonction("isekai", "getHistorique");
