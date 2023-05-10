@@ -139,7 +139,7 @@ module.exports = {
                     let nouveauPost = listeNouveauxPosts.pop();
                     objet.lienDernièreUpdate = nouveauPost.link;
                     for (let [canal, objetCanal] of Object.entries(objet.listeCanaux)) {
-                        outils.envoyerMessageAUnCanal(outils.getClient(), `${nouveauPost.link}`, canal)
+                        outils.envoyerMessageAUnCanal(outils.get(), `${nouveauPost.link}`, canal)
                         .then((msg)=> {
                             if (listeNouveauxPosts.length === 0) {
                                 msg.react("🔔").then(() => msg.react("🔕"));

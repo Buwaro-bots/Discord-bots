@@ -250,8 +250,10 @@ module.exports = {
             }
         }
         outils.setHistoriqueLancers(nouvelHistorique); // Pour pouvoir garder les rolls récents dans l'historique...
-        let writer = JSON.stringify(ancienHistorique, null, 4);
-        fs.writeFileSync(`./Données/Archives/Logs_${dateString}.json`, writer); // Et n'archiver que les anciens
+        if (global.serveurProd) {
+            let writer = JSON.stringify(ancienHistorique, null, 4);
+            fs.writeFileSync(`./Données/Archives/Logs_${dateString}.json`, writer); // Et n'archiver que les anciens
+        }
     },
 
     checkDernierArchivage : function() {

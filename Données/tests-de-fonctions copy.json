@@ -1,0 +1,8 @@
+[
+    {
+        "fichier" : "roll",
+        "fonction" : "commandeComplexe",
+        "arguments" : ["5d100 + 5"],
+        "commentaire" : "Renvoit un tableau avec le résultats de plusieurs façons."
+    }
+]

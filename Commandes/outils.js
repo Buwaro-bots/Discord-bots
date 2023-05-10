@@ -63,9 +63,11 @@ module.exports = {
     },
 
     setHistoriqueLancers : function(nouveauxHistorique) {
-        statsLancers = nouveauxHistorique;
-        let writer = JSON.stringify(statsLancers, null, 4);
-        fs.writeFileSync('./Données/stats.json', writer);
+        if (global.serveurProd) {
+            statsLancers = nouveauxHistorique;
+            let writer = JSON.stringify(statsLancers, null, 4);
+            fs.writeFileSync('./Données/stats.json', writer);
+        }
     },
 
     initialiserDésPondérés : function() {
@@ -227,15 +229,19 @@ module.exports = {
 
         statsLancers[auteur].push({"lancer": lancer, "type": typeLancer, "date": dateHeure, "timestamp": Date.now(), "estPM": estPM, "estReussite": estReussite, "canal": canal});
     
-        let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/stats.json', writer);
+        if (global.serveurProd) {
+            let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./Données/stats.json', writer);
+        }
     },
 
     logLancerEffacer: function() {
-        statsLancers = {}
-        let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/stats.json', writer);
-        console.log("Lancers effacés.")
+        if (global.serveurProd) {
+            statsLancers = {}
+            let writer = JSON.stringify(statsLancers, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./Données/stats.json', writer);
+            console.log("Lancers effacés.")
+        }
     },
 
     rattrapageFauteOrthographe: function(liste, entree, force = "faible") {
@@ -327,8 +333,10 @@ module.exports = {
             botReply = " : Vous avez activé la vérification automatique.";
         }
 
-        let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/param-joueurs.json', writer);
+        if (global.serveurProd) {
+            let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./Données/param-joueurs.json', writer);
+        }
 
         return botReply;
     },
@@ -412,8 +420,10 @@ module.exports = {
         if (listeClefs.length === 0) {
             if (typeof configEnCours[clef] != "string") throw("La variable spécifiée n'est pas une chaine de caractères.");
             configEnCours[clef] = nouvelleValeur;
-            let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
-            fs.writeFileSync('./config.json', writer);
+            if (global.serveurProd) {
+                let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./config.json', writer);
+            }
         }
         else {
             module.exports.setConfig(listeClefs.join("."), nouvelleValeur, configEnCours[clef]);

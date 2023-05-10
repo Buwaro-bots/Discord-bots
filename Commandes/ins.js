@@ -115,8 +115,10 @@ module.exports = {
             if (client !== null && outils.getConfig("paramètres.canalLogs") !== null) client.channels.cache.get(outils.getConfig("paramètres.canalLogs")).send(botReply);
         }
 
-        let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
-        fs.writeFileSync('./Données/param-joueurs.json', writer);
+        if (global.serveurProd) {
+            let writer = JSON.stringify(paramJoueurs, null, 4); // On sauvegarde le fichier.
+            fs.writeFileSync('./Données/param-joueurs.json', writer);
+        }
         
 
         return;

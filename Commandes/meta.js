@@ -258,34 +258,36 @@ module.exports = {
 }
 
 function archiver(créerSauvegardeSecours) {
-    let historiqueIsekai = mesCommandes.isekai.getHistorique();
-    let writerIsekai = JSON.stringify(historiqueIsekai, null, 4);
-    fs.writeFileSync('./Données/tempIsekai.json', writerIsekai, function(err, result) {
-        if(err) console.log('error', err);
-    });
-
-    historiqueMusique = mesCommandes.musique.getHistorique();
-    writerHistorique = JSON.stringify(historiqueMusique, null, 4);
-    fs.writeFileSync('./Données/tempMusique.json', writerHistorique, function(err, result) {
-        if(err) console.log('error', err);
-    });
-
-    historiqueDés = outils.getDésPondérés();
-    writerDés = JSON.stringify(historiqueDés, null, 4);
-    fs.writeFileSync('./Données/tempDés.json', writerDés, function(err, result) {
-        if(err) console.log('error', err);
-    });
-
-    if (créerSauvegardeSecours) {
-        fs.writeFileSync('./Données/tempIsekaiArchive.json', writerIsekai, function(err, result) {
+    if (global.serveurProd) {
+        let historiqueIsekai = mesCommandes.isekai.getHistorique();
+        let writerIsekai = JSON.stringify(historiqueIsekai, null, 4);
+        fs.writeFileSync('./Données/tempIsekai.json', writerIsekai, function(err, result) {
             if(err) console.log('error', err);
         });
-        fs.writeFileSync('./Données/tempDésArchive.json', writerDés, function(err, result) {
+
+        historiqueMusique = mesCommandes.musique.getHistorique();
+        writerHistorique = JSON.stringify(historiqueMusique, null, 4);
+        fs.writeFileSync('./Données/tempMusique.json', writerHistorique, function(err, result) {
             if(err) console.log('error', err);
         });
-        fs.writeFileSync('./Données/tempMusiqueArchive.json', writerHistorique, function(err, result) {
+
+        historiqueDés = outils.getDésPondérés();
+        writerDés = JSON.stringify(historiqueDés, null, 4);
+        fs.writeFileSync('./Données/tempDés.json', writerDés, function(err, result) {
             if(err) console.log('error', err);
         });
+
+        if (créerSauvegardeSecours) {
+            fs.writeFileSync('./Données/tempIsekaiArchive.json', writerIsekai, function(err, result) {
+                if(err) console.log('error', err);
+            });
+            fs.writeFileSync('./Données/tempDésArchive.json', writerDés, function(err, result) {
+                if(err) console.log('error', err);
+            });
+            fs.writeFileSync('./Données/tempMusiqueArchive.json', writerHistorique, function(err, result) {
+                if(err) console.log('error', err);
+            });
+        }
     }
 }
 

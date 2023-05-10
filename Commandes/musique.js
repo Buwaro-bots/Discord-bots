@@ -204,12 +204,14 @@ module.exports = {
                     listeUtilisateursGlobale.push(idUtilisateur);
                 }
             }
-            let writer = JSON.stringify(musiquesARajouter, null, 4); // On sauvegarde le fichier.
-            fs.writeFileSync('./Données/musique-a-rajouter.json', writer);
-            writer = JSON.stringify(listeChansons, null, 4); // On sauvegarde le fichier.
-            fs.writeFileSync('./Données/musique.json', writer);
-            listeAdresses = module.exports.initialiserAdresses()
-            message.react('👍');
+            if (global.serveurProd) {
+                let writer = JSON.stringify(musiquesARajouter, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./Données/musique-a-rajouter.json', writer);
+                writer = JSON.stringify(listeChansons, null, 4); // On sauvegarde le fichier.
+                fs.writeFileSync('./Données/musique.json', writer);
+                listeAdresses = module.exports.initialiserAdresses()
+                message.react('👍');
+            }
             return;
         }
         else if (args[0] === "chercher") {

@@ -30,7 +30,7 @@ messageAdmin.author.id = outils.getConfig("paramètres.admin");
 
 process.on('uncaughtException', function (exception) {
 	console.log(exception);
-   });
+});
 
 if (process.argv.length > 2) {
 	let arguments = process.argv.slice(2);
