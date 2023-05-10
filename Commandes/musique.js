@@ -91,6 +91,19 @@ module.exports = {
             serveur.player.stop();
             return;
         }
+        else if (args[0] === "terminer") {
+            module.exports.verifierSiUtilisateurConnecté(message);
+            let serveur = listeServeurs[message.guildId];
+            if (serveur.estStop === -1) {
+                serveur.estStop = -0.5;
+                message.react('👍')
+            }
+            else if (serveur.estStop === -0.5) {
+                serveur.estStop = -1;
+                message.react('👍')
+            }
+            return;
+        }
         else if (args[0] === "skip") {
             module.exports.verifierSiUtilisateurConnecté(message);
             let serveur = listeServeurs[message.guildId];
@@ -440,7 +453,7 @@ module.exports = {
                         premièreOSTListe = true;
                         let liste = message.guild.members.cache.filter(member => member.voice.channel);
                         let listeUtilisateursConnectés = Array.from(liste.keys());
-                        while (listeChansonsEnCours.length < 10){
+                        while (listeChansonsEnCours.length < outils.getConfig("musique.nombreMinimumDeMusiqueParListe")){
                             for (let i = 0; i < listeUtilisateursGlobale.length; i++) {
                                 let utilisateurEnCours = serveur.listeChansons[listeUtilisateursGlobale[i]];
                                 
@@ -531,6 +544,8 @@ module.exports = {
                     })
                     resource = createAudioResource(chansonAJouer);
                     player.play(resource);
+
+                    if (serveur.estStop === -0.5 && listeChansonsEnCours.length === 0) serveur.estStop = 0;
                 }
             }
         });
