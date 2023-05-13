@@ -14,7 +14,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="roll">
                 <button id="button-roll" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-roll" aria-expanded="false" aria-controls="collapse-roll">
-                    Commandes de rolls
+                    Commandes de lancers de dés simples
                 </button>
             </h2>
             <div id="collapse-roll" class="accordion-collapse collapse" aria-labelledby="roll" data-bs-parent="#accordionExample">
@@ -32,26 +32,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="everyone">
-                <button id="button-everyone" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-everyone" aria-expanded="false" aria-controls="collapse-everyone">
-                    Lancers collectifs
-                </button>
-            </h2>
-            <div id="collapse-everyone" class="accordion-collapse collapse" aria-labelledby="everyone" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    <p>Dans le cas où tout les joueurs ont besoin de faire le même jet, il est possible de faire <span class="commande">;everyone</span> <span class="parametre">type du jet</span> <span class="variable">(le lancer)</span>, une emote apparaîtra en dessous du message, et cliquer dessus lancera les dés demandés. Cette commande fonctionne avec quasiment toutes les commandes du bot, y compris les jets d'INS et isekai.</p>
-                    <img src="images/everyone_1.png" class="discord-exemples" alt=";everyone roll 1d100">
-                    <img src="images/everyone_2.png" class="discord-exemples" alt=";everyone ins"><br/><br/>
-                    <br/>
-                    <p>Note : Pour Donjons et Groudon, étant donné que le nombre de faces dépend de la stat, à la place, il faut faire <span class="commande">;dng</span> et cliquer sur l'un des nombres en réaction.</p>
-                    <img src="images/everyone_3.png" class="discord-exemples" alt=";dng">
-
-                </div>
-            </div>
-        </div>
-
         <div class="accordion-item">
             <h2 class="accordion-header" id="dng">
                 <button id="button-dng" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng" aria-expanded="false" aria-controls="collapse-dng">
@@ -84,7 +64,7 @@
 
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="dng-6">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-6" aria-expanded="false" aria-controls="collapse-dng-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-6" aria-expanded="false" aria-controls="collapse-dng-6">
                                     Vérification automatique
                                 </button>
                             </h2>
@@ -167,8 +147,7 @@
                             </h2>
                             <div id="collapse-dng-5" class="accordion-collapse collapse" aria-labelledby="dng-5" data-bs-parent="#accordion-dng">
                                 <div class="accordion-body">
-                                    <p>N'hésitez pas à refaire <span class="commande">;dng</span> <span class="parametre">aide</span> pour avoir la liste des liens utiles et un rappel rapide des commandes. 
-                                        Si vous estimez que d'autres informations mériteraient d'être sur cette page, n'hésitez pas à me prévenir voir même de m'aider à l'écrire.</p>
+                                    <p>N'hésitez pas à refaire <span class="commande">;dng</span> <span class="parametre">aide</span> pour avoir la liste des liens utiles et un rappel rapide des commandes.</p>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +177,13 @@
                                         Pour les réussites/echecs critiques, pour les démons une réussite critique correspond à un triple 6, et un échec critique un triple 1. Et inversement pour les anges. Pour les humains, la réussite critique correspond à un triple 3 et les triples 1 et 6 à des échecs critiques.<br/>
                                         Pour faire un lancer, la commande est <span class="commande">;ins</span></p>
                                         <img src="images/ins_1.png" class="discord-exemples" alt=";ins devient &rarr a lancé [43] + [4].">
-                                    
+                                    <p class="description-de-base""><br/>
+                                        Dans le cas d'une confrontation entre deux personnages, il est possible pour le MJ de demande un jet en opposition. Pour l'effectuer il faut utiliser <span class="commande">;ins</span> <span class="parametre">opposition</span>, cela affiche la différence de stat nécessaire pour que le jet réussisse.<br/>
+                                        <img src="images/ins_12.png" class="discord-exemples" alt=";ins opposition devient &rarr a lancé [43] + [1]. Réussite à partir d'une différence de stat de +0.5."><br/>
+                                        Pour que le jet réussisse, il faut que la stat soit un moins supérieur de 0,5 à celle de son adversaire. (par exemple 2+ vs 2.)<br/><br/>
+                                        <img src="images/ins_11.png" class="discord-exemples" alt=";ins opposition devient &rarr a lancé [16] + [3]. Réussite à partir d'une différence de stat de -2."><br/>
+                                        Pour que le jet réussisse, comme le jet est excellent, la stat peut être inférieure jusqu'à 2 points de celle de son adversaire. (par exemple 2 vs 4.)
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -269,6 +254,190 @@
             </div>
         </div>
         <div class="accordion-item">
+            <h2 class="accordion-header" id="musique">
+                <button id="button-musique" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique" aria-expanded="false" aria-controls="collapse-musique">
+                    Mode radio
+                </button>
+            </h2>
+            <div id="collapse-musique" class="accordion-collapse collapse" aria-labelledby="musique" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="accordion" id="accordion-musique">
+                        <p class="description-de-base">
+                            Le bot est capable de jouer des musiques choisies par les utilisateurs du bots.
+                        </p>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="musique-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique-1" aria-expanded="false" aria-controls="collapse-musique-1">
+                                    Titre
+                                </button>
+                            </h2>
+                            <div id="collapse-musique-1" class="accordion-collapse collapse" aria-labelledby="musique-1" data-bs-parent="#accordion-musique">
+                                <div class="accordion-body">
+                                    <p>
+                                        *Texte ici*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="musique-2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique-2" aria-expanded="false" aria-controls="collapse-musique-2">
+                                    Titre
+                                </button>
+                            </h2>
+                            <div id="collapse-musique-2" class="accordion-collapse collapse" aria-labelledby="musique-2" data-bs-parent="#accordion-musique">
+                                <div class="accordion-body">
+                                    <p>
+                                        *Texte ici*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="musique-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique-3" aria-expanded="false" aria-controls="collapse-musique-3">
+                                    Titre
+                                </button>
+                            </h2>
+                            <div id="collapse-musique-3" class="accordion-collapse collapse" aria-labelledby="musique-3" data-bs-parent="#accordion-musique">
+                                <div class="accordion-body">
+                                    <p>
+                                        *Texte ici*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="rss">
+                <button id="button-rss" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss" aria-expanded="false" aria-controls="collapse-rss">
+                    Lecteur de flux RSS (recherche de mises à jours de sites internet) [en beta]
+                </button>
+            </h2>
+            <div id="collapse-rss" class="accordion-collapse collapse" aria-labelledby="rss" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="accordion" id="accordion-rss">
+                        <p class="description-de-base">
+                            *Introduction*
+                        </p>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="rss-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss-1" aria-expanded="false" aria-controls="collapse-rss-1">
+                                    Titre
+                                </button>
+                            </h2>
+                            <div id="collapse-rss-1" class="accordion-collapse collapse" aria-labelledby="rss-1" data-bs-parent="#accordion-rss">
+                                <div class="accordion-body">
+                                    <p>
+                                        *Texte ici*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="rss-2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss-2" aria-expanded="false" aria-controls="collapse-rss-2">
+                                    Titre
+                                </button>
+                            </h2>
+                            <div id="collapse-rss-2" class="accordion-collapse collapse" aria-labelledby="rss-2" data-bs-parent="#accordion-rss">
+                                <div class="accordion-body">
+                                    <p>
+                                        *Texte ici*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="rss-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss-3" aria-expanded="false" aria-controls="collapse-rss-3">
+                                    Titre
+                                </button>
+                            </h2>
+                            <div id="collapse-rss-3" class="accordion-collapse collapse" aria-labelledby="rss-3" data-bs-parent="#accordion-rss">
+                                <div class="accordion-body">
+                                    <p>
+                                        *Texte ici*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="meta">
+                <button id="button-meta" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-meta" aria-expanded="false" aria-controls="collapse-meta">
+                    Metas commandes (commandes qui peuvent en appeler d'autres)
+                </button>
+            </h2>
+            <div id="collapse-meta" class="accordion-collapse collapse" aria-labelledby="meta" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="accordion" id="accordion-meta">
+                        <p class="description-de-base">
+                            Il existe des commandes qui permettent d'utiliser les autres commandes de manière plus pratique. Pour la plupart, l'utilisation est <span class="commande">;nom-de-la-commande-meta</span> <span class="parametre">[quelque chose]</span> <span class="variable">[la commande d'origine tel que vous l'utilisez]</span>
+                        </p>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="meta-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-meta-1" aria-expanded="false" aria-controls="collapse-meta-1">
+                                    Rolls collectifs
+                                </button>
+                            </h2>
+                            <div id="collapse-meta-1" class="accordion-collapse collapse" aria-labelledby="meta-1" data-bs-parent="#accordion-meta">
+                                <div class="accordion-body">
+                                    <p>Dans le cas où tout les joueurs ont besoin de faire le même jet, il est possible de faire <span class="commande">;everyone</span> <span class="parametre">type du jet</span> <span class="variable">(le lancer)</span>, une emote apparaîtra en dessous du message, et cliquer dessus lancera les dés demandés. Cette commande fonctionne avec quasiment toutes les commandes du bot, y compris les jets d'INS et isekai.</p>
+                                    <img src="images/everyone_1.png" class="discord-exemples" alt=";everyone roll 1d100">
+                                    <img src="images/everyone_2.png" class="discord-exemples" alt=";everyone ins"><br/><br/>
+                                    <br/>
+                                    <p>Note : Pour Donjons et Groudon, étant donné que le nombre de faces dépend de la stat, à la place, il faut faire <span class="commande">;meta</span> et cliquer sur l'un des nombres en réaction.</p>
+                                    <img src="images/everyone_3.png" class="discord-exemples" alt=";dng">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="meta-2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-meta-2" aria-expanded="false" aria-controls="collapse-meta-2">
+                                    Plusieurs rolls avec une même commande
+                                </button>
+                            </h2>
+                            <div id="collapse-meta-2" class="accordion-collapse collapse" aria-labelledby="meta-2" data-bs-parent="#accordion-meta">
+                                <div class="accordion-body">
+                                    <p>Si vous avez besoin de faire un lancer toutes les X minutes, c'est possible avec <span class="commande">;tempo</span> <span class="parametre">[nombre de minutes]</span>  <span class="variable">[la commande tel que vous l'utilisez]</span>, tel que <span class="commande">;tempo</span> <span class="parametre">60</span> <span class="variable"></span>roll 1d2</span>.<br/>
+                                    Vous pouvez arrêter une commande en cliquant sur l'emote stop en réaction du message d'origine. Il est possible d'arrêter toutes vos commandes tempo avec <span class="commande">;tempo</span> <span class="parametre">stop</span>. La limite est de 100 lancers pour une commande.</p>
+                                    <img src="images/autres_6.png" class="discord-exemples" alt=";tempo 1 roll 1d2 envoit un message toutes les deux minutes pour lancer un d2.">
+
+                                    <p>Si vous voulez faire plusieurs fois la même commande, il est possible de faire <span class="commande">;répéter</span> <span class="parametre">[nombre de messages à envoyer]</span> <span class="variable">[la commande tel que vous l'utilisez]</span>. Evitez de demander plus de 5 fois la même commande ou d'en abuser.</p>
+                                    <img src="images/autres_3.png" class="discord-exemples" alt=";repeat 3 dng 4 envoit 3 messages de lancers avec dng et une stat de 4."><br/><br/>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="meta-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-meta-3" aria-expanded="false" aria-controls="collapse-meta-3">
+                                    Créations de raccourcis
+                                </button>
+                            </h2>
+                            <div id="collapse-meta-3" class="accordion-collapse collapse" aria-labelledby="meta-3" data-bs-parent="#accordion-meta">
+                                <div class="accordion-body">
+                                    <p>
+                                        Si vous utilisez une commande spécifique souvent, vous pouvez créer un raccourci. La commande est <span class="commande">;alias</span> <span class="parametre">[nom du raccourci]</span> <span class="variable">[la commande tel que vous l'utilisez]</span>.<br/>
+                                        Si vous allez être le seul à utiliser cette commande, vous pouvez faire <span class="commande">;alias</span> <span class="parametre">perso</span> <span class="parametre">[nom du raccourci]</span> <span class="variable">[la commande tel que vous l'utilisez]</span>, pour que cette commande soit spécifique à vous. Cela est utile si vous voulez utiliser un nom déjà pris par quelqu'un d'autre.
+                                    </p>
+                                    <img src="images/alias_1.png" class="discord-exemples" alt=";alias r66 roll 1d6 * 10 + 1d6">
+                                    <img src="images/alias_2.png" class="discord-exemples" alt=";alias insr2 combiner ins ; roll 1d2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
             <h2 class="accordion-header" id="autres">
                 <button id="button-autres" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres" aria-expanded="false" aria-controls="collapse-autres">
                     Autres commandes
@@ -276,27 +445,64 @@
             </h2>
             <div id="collapse-autres" class="accordion-collapse collapse" aria-labelledby="autres" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <p>Si vous souhaitez recevoir un résultat en privé, il suffit juste de mettre deux point-virgule au début de la commande. Si vous souhaitez recevoir le résultat en privé ET que le MJ reçoive aussi le résultat, mentionnez le à la fin de la commande.</p>
-                    <img src="images/autres_2.png" class="discord-exemples" alt=";;dng 4 fait réagir avec une emote et envoit un mp."><br/><br/>
-                    
-                    <p>Si vous voulez faire plusieurs fois la même commande, il est possible de faire <span class="commande">;repeat</span> <span class="parametre">nombre de messages à envoyer</span> <span class="variable">la commande que vous vouler faire sans le point-virgule</span>. Evitez de demander plus de 5 fois la même commande ou d'en abuser.</p>
-                    <img src="images/autres_3.png" class="discord-exemples" alt=";repeat 3 dng 4 envoit 3 messages de lancers avec dng et une stat de 4."><br/><br/>
+                    <div class="accordion" id="accordion-autres">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="autres-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-1" aria-expanded="false" aria-controls="collapse-autres-1">
+                                    Commandes diverses
+                                </button>
+                            </h2>
+                            <div id="collapse-autres-1" class="accordion-collapse collapse" aria-labelledby="autres-1" data-bs-parent="#accordion-autres">
+                                <div class="accordion-body">     
+                                    <p>
+                                        <span class="commande">;aide</span> Envoie un lien vers ce mode d'emploi. Certaines commandes ont un résumé du mode d'emploi comme par example <span class="commande">;aide</span> <span class="variable">dng</span>.
+                                    </p>
+                                    <p>Si vous souhaitez recevoir un résultat en privé, il suffit juste de mettre deux point-virgule au début de la commande. Si vous souhaitez recevoir le résultat en privé ET que le MJ reçoive aussi le résultat, mentionnez le à la fin de la commande.</p>
+                                    <img src="images/autres_2.png" class="discord-exemples" alt=";;dng 4 fait réagir avec une emote et envoit un mp."><br/><br/>
+                                    
+                                    <p>Il est possible de tirer des cartes de tarot avec <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
+                                    <img src="images/autres_4.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
 
-                    <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span>.  Pour restreindre la commande à une génération et/ou un type, il faut faire  <span class="commande">;isekai</span> <span class="variable">type et/ou génération</span>. (abrégé par <span class="variable">gen</span> et sans espace avant le numéro)</p>
-                    <p>Si le pokémon lancé ne vous plait pas, vous pouvez en tirer un autre en cliquant sur l'emote dé en dessous de la réponse.</p>
-                    <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."><br/><br/>
-
-                    <p>Il est possible de tirer des cartes de tarot avec <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
-                    <img src="images/autres_4.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
-
-                    <p>
-                        <span class="commande">;log</span> <span class="variable">nombre d'heures</span> affiche les derniers jets effectués. Attention, cette commande peut éventuellement envoyer plusieurs messages si beaucoup de lancers ont été faits.<br/>
-                        <span class="commande">;ramoloss</span> fait quelque chose, peut-etre.
-                    </p>
-
+                                    <p>
+                                        Vous pouvez voir un récapitulatif des derniers jets effectués sur un canal dans les 5 dernières heures avec la commande <span class="commande">;stats</span>. Par défaut la commande regarde les jets effectués pendant les 5 dernières heures.<br/>
+                                        Des statistiques existent pour les jets de INS et DnG, si vous voulez avoir des statistiques spécifiques pour une personne, vous pouvez faire <span class="commande">;stats</span> <span class="parametre">joueur</span> <span class="variable">[pseudo]</span>.<br/>
+                                        La commande trie les joueurs par ordre alphabétique. Si vous voulez mettre le MJ en dernier, vous rajoutez <span class="parametre">mj</span> <span class="variable">[pseudo]</span>.
+                                        Note : Le vrai nom de la commande est <span class="commande">;log</span> <span class="variable">nombre d'heures</span>. Cela prend tout les rolls du serveurs, pour juste le canal il faut rajouter <span class="parametre">canal</span>.<br/>
+                                        Attention, cette commande peut éventuellement envoyer plusieurs messages si beaucoup de lancers ont été faits.<br/>
+                                    </p>
+                                    <p>
+                                        <span class="commande">;ouija</span> Crée une "phrase" avec des lettres aléatoires.<br/>
+                                        <span class="commande">;lol</span> tire un personnage de League of Legends. Attention la liste n'est probablement pas à jour.<br/>
+                                        <span class="commande">;ramoloss</span> fait quelque chose, peut-etre.<br/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="autres-2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-2" aria-expanded="false" aria-controls="collapse-autres-2">
+                                    Rolls de pokémons
+                                </button>
+                            </h2>
+                            <div id="collapse-autres-2" class="accordion-collapse collapse" aria-labelledby="autres-2" data-bs-parent="#accordion-autres">
+                                <div class="accordion-body">
+                                    <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span>.  Pour restreindre la commande à une génération et/ou un type, il faut faire  <span class="commande">;isekai</span> <span class="variable">type et/ou génération</span>. (abrégé par <span class="variable">gen</span> et sans espace avant le numéro)</p>
+                                    <p>Si le pokémon lancé ne vous plait pas, vous pouvez en tirer un autre en cliquant sur l'emote dé en dessous de la réponse. Si vous n'êtes pas sûr de savoir quel pokémon c'est (ou voulez le voir), vous pouvez cliquer sur l'emote photo pour afficher la miniature et obtenir un lien vers son artwork.</p>
+                                    <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."></br>
+                                    <p>Quand un jeu sort, les nouveaux pokémons sont d'abord cachés sous une balise spoiler pendant quelques semaines.<br/>
+                                    <span class="commande">;isekai</span> <span class="parametre">dernier</span> permet de revoir le dernier <span class="commande">;isekai</span> que vous avez fait. <span class="commande">;isekai</span> <span class="parametre">liste</span> permet de revoir le dernier de tout le monde.</p>
+                                    <img src="images/autres_5.png" class="discord-exemples" alt=";ins dernier devient &rarr s'est actuellement fait isekai en [pokémon]."><br/><br/>
+                                    <p> Vous pouvez tirer au sort une équipe de 6 pokémons avec la commande <span class="commande">;équipe</span>. Il est possible de chercher un tag avec <span class="commande">;equipe</span> <span class="variable">[type/génération/autre]</span>. Si vous voulez un nombre de pokémons différents, la commande est <span class="commande">;isekai</span> <span class="parametre">roll</span> <span class="variable">[nombre de pokémons]</span>.</p>
+                                    <p>La commande <span class="commande">;isekai</span> et <span class="commande">;équipe</span> peuvent-être fusionnées avec la commande <span class="commande">;menubestof</span>. D'autres commandes secrètes existent.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="patch">
                 <button id="button-patch" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-patch" aria-expanded="false" aria-controls="collapse-patch">
