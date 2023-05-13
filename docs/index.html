@@ -177,13 +177,6 @@
                                         Pour les réussites/echecs critiques, pour les démons une réussite critique correspond à un triple 6, et un échec critique un triple 1. Et inversement pour les anges. Pour les humains, la réussite critique correspond à un triple 3 et les triples 1 et 6 à des échecs critiques.<br/>
                                         Pour faire un lancer, la commande est <span class="commande">;ins</span></p>
                                         <img src="images/ins_1.png" class="discord-exemples" alt=";ins devient &rarr a lancé [43] + [4].">
-                                    <p class="description-de-base""><br/>
-                                        Dans le cas d'une confrontation entre deux personnages, il est possible pour le MJ de demande un jet en opposition. Pour l'effectuer il faut utiliser <span class="commande">;ins</span> <span class="parametre">opposition</span>, cela affiche la différence de stat nécessaire pour que le jet réussisse.<br/>
-                                        <img src="images/ins_12.png" class="discord-exemples" alt=";ins opposition devient &rarr a lancé [43] + [1]. Réussite à partir d'une différence de stat de +0.5."><br/>
-                                        Pour que le jet réussisse, il faut que la stat soit un moins supérieur de 0,5 à celle de son adversaire. (par exemple 2+ vs 2.)<br/><br/>
-                                        <img src="images/ins_11.png" class="discord-exemples" alt=";ins opposition devient &rarr a lancé [16] + [3]. Réussite à partir d'une différence de stat de -2."><br/>
-                                        Pour que le jet réussisse, comme le jet est excellent, la stat peut être inférieure jusqu'à 2 points de celle de son adversaire. (par exemple 2 vs 4.)
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -202,6 +195,25 @@
                                     <p>Si vous avez un bonus de colonne, la commande est <span class="commande">;ins</span> <span class="parametre">+</span> <span class="variable">nombre de colonnes</span>. Si vous avez un malus de colonnes, remplacez le <span class="parametre">+</span> par un <span class="parametre">-</span>. Si vous n'avez pas activé la vérification automatique, la commande est <span class="commande">;ins check</span>.</p>
                                     <img src="images/ins_4.png" class="discord-exemples" alt=";ins +4 devient &rarr a lancé [52] + [4]. Réussite avec une stat d'au minimum 1+.">
                                     <img src="images/ins_5.png" class="discord-exemples" alt=";ins check -4 devient &rarr [22] + [2]. Réussite avec une stat d'au moins 2+.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="ins-5">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ins-5" aria-expanded="false" aria-controls="collapse-ins-5">
+                                    Jets en opposition
+                                </button>
+                            </h2>
+                            <div id="collapse-ins-5" class="accordion-collapse collapse" aria-labelledby="ins-5" data-bs-parent="#accordion-rss">
+                                <div class="accordion-body">
+                                    <p>
+                                        Dans le cas d'une confrontation entre deux personnages, il est possible pour le MJ de demande un jet en opposition. Pour l'effectuer il faut utiliser <span class="commande">;ins</span> <span class="parametre">opposition</span>, cela affiche la différence de stat nécessaire pour que le jet réussisse.<br/>
+                                        <img src="images/ins_12.png" class="discord-exemples" alt=";ins opposition devient &rarr a lancé [43] + [1]. Réussite à partir d'une différence de stat de +0.5."><br/>
+                                        Pour que le jet réussisse, il faut que la stat soit un moins supérieur de 0,5 à celle de son adversaire. (par exemple 2+ vs 2.)<br/><br/>
+                                        <img src="images/ins_11.png" class="discord-exemples" alt=";ins opposition devient &rarr a lancé [16] + [3]. Réussite à partir d'une différence de stat de -2."><br/>
+                                        Pour que le jet réussisse, comme le jet est excellent, la stat peut être inférieure jusqu'à 2 points de celle de son adversaire. (par exemple 2 vs 4.)
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -372,7 +384,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="meta">
                 <button id="button-meta" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-meta" aria-expanded="false" aria-controls="collapse-meta">
-                    Metas commandes (commandes qui peuvent en appeler d'autres)
+                    Commandes avancées
                 </button>
             </h2>
             <div id="collapse-meta" class="accordion-collapse collapse" aria-labelledby="meta" data-bs-parent="#accordionExample">
@@ -452,6 +464,27 @@
                                     Commandes diverses
                                 </button>
                             </h2>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="autres-2">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-2" aria-expanded="false" aria-controls="collapse-autres-2">
+                                        Rolls de pokémons
+                                    </button>
+                                </h2>
+                                <div id="collapse-autres-2" class="accordion-collapse collapse" aria-labelledby="autres-2" data-bs-parent="#accordion-autres">
+                                    <div class="accordion-body">
+                                        <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span>.  Pour restreindre la commande à une génération et/ou un type, il faut faire  <span class="commande">;isekai</span> <span class="variable">type et/ou génération</span>. (abrégé par <span class="variable">gen</span> et sans espace avant le numéro)</p>
+                                        <p>Si le pokémon lancé ne vous plait pas, vous pouvez en tirer un autre en cliquant sur l'emote dé en dessous de la réponse. Si vous n'êtes pas sûr de savoir quel pokémon c'est (ou voulez le voir), vous pouvez cliquer sur l'emote photo pour afficher la miniature et obtenir un lien vers son artwork.</p>
+                                        <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."></br>
+                                        <p>Quand un jeu sort, les nouveaux pokémons sont d'abord cachés sous une balise spoiler pendant quelques semaines.<br/>
+                                        <span class="commande">;isekai</span> <span class="parametre">dernier</span> permet de revoir le dernier <span class="commande">;isekai</span> que vous avez fait. <span class="commande">;isekai</span> <span class="parametre">liste</span> permet de revoir le dernier de tout le monde.</p>
+                                        <img src="images/autres_5.png" class="discord-exemples" alt=";ins dernier devient &rarr s'est actuellement fait isekai en [pokémon]."><br/><br/>
+                                        <p> Vous pouvez tirer au sort une équipe de 6 pokémons avec la commande <span class="commande">;équipe</span>. Il est possible de chercher un tag avec <span class="commande">;equipe</span> <span class="variable">[type/génération/autre]</span>. Si vous voulez un nombre de pokémons différents, la commande est <span class="commande">;isekai</span> <span class="parametre">roll</span> <span class="variable">[nombre de pokémons]</span>.</p>
+                                        <p>La commande <span class="commande">;isekai</span> et <span class="commande">;équipe</span> peuvent-être fusionnées avec la commande <span class="commande">;menubestof</span>. D'autres commandes secrètes existent.</p>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="collapse-autres-1" class="accordion-collapse collapse" aria-labelledby="autres-1" data-bs-parent="#accordion-autres">
                                 <div class="accordion-body">     
                                     <p>
@@ -475,25 +508,6 @@
                                         <span class="commande">;lol</span> tire un personnage de League of Legends. Attention la liste n'est probablement pas à jour.<br/>
                                         <span class="commande">;ramoloss</span> fait quelque chose, peut-etre.<br/>
                                     </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="autres-2">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-2" aria-expanded="false" aria-controls="collapse-autres-2">
-                                    Rolls de pokémons
-                                </button>
-                            </h2>
-                            <div id="collapse-autres-2" class="accordion-collapse collapse" aria-labelledby="autres-2" data-bs-parent="#accordion-autres">
-                                <div class="accordion-body">
-                                    <p>Il est possible de se réincarner en pokémon avec la commande <span class="commande">;isekai</span>.  Pour restreindre la commande à une génération et/ou un type, il faut faire  <span class="commande">;isekai</span> <span class="variable">type et/ou génération</span>. (abrégé par <span class="variable">gen</span> et sans espace avant le numéro)</p>
-                                    <p>Si le pokémon lancé ne vous plait pas, vous pouvez en tirer un autre en cliquant sur l'emote dé en dessous de la réponse. Si vous n'êtes pas sûr de savoir quel pokémon c'est (ou voulez le voir), vous pouvez cliquer sur l'emote photo pour afficher la miniature et obtenir un lien vers son artwork.</p>
-                                    <img src="images/autres_1.png" class="discord-exemples" alt=";isekai devient &rarr va être isekai en le pokémon numéro [x] qui est [y]."></br>
-                                    <p>Quand un jeu sort, les nouveaux pokémons sont d'abord cachés sous une balise spoiler pendant quelques semaines.<br/>
-                                    <span class="commande">;isekai</span> <span class="parametre">dernier</span> permet de revoir le dernier <span class="commande">;isekai</span> que vous avez fait. <span class="commande">;isekai</span> <span class="parametre">liste</span> permet de revoir le dernier de tout le monde.</p>
-                                    <img src="images/autres_5.png" class="discord-exemples" alt=";ins dernier devient &rarr s'est actuellement fait isekai en [pokémon]."><br/><br/>
-                                    <p> Vous pouvez tirer au sort une équipe de 6 pokémons avec la commande <span class="commande">;équipe</span>. Il est possible de chercher un tag avec <span class="commande">;equipe</span> <span class="variable">[type/génération/autre]</span>. Si vous voulez un nombre de pokémons différents, la commande est <span class="commande">;isekai</span> <span class="parametre">roll</span> <span class="variable">[nombre de pokémons]</span>.</p>
-                                    <p>La commande <span class="commande">;isekai</span> et <span class="commande">;équipe</span> peuvent-être fusionnées avec la commande <span class="commande">;menubestof</span>. D'autres commandes secrètes existent.</p>
                                 </div>
                             </div>
                         </div>
