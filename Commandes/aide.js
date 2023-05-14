@@ -67,7 +67,8 @@ module.exports = {
     },
 
     musique: function(message, args, envoyerPM, idMJ) {
-        let botReply = "**;musique** permet de lancer le bot musical.\r\n" +
+        let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=musique>\r\n" +
+        "**;musique** permet de lancer le bot musical.\r\n" +
         "**;pause** permet de le mettre sur pause ou de le relancer.\r\n" +
         "**;skip** permet de passer à la musique suivante.\r\n" +
         "**;stop** permet d'arrêter le bot musical, il se déconnecte automatiquement après le générique de fin.\r\n" +

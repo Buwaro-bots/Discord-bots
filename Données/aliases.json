@@ -79,6 +79,11 @@
         "unshift": ["stop"]
     },
     {
+        "nom": "terminer",
+        "alias": "musique",
+        "unshift": ["terminer"]
+    },
+    {
         "nom" : "8ball",
         "alias" : "ball_8"
     },

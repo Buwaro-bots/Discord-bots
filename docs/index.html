@@ -139,18 +139,6 @@
                             </div>
                         </div>
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="dng-5">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-dng-5" aria-expanded="false" aria-controls="collapse-dng-5">
-                                    Autres
-                                </button>
-                            </h2>
-                            <div id="collapse-dng-5" class="accordion-collapse collapse" aria-labelledby="dng-5" data-bs-parent="#accordion-dng">
-                                <div class="accordion-body">
-                                    <p>N'hésitez pas à refaire <span class="commande">;dng</span> <span class="parametre">aide</span> pour avoir la liste des liens utiles et un rappel rapide des commandes.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     
                 </div>
@@ -205,7 +193,7 @@
                                     Jets en opposition
                                 </button>
                             </h2>
-                            <div id="collapse-ins-5" class="accordion-collapse collapse" aria-labelledby="ins-5" data-bs-parent="#accordion-rss">
+                            <div id="collapse-ins-5" class="accordion-collapse collapse" aria-labelledby="ins-5" data-bs-parent="#accordion-ins">
                                 <div class="accordion-body">
                                     <p>
                                         Dans le cas d'une confrontation entre deux personnages, il est possible pour le MJ de demande un jet en opposition. Pour l'effectuer il faut utiliser <span class="commande">;ins</span> <span class="parametre">opposition</span>, cela affiche la différence de stat nécessaire pour que le jet réussisse.<br/>
@@ -274,47 +262,57 @@
             <div id="collapse-musique" class="accordion-collapse collapse" aria-labelledby="musique" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <div class="accordion" id="accordion-musique">
-                        <p class="description-de-base">
-                            Le bot est capable de jouer des musiques choisies par les utilisateurs du bots.
-                        </p>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="musique-1">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique-1" aria-expanded="false" aria-controls="collapse-musique-1">
-                                    Titre
+                                    Utilisation de base
                                 </button>
                             </h2>
-                            <div id="collapse-musique-1" class="accordion-collapse collapse" aria-labelledby="musique-1" data-bs-parent="#accordion-musique">
+                            <div id="collapse-musique-1" class="accordion-collapse collapse show" aria-labelledby="musique-1" data-bs-parent="#accordion-musique">
                                 <div class="accordion-body">
                                     <p>
-                                        *Texte ici*
+                                        Il est possible d'appeler le bot dans un salon vocal pour jouer des musiques proposées par les utilisateurs.<br/>
+                                        <span class="commande">;musique</span> permet de lancer le bot musical.<br/>
+                                        <span class="commande">;pause</span> permet de le mettre sur pause ou de le relancer.<br/>
+                                        <span class="commande">;skip</span> permet de passer à la musique suivante.<br/>
+                                        <span class="commande">;stop</span> permet d'arrêter le bot musical, il se déconnecte automatiquement après le générique de fin.<br/>
+                                        <span class="commande">;terminer</span> permet d'arrêter le bot musical après la fin de la playlist actuelle.<br/><br/>
+                                        Quand le bot est lancé, la playlist ressemble à ça :
                                     </p>
+                                    <img src="images/musique_1.png" class="discord-exemples" alt="La liste des musiques s'affiche.">
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="musique-2">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique-2" aria-expanded="false" aria-controls="collapse-musique-2">
-                                    Titre
+                                    Rechercher une OST
                                 </button>
                             </h2>
                             <div id="collapse-musique-2" class="accordion-collapse collapse" aria-labelledby="musique-2" data-bs-parent="#accordion-musique">
                                 <div class="accordion-body">
                                     <p>
-                                        *Texte ici*
+                                        <span class="commande">;chercher</span> <span class="variable">mot ou phrase</span> permet de chercher une musique disponible dans le bot. S'il y a plus de 10 résultats, la réponse sera envoyé par MP.<br/>
+                                        <span class="commande">;jouer</span> <span class="variable">numero de recherche / nom exact d'une musique</span> permet de rajouter dans la playlist la musique demandée, si le bot n'était pas lancé il se lance. Le nom doit être tel qu'il apparait dans la playlist ou la commande rechercher.<br/><br/>
+                                        Quand vous rajoutez une musique dans la playlist en cours, elle est rajoutée juste après la musique en train d'être jouée.<br/>
+                                        Comme vous pouvez le voir si dessous, il est plus simple d'utiliser ;chercher pour retrouver facilement une OST, puis ;jouer en utilisant le numéro mentionné dans la recherche.
                                     </p>
+                                        <img src="images/musique_2.png" class="discord-exemples" alt=";musique chercher 'mot' affiche la liste des musiques ayant ce mot dans le nom.">
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="musique-3">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-musique-3" aria-expanded="false" aria-controls="collapse-musique-3">
-                                    Titre
+                                    Ajouter une OST
                                 </button>
                             </h2>
                             <div id="collapse-musique-3" class="accordion-collapse collapse" aria-labelledby="musique-3" data-bs-parent="#accordion-musique">
                                 <div class="accordion-body">
                                     <p>
-                                        *Texte ici*
+                                        Tout le monde est libre de proposer des musiques. Il est préférable de proposer des musiques de jeux vidéos.<br/>
+                                        La manière la plus simple est de donner à l'admin du bot une playlist youtube.<br/>
+                                        Le bot a été programmé pour jouer de préférence les musiques des personnes présentes dans le salon vocal, donc même si vous ne proposez qu'une dizaine d'OST vous les entendrez quand même régulièrement.
                                     </p>
                                 </div>
                             </div>
@@ -323,64 +321,26 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="accordion-item">
             <h2 class="accordion-header" id="rss">
                 <button id="button-rss" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss" aria-expanded="false" aria-controls="collapse-rss">
-                    Lecteur de flux RSS (recherche de mises à jours de sites internet) [en beta]
+                    Recherche de mises à jours de sites internet (par flux RSS) [en beta]
                 </button>
             </h2>
             <div id="collapse-rss" class="accordion-collapse collapse" aria-labelledby="rss" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <div class="accordion" id="accordion-rss">
                         <p class="description-de-base">
-                            *Introduction*
+                            Il a été rajouté récemment une fonction qui permet de vérifier régulièrement des mises à jour, cela est principalement utile pour les BD en ligne.<br/>
+                            Pour chaque site internet, vous pouvez être notifié en cliquant sur <img src="images/rss_1.png" class="discord-exemples" alt="la cloche">, et annuler l'abonnement en cliquant sur <img src="images/rss_2.png" class="discord-exemples" alt="la cloche barrée">.<br/>
+                            Etant donné que cette fonctionnalité est encore en beta, il est pour l'instant recommandé de demander à l'admin du bot plus d'informations.
                         </p>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="rss-1">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss-1" aria-expanded="false" aria-controls="collapse-rss-1">
-                                    Titre
-                                </button>
-                            </h2>
-                            <div id="collapse-rss-1" class="accordion-collapse collapse" aria-labelledby="rss-1" data-bs-parent="#accordion-rss">
-                                <div class="accordion-body">
-                                    <p>
-                                        *Texte ici*
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="rss-2">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss-2" aria-expanded="false" aria-controls="collapse-rss-2">
-                                    Titre
-                                </button>
-                            </h2>
-                            <div id="collapse-rss-2" class="accordion-collapse collapse" aria-labelledby="rss-2" data-bs-parent="#accordion-rss">
-                                <div class="accordion-body">
-                                    <p>
-                                        *Texte ici*
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="rss-3">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rss-3" aria-expanded="false" aria-controls="collapse-rss-3">
-                                    Titre
-                                </button>
-                            </h2>
-                            <div id="collapse-rss-3" class="accordion-collapse collapse" aria-labelledby="rss-3" data-bs-parent="#accordion-rss">
-                                <div class="accordion-body">
-                                    <p>
-                                        *Texte ici*
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        -->
         <div class="accordion-item">
             <h2 class="accordion-header" id="meta">
                 <button id="button-meta" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-meta" aria-expanded="false" aria-controls="collapse-meta">
@@ -438,7 +398,7 @@
                                 <div class="accordion-body">
                                     <p>
                                         Si vous utilisez une commande spécifique souvent, vous pouvez créer un raccourci. La commande est <span class="commande">;alias</span> <span class="parametre">[nom du raccourci]</span> <span class="variable">[la commande tel que vous l'utilisez]</span>.<br/>
-                                        Si vous allez être le seul à utiliser cette commande, vous pouvez faire <span class="commande">;alias</span> <span class="parametre">perso</span> <span class="parametre">[nom du raccourci]</span> <span class="variable">[la commande tel que vous l'utilisez]</span>, pour que cette commande soit spécifique à vous. Cela est utile si vous voulez utiliser un nom déjà pris par quelqu'un d'autre.
+                                        Si vous allez être le seul à utiliser cette commande, vous pouvez faire <span class="commande">;alias perso</span> <span class="parametre">[nom du raccourci]</span> <span class="variable">[la commande tel que vous l'utilisez]</span>, pour que cette commande soit spécifique à vous. Cela est utile si vous voulez utiliser un nom déjà pris par quelqu'un d'autre.
                                     </p>
                                     <img src="images/alias_1.png" class="discord-exemples" alt=";alias r66 roll 1d6 * 10 + 1d6">
                                     <img src="images/alias_2.png" class="discord-exemples" alt=";alias insr2 combiner ins ; roll 1d2">
@@ -457,39 +417,10 @@
             </h2>
             <div id="collapse-autres" class="accordion-collapse collapse" aria-labelledby="autres" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <div class="accordion" id="accordion-autres">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="autres-1">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-1" aria-expanded="false" aria-controls="collapse-autres-1">
-                                    Commandes diverses
-                                </button>
-                            </h2>
-                            <div id="collapse-autres-1" class="accordion-collapse collapse" aria-labelledby="autres-1" data-bs-parent="#accordion-autres">
-                                <div class="accordion-body">     
-                                    <p>
-                                        <span class="commande">;aide</span> Envoie un lien vers ce mode d'emploi. Certaines commandes ont un résumé du mode d'emploi comme par example <span class="commande">;aide</span> <span class="variable">dng</span>.
-                                    </p>
-                                    <p>Si vous souhaitez recevoir un résultat en privé, il suffit juste de mettre deux point-virgule au début de la commande. Si vous souhaitez recevoir le résultat en privé ET que le MJ reçoive aussi le résultat, mentionnez le à la fin de la commande.</p>
-                                    <img src="images/autres_2.png" class="discord-exemples" alt=";;dng 4 fait réagir avec une emote et envoit un mp."><br/><br/>
-                                    
-                                    <p>Il est possible de tirer des cartes de tarot avec <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
-                                    <img src="images/autres_4.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
-
-                                    <p>
-                                        Vous pouvez voir un récapitulatif des derniers jets effectués sur un canal dans les 5 dernières heures avec la commande <span class="commande">;stats</span>. Par défaut la commande regarde les jets effectués pendant les 5 dernières heures.<br/>
-                                        Des statistiques existent pour les jets de INS et DnG, si vous voulez avoir des statistiques spécifiques pour une personne, vous pouvez faire <span class="commande">;stats</span> <span class="parametre">joueur</span> <span class="variable">[pseudo]</span>.<br/>
-                                        La commande trie les joueurs par ordre alphabétique. Si vous voulez mettre le MJ en dernier, vous rajoutez <span class="parametre">mj</span> <span class="variable">[pseudo]</span>.
-                                        Note : Le vrai nom de la commande est <span class="commande">;log</span> <span class="variable">nombre d'heures</span>. Cela prend tout les rolls du serveurs, pour juste le canal il faut rajouter <span class="parametre">canal</span>.<br/>
-                                        Attention, cette commande peut éventuellement envoyer plusieurs messages si beaucoup de lancers ont été faits.<br/>
-                                    </p>
-                                    <p>
-                                        <span class="commande">;ouija</span> Crée une "phrase" avec des lettres aléatoires.<br/>
-                                        <span class="commande">;lol</span> tire un personnage de League of Legends. Attention la liste n'est probablement pas à jour.<br/>
-                                        <span class="commande">;ramoloss</span> fait quelque chose, peut-etre.<br/>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="accordion" id="accordion-autres">   
+                        <p class="description-de-base">
+                            Envoie un lien vers ce mode d'emploi. Certaines commandes ont un résumé du mode d'emploi, vous pouvez par example rajouter <span class="variable">dng/ins/roll/isekai/musique</span>.
+                        </p>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="autres-2">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-2" aria-expanded="false" aria-controls="collapse-autres-2">
@@ -504,11 +435,61 @@
                                     <p>Quand un jeu sort, les nouveaux pokémons sont d'abord cachés sous une balise spoiler pendant quelques semaines.<br/>
                                     <span class="commande">;isekai</span> <span class="parametre">dernier</span> permet de revoir le dernier <span class="commande">;isekai</span> que vous avez fait. <span class="commande">;isekai</span> <span class="parametre">liste</span> permet de revoir le dernier de tout le monde.</p>
                                     <img src="images/autres_5.png" class="discord-exemples" alt=";ins dernier devient &rarr s'est actuellement fait isekai en [pokémon]."><br/><br/>
-                                    <p> Vous pouvez tirer au sort une équipe de 6 pokémons avec la commande <span class="commande">;équipe</span>. Il est possible de chercher un tag avec <span class="commande">;equipe</span> <span class="variable">[type/génération/autre]</span>. Si vous voulez un nombre de pokémons différents, la commande est <span class="commande">;isekai</span> <span class="parametre">roll</span> <span class="variable">[nombre de pokémons]</span>.</p>
+                                    <p> Vous pouvez tirer au sort une équipe de pokémons avec la commande <span class="commande">;isekai</span> <span class="parametre">roll</span> <span class="variable">[nombre de pokémons]</span>. Si vous voulez 6 pokémons, vous pouvez juste taper <span class="commande">;équipe</span>. Il est possible de chercher un tag en rajoutant <span class="variable">[type/génération/autre*]</span>.<br/>
+                                        *La liste non exhaustive est : DnG, PasDnG, Base, Final, Starter, Starter+, Forme, Alola, Galar, Hisui, Paldea, Femelle, Mâle, Légendaire, Non-pokemon, Digimon.</p>
                                     <p>La commande <span class="commande">;isekai</span> et <span class="commande">;équipe</span> peuvent-être fusionnées avec la commande <span class="commande">;menubestof</span>. D'autres commandes secrètes existent.</p>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="autres-3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-3" aria-expanded="false" aria-controls="collapse-autres-3">
+                                    Recherche de mises à jours de sites internet (par flux RSS) [en beta]
+                                </button>
+                            </h2>
+                            <div id="collapse-autres-3" class="accordion-collapse collapse" aria-labelledby="autres-3" data-bs-parent="#accordion-autres">
+                                <div class="accordion-body">
+                                    <p>
+                                        Il a été rajouté récemment une fonction qui permet de vérifier régulièrement des mises à jour, cela est principalement utile pour les BD en ligne.<br/>
+                                        Pour chaque site internet, vous pouvez être notifié en cliquant sur <img src="images/rss_1.png" class="discord-exemples" alt="la cloche">, et annuler l'abonnement en cliquant sur <img src="images/rss_2.png" class="discord-exemples" alt="la cloche barrée">.<br/>
+                                        Etant donné que cette fonctionnalité est encore en beta, il est pour l'instant recommandé de demander à l'admin du bot plus d'informations.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="autres-1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-autres-1" aria-expanded="false" aria-controls="collapse-autres-1">
+                                    Commandes diverses
+                                </button>
+                            </h2>
+                            <div id="collapse-autres-1" class="accordion-collapse collapse" aria-labelledby="autres-1" data-bs-parent="#accordion-autres">
+                                <div class="accordion-body">     
+                                    <p>Si vous souhaitez recevoir un résultat en privé, il suffit juste de mettre deux point-virgule au début de la commande. Si vous souhaitez recevoir le résultat en privé ET que le MJ reçoive aussi le résultat, mentionnez le à la fin de la commande.</p>
+                                    <img src="images/autres_2.png" class="discord-exemples" alt=";;dng 4 fait réagir avec une emote et envoit un mp."><br/><br/>
+                                    
+                                    <p>Il est possible de tirer des cartes de tarot avec <span class="commande">;tarot</span> <span class="variable">nombre de cartes à tirer</span>.</p>
+                                    <img src="images/autres_4.png" class="discord-exemples" alt=";tarot 3 devient &rarr a tiré les cartes : XXI le monde,  VI les amoureux,  V l'hiérophante"><br/><br/>
+
+                                    <p>
+                                        Vous pouvez voir un récapitulatif des derniers jets effectués sur un canal dans les 5 dernières heures avec la commande <span class="commande">;stats</span>. Dans le cas des jdr suivant : INS et DnG, ce récapitulatif sera accompagné de statistiques.<br/>
+                                        La commande trie les joueurs par ordre alphabétique. Si vous voulez mettre le MJ en dernier, vous rajoutez <span class="parametre">mj</span> <span class="variable">[pseudo]</span>.<br/>
+                                        Si vous voulez avoir des statistiques spécifiques pour une personne, vous pouvez faire <span class="commande">;stats</span> <span class="parametre">joueur</span> <span class="variable">[pseudo]</span>.<br/>
+                                        Note : Le vrai nom de la commande est <span class="commande">;log</span> <span class="variable">nombre d'heures</span>. Cela prend tout les rolls du serveurs, pour juste le canal il faut rajouter <span class="parametre">canal</span>.<br/>
+                                        Attention, ces commandes peuvent éventuellement envoyer plusieurs messages si beaucoup de lancers ont été faits.<br/>
+                                    </p>
+                                    <p>
+                                        <span class="commande">;ouija</span> Crée une "phrase" avec des lettres aléatoires.<br/>
+                                        <span class="commande">;lol</span> tire un personnage de League of Legends. La liste a été mise à jour pour la dernière fois le 14 Novembre 2022, la liste sera très très occasionnellement mise à jour.<br/>
+                                        <span class="commande">;ramoloss</span> fait quelque chose, peut-etre.<br/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+
                     </div>
                 </div>
             </div>
