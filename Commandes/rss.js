@@ -152,7 +152,7 @@ module.exports = {
                                             objetCanal.listeMentions.push(user.id);
                                             let botReply = `<@${user.id}> Vous êtes maintenant abonné`;
                                             botReply += objet.titre === null ? "." : ` à ${objet.titre}.`;
-                                            outils.envoyerMessageAUnCanal(outils.getClient(), botReply, canal);
+                                            outils.envoyerMessageAUnCanal(botReply, canal);
                                             module.exports.sauvegarderJSON(); 
                                         }
                                         reaction.users.remove(user);
@@ -163,7 +163,7 @@ module.exports = {
                                             objetCanal.listeMentions.splice(index, 1);
                                             let botReply = `<@${user.id}> Vous êtes maintenant désabonné`;
                                             botReply += objet.titre === null ? "." : ` de ${objet.titre}.`;
-                                            outils.envoyerMessageAUnCanal(outils.getClient(), botReply, canal);
+                                            outils.envoyerMessageAUnCanal(botReply, canal);
                                             module.exports.sauvegarderJSON(); 
                                         }
                                         reaction.users.remove(user);
@@ -183,7 +183,7 @@ module.exports = {
                             for (let i = 0; i < objetCanal.listeMentions.length; i++) {
                                 botReply += `<@${objetCanal.listeMentions[i]}> `;
                             }
-                            outils.envoyerMessageAUnCanal(outils.getClient(), botReply, canal);
+                            outils.envoyerMessageAUnCanal(botReply, canal);
                     }
                     }
                 }

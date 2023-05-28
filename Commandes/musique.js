@@ -95,7 +95,7 @@ module.exports = {
             module.exports.verifierSiUtilisateurConnecté(message);
             let serveur = listeServeurs[message.guildId];
             if (serveur.estStop === -1) {
-                serveur.estStop = -0.5;
+                serveur.estStop = serveur.listeChansonsEnCours.length === 0? 0 : -0.5;
                 message.react('👍')
             }
             else if (serveur.estStop === -0.5) {
@@ -425,7 +425,7 @@ module.exports = {
                     connection.destroy();
                     return;
                 }
-                else if (serveur.estStop === 0){
+                else if (serveur.estStop >= 0){
                     let numeroOuttro = outils.randomNumber(listeChansons.outtro.liste.length)-1;
                     console.log(listeChansons.outtro.liste[numeroOuttro])
                     outils.logLancer(message, listeChansons.outtro.liste[numeroOuttro].replace(/^.*[\\\/]/, '').slice(0,-4), "musique ending");
