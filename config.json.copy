@@ -18,6 +18,9 @@
     "musique": {
         "nombreMinimumDeMusiqueParListe" : 10
     },
+    "rss" : {
+        "horairesDeVerifications" : [17, 20, 23] "Les heures ou les flux rss sont vérifiés."
+    },
     "autresBots": {
         "nom de la commande" : {
             "fichier" : "fichier.bat",
