@@ -170,17 +170,17 @@ module.exports = {
     }
     
     if (modeSimple) {
-        botReply = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
+        botReply = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny, envoyerPM);
         outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
         delete listeIsekaisEnCours[message.id];
     }
 
     else if (isekaiEnCours.messageEnvoyé === null) {
-        isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny);
+        isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny, envoyerPM);
         outils.envoyerMessage(isekaiEnCours.contenuMessage, message, envoyerPM, idMJ)
         .then((msg)=> { // Cette fonction permet d'éditer le message au bout de 5 secondes.
             isekaiEnCours.messageEnvoyé = msg;
-            isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny);
+            isekaiEnCours.contenuMessage = module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny, envoyerPM);
             setTimeout(function() {
                 msg.edit(isekaiEnCours.contenuMessage);
                 if (!(args.includes("starter+"))) {msg.react("🎲").then(() => msg.react("🖼️"))};
@@ -218,10 +218,10 @@ module.exports = {
                     }
                     else {
                         if (dernierPokemon.tags.includes("Spoiler")) {
-                            isekaiEnCours.contenuMessage += ` (|| https://www.serebii.net/pokedex-sv/icon/${dernierPokemonNumero}.png || <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
+                            isekaiEnCours.contenuMessage += ` (|| [Icone](https://www.serebii.net/pokedex-sv/icon/${dernierPokemonNumero}.png) || [Artwork](<https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
                         }
                         else {
-                            isekaiEnCours.contenuMessage += ` (https://www.serebii.net/pokedex-sv/icon/${dernierPokemonNumero}.png <https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
+                            isekaiEnCours.contenuMessage += ` [Icone](https://www.serebii.net/pokedex-sv/icon/${dernierPokemonNumero}.png) / [Artwork](<https://www.serebii.net/pokemon/art/${dernierPokemonNumero}.png>)`;
                         }
                     }
                     if (!(msg.content.includes("|| "))){
@@ -236,8 +236,8 @@ module.exports = {
         })
     }
     else {
-        let messageTemporaire = `${isekaiEnCours.contenuMessage}\r\n${module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny)}`
-        isekaiEnCours.contenuMessage += `\r\n${module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny)}`;
+        let messageTemporaire = `${isekaiEnCours.contenuMessage}\r\n${module.exports.genererPhraseReponse(message, pokemonChoisi, true, estShiny, envoyerPM)}`
+        isekaiEnCours.contenuMessage += `\r\n${module.exports.genererPhraseReponse(message, pokemonChoisi, false, estShiny, envoyerPM)}`;
         isekaiEnCours.messageEnvoyé.edit(messageTemporaire)
         .then((msg)=> { 
             setTimeout(function() {
@@ -313,7 +313,7 @@ module.exports = {
     return pokemonChoisi;
     },
     
-    genererPhraseReponse :function(message, pokémon, estMasqué, estShiny) {
+    genererPhraseReponse :function(message, pokémon, estMasqué, estShiny, envoyerPM) {
         let intro = `${message.author.toString()} va être isekai en le`;
         let type = estMasqué || !(pokémon.tags.includes("Digimon")) ? "pokémon" : "digimon";
         let [numéro, espèce] = estMasqué || !(pokémon.hasOwnProperty("nomForme") || pokémon.tags.includes("Digimon")) ? [pokémon.numero, pokémon.nom] : [pokémon.numeroForme, pokémon.nomForme];
@@ -333,7 +333,7 @@ module.exports = {
         else {
             suffixe = estShiny? " **shiny**" : "";
             let nombreReroll = listeIsekaisEnCours[message.id].listePokemonsDejaTires.length;
-            outils.logLancer(message, `${espèce}${estShiny ? "shiny" : ""}`, `${message.content.slice(1,900)}${nombreReroll > 1 ? ` *reroll n°${nombreReroll-1}*` : ""}`, false);
+            outils.logLancer(message, `${espèce}${estShiny ? "shiny" : ""}`, `${message.content.slice(1,900)}${nombreReroll > 1 ? ` *reroll n°${nombreReroll-1}*` : ""}`, envoyerPM);
         }
         return `${intro} ${type} numéro ${numéro} qui est ${masque}${espèce}${suffixe}${masque}.${lienDigimon}`;
     },

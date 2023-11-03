@@ -8,6 +8,13 @@
     "roll": {
     "lancerParDefault": "roll fait si l'utilisateur fait juste ;roll, 100 ou 20 ou 2d20 ou 5d12 * 4 - 20"
     },
+    "isekai": {
+        "rollsAvantApparitionsDigimon": 4,
+        "rollsMaximum": 15,
+        "tauxShiny": 64,
+        "tauxShinyEquipe": 400,
+        "tauxNouveau": 1 [Taux d'apparitions des nouveaux pokémons, à mettre vers 4/5 quand un nouveau jeu sort puis baisser petit à petit]
+    },
     "musique": {
         "nombreMinimumDeMusiqueParListe" : 10
     },
