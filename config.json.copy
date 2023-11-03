@@ -6,7 +6,7 @@
         "canalLogs" : "id d'un canal de log, null si non utilisé"
     },
     "roll": {
-    "lancerParDefault": "roll fait si l'utilisateur fait juste ;roll, 100 ou 20 ou 2d20 ou 5d12 * 4 - 20"
+        "lancerParDefault": "roll fait si l'utilisateur fait juste ;roll, 100 ou 20 ou 2d20 ou 5d12 * 4 - 20"
     },
     "isekai": {
         "rollsAvantApparitionsDigimon": 4,

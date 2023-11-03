@@ -418,8 +418,15 @@ module.exports = {
         let clef = listeClefs.shift()
 
         if (listeClefs.length === 0) {
-            if (typeof configEnCours[clef] != "string") throw("La variable spécifiée n'est pas une chaine de caractères.");
-            configEnCours[clef] = nouvelleValeur;
+            if (typeof configEnCours[clef] === "string") {
+                configEnCours[clef] = nouvelleValeur;
+            } else if (typeof configEnCours[clef] === "number") {
+                module.exports.verifierNaN([nouvelleValeur]);
+                configEnCours[clef] = parseInt(nouvelleValeur);
+            }
+            else {
+                throw("La variable spécifiée n'est pas une chaine de caractères.");
+            }
             if (global.serveurProd) {
                 let writer = JSON.stringify(config, null, 4); // On sauvegarde le fichier.
                 fs.writeFileSync('./config.json', writer);
