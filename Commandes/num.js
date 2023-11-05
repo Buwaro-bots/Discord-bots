@@ -2,7 +2,8 @@ const outils = require("./outils.js");
 const fs = require('fs');
 
 module.exports = {
-    num : function(message, args, envoyerPM, idMJ, commandBody) {
+    num : function(message, args, envoyerPM, idMJ, options) {
+    options.utiliserCommentaires = true;
 
     args = args.length === 0 ? [3] : args;
     let test = args[0];
@@ -15,7 +16,7 @@ module.exports = {
     botReply += estReussite ? "C'est une réussite" : "C'est un échec";
     botReply += lancer === 1 || lancer === 20 ? " **critique !**" : ".";
 
-    outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+    outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
     outils.logLancer(message, lancer, `test de ${test}`, envoyerPM, estReussite);
     }
 }

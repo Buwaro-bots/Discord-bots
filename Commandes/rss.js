@@ -20,7 +20,7 @@ let listeDeTitres = {}
 let fluxàModifier = null
 
 module.exports = {
-    rss : function(message, args, envoyerPM, idMJ) {
+    rss : function(message, args, envoyerPM, idMJ, options) {
         if (args[0] === "actualiser") {
             if (args.length > 1) {
                 args.shift();

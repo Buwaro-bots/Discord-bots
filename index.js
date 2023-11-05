@@ -30,7 +30,11 @@ client.on("messageCreate", (message) => {
     dateHeure = new Date();
     let heure = outils.pad(dateHeure.getHours()) + ':' + outils.pad(dateHeure.getMinutes()) + ':' + outils.pad(dateHeure.getSeconds());
     process.stdout.write(`\x1b[92m${heure}  \x1b[96m${message.author.username}#${message.author.discriminator} \x1b[94m${message.content} \x1b[90m=> \x1b[97m`);
-
+    
+    let options = {
+        "commentaires" : [],
+        "utiliserCommentaires" : false
+    }
     let envoyerPM = false; // Cette variable indique si la réponse doit être envoyée par mp.
     let idMJ = null;
     // Si l'utilisateur utilise deux fois le préfix, on considère qu'il veut recevoir la réponse par mp
@@ -38,7 +42,10 @@ client.on("messageCreate", (message) => {
         envoyerPM = true;
         message.content = message.content.slice(prefix.length);
     }
-
+    if (message.content.includes(" #")) {
+        options.commentaires = message.content.split(" #")
+        message.content = options.commentaires.shift();
+    }
     // Si le message contient un d et inclus un nombre après le d, on remplace le message par un lancer
     if (!(message.content.includes(' ')) && message.content.includes('d') && message.content.length > message.content.indexOf('d') + 1 && !isNaN(message.content.substring(message.content.indexOf('d') + 1))) {
         message.content = ";roll " +  message.content.substring(1);
@@ -79,13 +86,13 @@ client.on("messageCreate", (message) => {
 
     try {
         const fonction = recherchercommande(command);
-        fonction(message, args, envoyerPM, idMJ);
+        fonction(message, args, envoyerPM, idMJ, options);
         return;
     }
 
     catch(err) {
         if (typeof(err) === "string") {
-            outils.envoyerMessage(`${err}\r\nVous pouvez supprimer ce message en cliquant sur la petite croix.`, message, envoyerPM, null, true);
+            outils.envoyerMessage(`${err}\r\nVous pouvez supprimer ce message en cliquant sur la petite croix.`, message, envoyerPM, null, options, true);
         }
         else {
             outils.envoyerMessage("Erreur interne.", message, envoyerPM, null);

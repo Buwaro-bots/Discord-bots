@@ -14,9 +14,9 @@ let botEnCours = false;
 let botEstDésactivé = false;
 
 module.exports = {
-    musique: function(message, args, envoyerPM, idMJ) {
+    musique: function(message, args, envoyerPM, idMJ, options) {
         if (["aide", "help", "commandes", "commande"].includes(args[0])) {
-            aide(message, args, envoyerPM, idMJ);
+            aide(message, args, envoyerPM, idMJ, options);
             return;
         }
 

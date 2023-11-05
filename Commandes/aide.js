@@ -2,9 +2,9 @@ const outils = require("./outils.js");
 let strings = require('../Données/textes-privés.json');
 
 module.exports = {
-    aide: function(message, args, envoyerPM, idMJ) {
+    aide: function(message, args, envoyerPM, idMJ, options) {
         if (args.length > 0 && module.exports.hasOwnProperty(args[0]) && args[0] !== "aide") {
-            module.exports[args[0]](message, args, envoyerPM, idMJ);
+            module.exports[args[0]](message, args, envoyerPM, idMJ, options);
             return;
         }
         let botReply =  "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=roll>\r\n" +
@@ -20,20 +20,20 @@ module.exports = {
                         "**;repeat** permet de faire plusieurs fois la même commandes comme **;repeat 3 dng 4** pour faire 3 rolls de dng avec une stat de 4.\r\n" +
                         "\r\n" +
                         "**;isekai** pour vous faire réincarner en pokémon. Il est possible de roll dans une catégorie telle que les types, Femelle/Mâle, gen1, DnG. ";
-        outils.envoyerMessage(botReply , message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply , message, envoyerPM, idMJ, options, true);
     },
 
-    roll: function(message, args, envoyerPM, idMJ) {
+    roll: function(message, args, envoyerPM, idMJ, options) {
         let botReply =  "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=roll>\r\n" +
                         "\r\n" +
                         "**;roll** pour faire des jets. Il est possible de juste mettre le nombre de faces comme **;roll *20***, des commandes plus compliquées comme **;roll *1d10 + 1d8 + 3***, " +
                         "ou juste **;roll** pour avoir la commande par défaut qui en général est 100.  Il est aussi possible d'abréger en **;r**.\r\n" +
                         "**;d20** ou **;2d100** est un raccourci pour faire un jet simple, mais il n'est possible de lancer qu'un seul type de dés. .\r\n" +
                         "**;roll setup *1d10 + 1d8*** permets de changer le roll par défaut.\r\n";
-        outils.envoyerMessage(botReply , message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply , message, envoyerPM, idMJ, options, true);
     },
 
-    dng: function(message, args, envoyerPM, idMJ) {
+    dng: function(message, args, envoyerPM, idMJ, options) {
         let espaces = "                ";
         let botReply = "." + // Nécéssaire pour que discord n'enlève pas les espaces.
         espaces + "**Liens utiles**\r\n" +
@@ -48,11 +48,11 @@ module.exports = {
         "**;dng table** pour la table des types.\r\n" +
         "**;dng trait** pour avoir la description complète d'un trait. **;dex *espèce*** permet de vous rappeler les traits que vous avez.\r\n"
 
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
         return;
     },
 
-    ins: function(message, args, envoyerPM, idMJ) {
+    ins: function(message, args, envoyerPM, idMJ, options) {
         let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=ins>\r\n" +
         "**;ins** permet de faire un jet normal.\r\n" +
         ";ins **opposition** pour indiquer la différence de stat nécéssaire pour battre un autre perso.\r\n" +
@@ -62,11 +62,11 @@ module.exports = {
         ";ins **message** ***lancer*** ***phrase*** permet d'ajouter un message personnalisé sur un résultat, par exemple **;ins 665 :lul:**. Les emotes doivent être disponibles sur un serveur où ce bot se trouve, si de la mise en forme est utilisé il n'est pas nécéssaire d'échapper les \* avec des \\.\r\n" +
         ";ins **tum** affiche la table unique multiple.\r\n"+
         ";ins **purge** permet de purger un nombre incroyable de **196** lancers en une seule commande !\r\n";
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
 
     },
 
-    musique: function(message, args, envoyerPM, idMJ) {
+    musique: function(message, args, envoyerPM, idMJ, options) {
         let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=musique>\r\n" +
         "**;musique** permet de lancer le bot musical.\r\n" +
         "**;pause** permet de le mettre sur pause ou de le relancer.\r\n" +
@@ -78,27 +78,27 @@ module.exports = {
         "\r\n" +
         "A cause de contraintes technique, le bot ne peut pas être lancé sur deux serveurs différents en même temps. Si vous devez vraiment l'utiliser dans deux serveurs différents, contactez l'admin pour lancer le bot deux fois.\r\n" +
         "Commandes exclusives à l'admin : ;musique activer / désactiver / reset / vérifier / maj.";
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
 
     },
 
-    isekai: function(message, args, envoyerPM, idMJ) {
+    isekai: function(message, args, envoyerPM, idMJ, options) {
         botReply = "A venir";
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
     },
 
-    source: function(message, args, envoyerPM, idMJ) {
-        outils.envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message, envoyerPM, idMJ, true);
+    source: function(message, args, envoyerPM, idMJ, options) {
+        outils.envoyerMessage("https://github.com/Buwaro-bots/Discord-bots", message, envoyerPM, idMJ, options, true);
     },
 
-    changelog: function(message, args, envoyerPM, idMJ) {
+    changelog: function(message, args, envoyerPM, idMJ, options) {
         let botReply = "Mode d'emploi : <https://buwaro-bots.github.io/Discord-bots/?mode=patch>\r\nGithub : https://github.com/Buwaro-bots/Discord-bots/commits/main";
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
     },
 
-    iceberg: function(message, args, envoyerPM, idMJ) {
+    iceberg: function(message, args, envoyerPM, idMJ, options) {
         let botReply = strings.Iceberg;
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
         return;
     },
 }

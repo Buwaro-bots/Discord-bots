@@ -36,14 +36,14 @@ module.exports = {
         }
     },
 
-    meta: function(message, args, envoyerPM, idMJ) {
+    meta: function(message, args, envoyerPM, idMJ, options) {
         let commande = outils.normalisationString(args.shift());
         if (module.exports.hasOwnProperty(commande)) {
-            module.exports[commande](message, args, envoyerPM, idMJ);
+            module.exports[commande](message, args, envoyerPM, idMJ, options);
         }
     },
 
-    repeter: function(message, args, envoyerPM, idMJ) {
+    repeter: function(message, args, envoyerPM, idMJ, options) {
         let nombreBoucles = args.shift();
         outils.verifierNaN([nombreBoucles]);
         if (nombreBoucles > 10 && outils.verifierSiAdmin(message.author.id) ) {
@@ -54,19 +54,19 @@ module.exports = {
         if (outils.normalisationString(commande) === "repeter") throw ("Blocage d'utiliser repeter sur repeter.")
         for (let i = 0; i < nombreBoucles; i++) {
             copyArgs = args.slice(0); // Nécéssaire pour les commandes qui modifient les paramètres. https://stackoverflow.com/a/6612410
-            fonctionCommande(message, copyArgs, envoyerPM, idMJ);
+            fonctionCommande(message, copyArgs, envoyerPM, idMJ, options);
         }
         
     },
 
     /* Cette commande regarde le premier paramètre donné et regarde si une commande avec ce nom existe, si oui, le bot rajoute une emote qui permet
     à d'autres utilisateurs de faire la commande demandée. */
-    everyone: function(message, args, envoyerPM, idMJ) {
+    everyone: function(message, args, envoyerPM, idMJ, options) {
         let commande = outils.normalisationString(args.shift());
 
         // Comme DnG a sa propre commande pour les rolls collectifs, on considère que l'utilisateur demandait ça.
         if (commande === "dng" && args.length === 0) {
-            mesCommandes.dng.dng(message, [], envoyerPM, idMJ);
+            mesCommandes.dng.dng(message, [], envoyerPM, idMJ, options);
             return;
         }
         let fonctionCommande = module.exports.recherchercommande(commande);
@@ -81,7 +81,7 @@ module.exports = {
             if(!user.bot && reaction.emoji.name === "🎲") {
                 collector.resetTimer({time: 400 * 1000});
                 dummyMessage.author = user;
-                fonctionCommande(dummyMessage, args, envoyerPM, idMJ);
+                fonctionCommande(dummyMessage, args, envoyerPM, idMJ, options);
                 outils.retirerReaction(message, reaction, user);
             }
         });
@@ -92,11 +92,11 @@ module.exports = {
 
     /* Cette commande permet de lancer une commande toutes les X minutes.
     On l'arrête si l'utilisateur clique sur l'emote, tape ;tempo stop, ou si l'admin tape ;tempo stop id-utilisateur.*/
-    tempo: function(message, args, envoyerPM, idMJ) {
+    tempo: function(message, args, envoyerPM, idMJ, options) {
         if (args.length === 0 || args[0] === "aide") {
             let botReply = "Pour faire une commande toutes les x minutes, la commande est ;tempo [nombre de minutes] [nom de la commande (roll, ins, etc.)] [le reste de la commande si besoin comme des bonus au jet].\r\n" +
             "Par exemple **;tempo 60 ins**, ou **;tempo 10 dng 3**."
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
         }
 
         if (args[0] === "stop") {
@@ -116,7 +116,7 @@ module.exports = {
         let fonctionCommande = module.exports.recherchercommande(commande);
         let dummyMessage = message;
         function lancerTempo() {
-            fonctionCommande(dummyMessage, args, envoyerPM, idMJ);
+            fonctionCommande(dummyMessage, args, envoyerPM, idMJ, options);
         }
         lancerTempo();
         let id = setInterval(lancerTempo, timer);
@@ -141,33 +141,33 @@ module.exports = {
         });
     },
 
-    troll: function(message, args, envoyerPM, idMJ) {
+    troll: function(message, args, envoyerPM, idMJ, options) {
         let typeLancer = outils.randomNumber(100);
         let nombreLancer = outils.randomNumber(100);
         process.stdout.write(`(${typeLancer}) (${nombreLancer})`);
 
         if (typeLancer <= 40) {
             nombreLancer = nombreLancer > 12 ? [] : ["cheat", (((nombreLancer % 6) + 1) * 111).toString()];
-            mesCommandes.ins.ins(message, nombreLancer, envoyerPM, idMJ);
+            mesCommandes.ins.ins(message, nombreLancer, envoyerPM, idMJ, options);
         }
         else if (typeLancer <= 65) {
             nombreLancer = nombreLancer > 80 ? "4" : (nombreLancer > 20 ? "3" : "2");
-            mesCommandes.dng.dng(message, [nombreLancer], envoyerPM, idMJ);
+            mesCommandes.dng.dng(message, [nombreLancer], envoyerPM, idMJ, options);
         }
         else if (typeLancer <= 84) {
             nombreLancer = nombreLancer > 30 ? "100" : (nombreLancer > 10 ? "2d20" : "4d6 - 3");
-            mesCommandes.roll.roll(message, [nombreLancer], envoyerPM, idMJ);
+            mesCommandes.roll.roll(message, [nombreLancer], envoyerPM, idMJ, options);
         }
         else if (typeLancer <= 92) {
             args = nombreLancer <= 25 ? ["5"] : [];
-            mesCommandes.autres.tarot(message, args, envoyerPM, idMJ);
+            mesCommandes.autres.tarot(message, args, envoyerPM, idMJ, options);
         }
         else {
-            mesCommandes.isekai.isekai(message, ["DnG"], envoyerPM, idMJ);
+            mesCommandes.isekai.isekai(message, ["DnG"], envoyerPM, idMJ, options);
         }
     },
 
-    combiner: function(message, args, envoyerPM, idMJ) {
+    combiner: function(message, args, envoyerPM, idMJ, options) {
         let argsGlobal = [...args];
         // TODO : Refuser si deux fois répéter sauf si admin
         while (argsGlobal.length > 0) {
@@ -178,11 +178,11 @@ module.exports = {
             }
             argsGlobal.shift();
             let fonctionCommande = module.exports.recherchercommande(commandeEnCours);
-            fonctionCommande(message, argsEnCours, envoyerPM, idMJ);
+            fonctionCommande(message, argsEnCours, envoyerPM, idMJ, options);
         }
     },
 
-    fermer: function(message, args, envoyerPM, idMJ) {
+    fermer: function(message, args, envoyerPM, idMJ, options) {
         if (message === null || outils.verifierSiAdmin(message.author.id)) {
             if (global.serveurProd) {
                 archiver(true);
@@ -193,7 +193,7 @@ module.exports = {
         }
     },
 
-    alias: function(message, args, envoyerPM, idMJ) {
+    alias: function(message, args, envoyerPM, idMJ, options) {
         let listeAliasPersos = JSON.parse(fs.readFileSync('./Données/aliases-perso.json', 'utf-8'));
         let listeAliasGlobal = listeAliasPersos.global;
         if (args.length > 2 && args[0] == "perso" && module.exports.recherchercommande(args[0], false) === null) {

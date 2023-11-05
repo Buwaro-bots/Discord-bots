@@ -5,7 +5,8 @@ const { ins: aide } = require("./aide.js");
 
 
 module.exports = {
-    ins : function(message, args, envoyerPM, idMJ) {
+    ins : function(message, args, envoyerPM, idMJ, options) {
+    options.utiliserCommentaires = true;
     let paramJoueurs = JSON.parse(fs.readFileSync(__dirname + '/../Données/param-joueurs.json', 'utf-8'))
 
     /* Etant donné que j'ai eu deux jdr différents dans deux serveurs différents, il a été considére comme plus pratique de regarder dans quel serveur
@@ -14,7 +15,7 @@ module.exports = {
     let serverID = message.guildId in paramJoueurs.ins.lancersSpeciaux ? message.guildId : "aucun";
 
     if (["aide", "help", "commandes", "commande"].includes(args[0])) {
-        aide(message, args, envoyerPM, idMJ);
+        aide(message, args, envoyerPM, idMJ, options);
         return;
     }
 
@@ -37,7 +38,7 @@ module.exports = {
             INSLancersChiffres[dices[2]] += 1;
         }
         botReply = botReply.slice(0,-2) + "\`\`\`"
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
 
         botReply = `\`\`\`ansi\r\nStats pour INS (premier dé de chaque lancer, triples, et totaux des trois dés.):\r\n`
         botReply += `\u001b[0;36mLancers de 1x : ${INSLancers[1][0]} ${INSLancers[1][1] > 0 ? "dont " + INSLancers[1][1] + " '111'" : ""} [${INSLancersChiffres[1]}]\r\n`
@@ -47,7 +48,7 @@ module.exports = {
         botReply += `\u001b[0;35mLancers de 5x : ${INSLancers[5][0]}  [${INSLancersChiffres[5]}]\r\n`
         botReply += `\u001b[0;31mLancers de 6x : ${INSLancers[6][0]} ${INSLancers[6][1] > 0 ? "dont " + INSLancers[6][1] + " '666'" : ""} [${INSLancersChiffres[6]}]\u001b[0;0m\r\n`
         botReply += "```"
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
         return;
     }
 
@@ -55,7 +56,7 @@ module.exports = {
         if (args.length === 1) {
             let botReply = "Pour rajouter un message, veuillez consulter le mode d'emploi, partie \"Messages personalisés\". \r\nhttps://buwaro-bots.github.io/Discord-bots/?mode=ins\r\n"
             + "Si vous souhaitez rajouter un message par mp ou pour un autre serveur, il faut rajouter l'id du serveur comme ça : **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**. ";
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
             return;
         }
         if (serverID === "aucun") {
@@ -66,7 +67,7 @@ module.exports = {
             else {
                 outils.envoyerMessage("Vous essayez de rajouter un message, soit par mp, soit sur un serveur qui n'a pas de messages personalisés." +
                 " Dans cette situation, utilisez cette commande sur le bon serveur, soit rajoutez l'id du serveur entre le lancer et le message." + 
-                " Comme **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**.", message, envoyerPM, idMJ, true);
+                " Comme **;ins message 421 id_du_serveur Ceci est un message**. Pour avoir l'id du serveur, vous pouvez taper **;id**.", message, envoyerPM, idMJ, options, true);
                 return;
             }
         }
@@ -96,7 +97,7 @@ module.exports = {
         if (args[2] === "deletethis") {
             delete paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id];
             let botReply = `${message.author.toString()} : Votre message pour le lancer ${lancer} a été supprimé.`;	
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
         }
         else {
             if (!(lancer in paramJoueurs.ins.lancersSpeciaux[serverID])) { // Si le lancer n'existait pas dans la base, on le rajoute
@@ -110,7 +111,7 @@ module.exports = {
             paramJoueurs.ins.lancersSpeciaux[serverID][lancer][message.author.id] = phrase; // On rajoute le message dans la base de données
             let botReply = `${message.author.toString()} : Maintenant, pour le lancer ${lancer}, je vais afficher le message : ${phrase}`;
 
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
             let client = outils.getClient();
             if (client !== null && outils.getConfig("paramètres.canalLogs") !== null) client.channels.cache.get(outils.getConfig("paramètres.canalLogs")).send(botReply);
         }
@@ -126,7 +127,7 @@ module.exports = {
 
     if (args[0] === "autocheck") {
         let botReply = message.author.toString() + outils.gestionAutocheck("ins", message.author.id);
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, true);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
         return;
     }
 
@@ -136,10 +137,11 @@ module.exports = {
         let resultat = INSdata.gacha[lancer];
         let botReply = `${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ||${resultat}||`;
 
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ)
+        let commentaire = outils.checkVariableOptions(options, "commentaire");
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options)
         .then((msg)=> {
             setTimeout(function() {
-                msg.edit(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}`);
+                msg.edit(`${message.author.toString()} a lancé au gacha [${lancer}] ce qui correspond à : ${resultat}${commentaire}`);
             }, 4000)
         });
 
@@ -244,7 +246,7 @@ module.exports = {
     }
 
 
-    outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+    outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
 
     outils.logLancer(message, `[${dices[0]}${dices[1]}]+[${dices[2]}]`, typeLancer, envoyerPM);
     }

@@ -359,7 +359,7 @@ else {
 			let args = listeCommandes[commande][i].args;
 			try {
 				const fonction = recherchercommande(commande);
-        		fonction(message, args, false, false);
+        		fonction(message, args, false, false, {utiliserCommentaires : false});
 			}
 			catch(e){
 				if (!(e.toString().includes("(reading 'then')")) && !(e.toString().includes("(reading 'channels')")) && !(e.toString().includes("message.react"))){

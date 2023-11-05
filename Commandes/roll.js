@@ -3,7 +3,8 @@ const fs = require('fs');
 const { verifierNaN } = require("./outils.js");
 
 module.exports = {
-    roll: function(message, args, envoyerPM, idMJ) {
+    roll: function(message, args, envoyerPM, idMJ, options) {
+        options.utiliserCommentaires = true;
         if (args[0] === "setup") {
             outils.setConfig("roll.lancerParDefault", args[1])
             outils.envoyerMessage(`Le lancer par défaut est maintenant ${args[1]}.`, message);
@@ -25,7 +26,7 @@ module.exports = {
             if (lancer > 9000000000000000) throw("Résultat trop grand.");
             let resultat = outils.randomNumber(lancer) ;
             let botReply = `${message.author.toString()} sur 1d${lancer} a lancé **${resultat}**.`;
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
             outils.logLancer(message, resultat, `1d${lancer}`, envoyerPM);
         }
 
@@ -35,7 +36,7 @@ module.exports = {
 
             let botReply = `${message.author.toString()} sur ${reponseCommandes}a lancé ${reponseLancers}, ce qui donne **${reponseSomme}**.`;
             if (botReply.length > 2000) throw ("Réponse trop longue.");
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
             let reponseALogger = `${reponseLancers}= ${reponseSomme}`;
             if (reponseALogger.length + reponseCommandes.length > 950) {
                 reponseCommandes = reponseCommandes.slice(0,100);

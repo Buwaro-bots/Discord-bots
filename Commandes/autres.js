@@ -5,10 +5,10 @@ const lol = liste.lol;
 const {exec} = require('child_process');
 
 module.exports = {
-    id: function(message, args, envoyerPM, idMJ) {
-        outils.envoyerMessage(`L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ, true);
+    id: function(message, args, envoyerPM, idMJ, options) {
+        outils.envoyerMessage(`L'id de ce serveur est ${message.guildId}.` , message, envoyerPM, idMJ, options, true);
     },
-    ramoloss: function(message, args, envoyerPM, idMJ) {
+    ramoloss: function(message, args, envoyerPM, idMJ, options) {
         async function speak() {
             temps = 5*60*1000 + outils.randomNumber(5*60*1000)// On attends 5 minutes, puis un temps aléatoire entre 1ms et 5 minutes.
             console.log(temps/1000)
@@ -19,7 +19,8 @@ module.exports = {
         speak();
     },
 
-    tarot: function(message, args, envoyerPM, idMJ) {
+    tarot: function(message, args, envoyerPM, idMJ, options) {
+        options.utiliserCommentaires = true;
         tarot = ["I le magicien", "II la grande prêtresse", "III l'impératrice", "IV l'empereur", "V l'hiérophante", "VI les amoureux", "VII le chariot", "VIII la justice", "IX l'ermite", "X la roue de fortune", "XI la force",
         "XII le pendu", "XIII la mort", "XIV la tempérance", "XV le diable", "XVI la maison dieu", "XVII l'étoile", "XVIII la lune", "XIX le soleil", "XX le jugement", "XXI le monde", "le fou"]
         
@@ -32,11 +33,11 @@ module.exports = {
         cartesTirées = cartesTirées.slice(0, nombreCartes);
         cartesTirées = cartesTirées.join(",  ");
 
-        outils.envoyerMessage(`${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ);
+        outils.envoyerMessage(`${message.author.toString()} a tiré ${phraseCartes} : ${cartesTirées}`, message, envoyerPM, idMJ, options);
         outils.logLancer(message, cartesTirées, "tarot", envoyerPM);
     },
 
-    ouija: function(message, args, envoyerPM, idMJ) {
+    ouija: function(message, args, envoyerPM, idMJ, options) {
         let texte = "";
         let nombreDeMots = outils.randomNumber(3) + 2;
         let consonnes = ["b", "b", "b", "c", "c", "c", "d", "d", "d",
@@ -63,10 +64,11 @@ module.exports = {
             texte += " ";
         }
         texte += ".";
-        outils.envoyerMessage(texte, message, envoyerPM, idMJ);
+        outils.envoyerMessage(texte, message, envoyerPM, idMJ, options);
     },
 
-    ball_8: function(message, args, envoyerPM, idMJ) {
+    ball_8: function(message, args, envoyerPM, idMJ, options) {
+        options.utiliserCommentaires = true;
         botReply = message.author.toString();
         lancer = outils.randomNumber(100);
         if (lancer <= 40) {
@@ -78,10 +80,10 @@ module.exports = {
         else {
             botReply += " Peut-être."
         }
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
     },
 
-    horoscope: function(message, args, envoyerPM, idMJ) {
+    horoscope: function(message, args, envoyerPM, idMJ, options) {
         let nbBoucle = 1
         if (args.length > 0 && args[0] === "hybride") {
             if (args.length > 1) {
@@ -122,14 +124,15 @@ module.exports = {
             }
             boucleEnCours += 1;
         }
-        outils.envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM, idMJ);
+        outils.envoyerMessage(`${message.author.toString()} Votre signe du jour est : ${animal}.`, message, envoyerPM, idMJ, options);
     },
-    lol: function(message, args, envoyerPM, idMJ) {
+    lol: function(message, args, envoyerPM, idMJ, options) {
+        options.utiliserCommentaires = true;
         let dé = outils.randomNumber(lol.length) - 1;
         let champion = lol[dé];
         let botReply = `${message.author.toString()} : ${champion}`;
         outils.logLancer(message, champion, "lol", envoyerPM);
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ)
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options)
         .then((msg)=> {
             msg.react("🖼️");
             const collector = msg.createReactionCollector({
@@ -154,7 +157,7 @@ module.exports = {
         })
     },
 
-    renommer: function(message, args, envoyerPM, idMJ) {
+    renommer: function(message, args, envoyerPM, idMJ, options) {
         const voiceChannelID = message.member.voice.channelId;
         if (voiceChannelID !== null && outils.verifierSiAdmin(message.author.id)) {
             let client = outils.getClient();
@@ -162,7 +165,7 @@ module.exports = {
                 .then(channel => channel.setName(args[0]));}
     },
 
-    bot: function(message, args, envoyerPM, idMJ) {
+    bot: function(message, args, envoyerPM, idMJ, options) {
         if (outils.verifierSiAdmin(message.author.id)) {
             let listeBots = outils.getConfig("autresBots");
             if (listeBots.hasOwnProperty(args[0])) {
@@ -174,17 +177,17 @@ module.exports = {
                      console.log(stdout);
                     }
                    );
-                outils.envoyerMessage(listeBots[args[0]].message, message, envoyerPM, idMJ);
+                outils.envoyerMessage(listeBots[args[0]].message, message, envoyerPM, idMJ, options);
             }
         }
     },
 
-    play: function(message, args, envoyerPM, idMJ) {
+    play: function(message, args, envoyerPM, idMJ, options) {
         let botreply = `${message.author.toString()} C'est **/play** scrogneugneu. (╯°□°)╯︵ ┻━┻`;
-        outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+        outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
     },
 
-    config: function(message, args, envoyerPM, idMJ) {
+    config: function(message, args, envoyerPM, idMJ, options) {
         if (!(outils.verifierSiAdmin(message.author.id))) {
             outils.envoyerMessage("Seul un admin peut utiliser cette commande.", message);
             return;

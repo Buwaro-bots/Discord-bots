@@ -3,7 +3,7 @@ const outils = require("./outils.js");
 const binomialProbability = require('binomial-probability')
 
 module.exports = {
-    log : function(message, args, envoyerPM, idMJ) {
+    log : function(message, args, envoyerPM, idMJ, options) {
     // Si l'argument est effacer et que l'utilisateur est l'admin, on effectue une copie de sauvegarde en mettant la date du jour, puis on efface les logs
     if (args[0] === "archiver" && outils.verifierSiAdmin(message.author.id)) {
         module.exports.archiver();
@@ -28,17 +28,17 @@ module.exports = {
     for (let i = 0; i < nomsJoueurs.length; i++) {
         let ajout = `${nomsJoueurs[i]} : ${listeJoueurs[nomsJoueurs[i]]}${sautsDeLigne}`;
         if (botReply.length + ajout.length > 2000) {
-            outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+            outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
             botReply = "";
         }
         if (ajout.length > 2000) {
-            outils.envoyerMessage(ajout.slice(0,2000), message, envoyerPM, idMJ);
+            outils.envoyerMessage(ajout.slice(0,2000), message, envoyerPM, idMJ, options);
         }
         else {
             botReply += ajout;
         }
     }
-    outils.envoyerMessage(botReply, message, envoyerPM, idMJ);
+    outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options);
     console.log("\x1b[0;37m");
     },
 

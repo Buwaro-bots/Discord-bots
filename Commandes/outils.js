@@ -103,8 +103,12 @@ module.exports = {
     },  
 
     // Cette fonction a été faite pour pouvoir enregistrer dans la console les réponses du bot et à centraliser la gestion de si le message doit être envoyé par mp ou pas, et à un MJ.
-    envoyerMessage: function(botReply, message, envoyerPM = false, idMJ = null, aSupprimer = false) {
-        if (client === null) {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
+    envoyerMessage: function(botReply, message, envoyerPM = false, idMJ = null, options, aSupprimer = false) {
+        if (typeof(options) == "object" && "commentaires" in options && options.utiliserCommentaires === true && options.commentaires.length > 0) {
+            botReply += " #" + options.commentaires.shift();
+            botReply = botReply.slice(0,2000);
+        }
+        if (client === null || message.channelId === '1') {console.log(botReply.length);console.log('\x1b[32m%s\x1b[0m', botReply); return;}
   
         module.exports.loggerMessage(botReply, message);
 
@@ -469,6 +473,19 @@ module.exports = {
             minute: 'numeric',
         };
         return objetDate.toLocaleString('fr-FR', options);
+    },
+
+    checkVariableOptions: function(options, mode) {
+        if (mode === "commentaire") {
+            if (options.commentaires.length > 0) {
+                return " #" + options.commentaires[0];
+            }
+            else {
+                return "";
+            }
+        }
+
+        return null;
     }
 }
 
