@@ -97,6 +97,7 @@ module.exports = {
             let botReply = "Pour faire une commande toutes les x minutes, la commande est ;tempo [nombre de minutes] [nom de la commande (roll, ins, etc.)] [le reste de la commande si besoin comme des bonus au jet].\r\n" +
             "Par exemple **;tempo 60 ins**, ou **;tempo 10 dng 3**."
             outils.envoyerMessage(botReply, message, envoyerPM, idMJ, options, true);
+            return;
         }
 
         if (args[0] === "stop") {
@@ -210,7 +211,8 @@ module.exports = {
                 "nom": nom,
                 "alias": alias,
                 "unshift": unshift,
-                "perso": true
+                "perso": true,
+                "commentaires": options.commentaires
             })
             botReply = `${message.author.toString()} La commande ${nom} a bien été enregistrée.`;
             outils.envoyerMessage(botReply, message, envoyerPM);
@@ -239,7 +241,8 @@ module.exports = {
                 "alias": alias,
                 "unshift" : unshift,
                 "createur": createur,
-                "createurId" : createurId
+                "createurId" : createurId,
+                "commentaires": options.commentaires
             })
             botReply = `${message.author.toString()} La commande ${nom} a bien été enregistrée.`;
             outils.envoyerMessage(botReply, message, envoyerPM);

@@ -77,6 +77,12 @@ client.on("messageCreate", (message) => {
                     args.unshift(alias.unshift[i]);
                 }
             }
+            if (alias.hasOwnProperty("commentaires")) {
+                let commentairesDeLAlias = [...alias.commentaires];
+                while (commentairesDeLAlias.length >= 1) {
+                    options.commentaires.unshift(commentairesDeLAlias.pop());
+                }
+            }
             if (alias.hasOwnProperty("perso") && alias.perso === true) {
                 message.react("🔒")
             }
